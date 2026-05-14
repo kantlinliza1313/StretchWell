@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Программы тренировок | StretchWell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+    <!-- Хедер -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-text">StretchWell</span>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="programs.html" class="nav-link active">Программы</a></li>
+                        <li><a href="specialists.html" class="nav-link">Специалисты</a></li>
+                        <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
+                        <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="login.html" class="btn btn-primary">Войти</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero секция -->
+    <section class="programs-hero">
+        <div class="container">
+            <h1 class="page-title">Программы тренировок</h1>
+            <p class="page-subtitle">Выберите направление и начните заниматься уже сегодня</p>
+        </div>
+    </section>
+    <!-- Программы (загружаются из Firebase) -->
+<main class="programs-main">
+    <div class="container">
+        <div class="programs-grid" id="programsGrid">
+            <!-- Данные загрузятся из Firebase -->
+            <div class="loading" style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                <i class="fas fa-spinner fa-spin"></i> Загрузка программ...
+            </div>
+        </div>
+    </div>
+</main>
+
+    <!-- Модальное окно с деталями программы -->
+    <div class="modal program-modal" id="programModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modalTitle">Название программы</h2>
+                <p class="modal-subtitle" id="modalSubtitle">Описание программы</p>
+                
+                <div class="modal-sections">
+                    <div class="modal-section">
+                        <h3>Для кого:</h3>
+                        <p id="modalForWhom"></p>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h3>Что получите:</h3>
+                        <ul class="modal-benefits" id="modalBenefits"></ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h3>Что входит:</h3>
+                        <div class="modal-specs" id="modalSpecs"></div>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <h3>Программа:</h3>
+                        <div class="modal-schedule" id="modalSchedule"></div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <a href="login.html" class="btn btn-primary btn-large">Начать занятия</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно с видео -->
+    <div class="modal video-modal" id="videoModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content video-modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="video-container">
+                <video controls id="modalVideo">
+                    <source src="" type="video/mp4">
+                    Ваш браузер не поддерживает видео
+                </video>
+            </div>
+            <h3 class="video-modal-title" id="videoModalTitle">Видео программы</h3>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-text">StretchWell</span>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Главная</a>
+                    <a href="programs.html">Программы</a>
+                    <a href="specialists.html">Специалисты</a>
+                    <a href="reviews.html">Отзывы</a>
+                    <a href="contact.html">Контакты</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2026 StretchWell. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<!-- Firebase -->
+<script type="module" src="js/firebase-config.js"></script>
+
+<!-- Загрузка программ из Firebase -->
+<script type="module">
+    import { loadPrograms } from './js/load-programs.js';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        loadPrograms();
+    });
+</script>
+
+<!-- Основной JS -->
+<script src="js/main.js"></script>
+</body>
+</html>

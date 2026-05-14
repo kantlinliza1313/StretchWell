@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание - StretchWell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/schedule.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Боковая панель -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo-link">
+                <span class="logo-text">StretchWell</span>
+            </a>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
+            </a>
+            <a href="my_programs.html" class="nav-item">
+                <i class="fas fa-dumbbell"></i>
+                <span>Мои программы</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Прогресс</span>
+            </a>
+            <a href="schedule.html" class="nav-item active">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Расписание</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <header class="top-bar">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="top-bar-center">
+                <h2 class="page-title">Расписание</h2>
+            </div>
+            <div class="user-info">
+                <span class="user-name">Иван Иванов</span>
+                <div class="user-avatar-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=Иван+Иванов&background=6198FF&color=fff" alt="Avatar" class="user-avatar">
+                </div>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <!-- Заголовок -->
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Моё расписание тренировок
+                </h3>
+                <p class="section-subtitle">Планируйте и отслеживайте свои занятия</p>
+            </div>
+
+            <!-- Переключатель вида -->
+            <div class="schedule-view-toggle">
+                <button class="view-btn active" data-view="week">
+                    <i class="fas fa-calendar-week"></i> Неделя
+                </button>
+                <button class="view-btn" data-view="month">
+                    <i class="fas fa-calendar"></i> Месяц
+                </button>
+                <button class="view-btn" data-view="list">
+                    <i class="fas fa-list"></i> Список
+                </button>
+            </div>
+
+            <!-- Навигация по датам -->
+            <div class="schedule-navigation">
+                <button class="nav-btn" id="prevWeek">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="current-period">
+                    <span id="currentWeek">25 — 31 марта 2026</span>
+                </div>
+                <button class="nav-btn" id="nextWeek">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="nav-btn today-btn" id="todayBtn">
+                    Сегодня
+                </button>
+            </div>
+
+            <!-- Недельный календарь -->
+            <div class="week-calendar" id="weekView">
+                <div class="week-days">
+                    <div class="week-day">
+                        <span class="day-name">Пн</span>
+                        <span class="day-date">25</span>
+                    </div>
+                    <div class="week-day">
+                        <span class="day-name">Вт</span>
+                        <span class="day-date">26</span>
+                    </div>
+                    <div class="week-day">
+                        <span class="day-name">Ср</span>
+                        <span class="day-date">27</span>
+                    </div>
+                    <div class="week-day today">
+                        <span class="day-name">Чт</span>
+                        <span class="day-date">28</span>
+                        <span class="day-today">Сегодня</span>
+                    </div>
+                    <div class="week-day">
+                        <span class="day-name">Пт</span>
+                        <span class="day-date">29</span>
+                    </div>
+                    <div class="week-day">
+                        <span class="day-name">Сб</span>
+                        <span class="day-date">30</span>
+                    </div>
+                    <div class="week-day">
+                        <span class="day-name">Вс</span>
+                        <span class="day-date">31</span>
+                    </div>
+                </div>
+
+                <div class="week-schedule">
+                    <!-- Понедельник -->
+                    <div class="day-column">
+                        <div class="day-header">
+                            <span class="day-label">25 мар</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event-card completed">
+                                <div class="event-time">10:00</div>
+                                <div class="event-content">
+                                    <h5>Утренняя растяжка</h5>
+                                    <p>20 мин • Гибкость</p>
+                                </div>
+                                <div class="event-status">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Вторник -->
+                    <div class="day-column">
+                        <div class="day-header">
+                            <span class="day-label">26 мар</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event-card completed">
+                                <div class="event-time">18:00</div>
+                                <div class="event-content">
+                                    <h5>Гибкость за 30 дней - Урок 7</h5>
+                                    <p>25 мин • Программа</p>
+                                </div>
+                                <div class="event-status">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Среда -->
+                    <div class="day-column">
+                        <div class="day-header">
+                            <span class="day-label">27 мар</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event-card completed">
+                                <div class="event-time">17:00</div>
+                                <div class="event-content">
+                                    <h5>Силовая тренировка</h5>
+                                    <p>40 мин • Сила</p>
+                                </div>
+                                <div class="event-status">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Четверг (сегодня) -->
+                    <div class="day-column today-column">
+                        <div class="day-header">
+                            <span class="day-label">28 мар</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event-card current">
+                                <div class="event-time">10:00</div>
+                                <div class="event-content">
+                                    <h5>Утренняя растяжка</h5>
+                                    <p>20 мин • Гибкость</p>
+                                </div>
+                                <button class="btn-event">Начать</button>
+                            </div>
+                            <div class="event-card upcoming">
+                                <div class="event-time">19:00</div>
+                                <div class="event-content">
+                                    <h5>Вечернее расслабление</h5>
+                                    <p>15 мин • Расслабление</p>
+                                </div>
+                                <button class="btn-event btn-outline">Напомнить</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Пятница -->
+                    <div class="day-column">
+                        <div class="day-header">
+                            <span class="day-label">29 мар</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event-card planned">
+                                <div class="event-time">18:00</div>
+                                <div class="event-content">
+                                    <h5>Гибкость за 30 дней - Урок 9</h5>
+                                    <p>25 мин • Программа</p>
+                                </div>
+                                <button class="btn-event btn-outline">Запланировать</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Суббота -->
+                    <div class="day-column">
+                        <div class="day-header">
+                            <span class="day-label">30 мар</span>
+                        </div>
+                        <div class="day-events empty">
+                            <span class="no-events">Нет тренировок</span>
+                        </div>
+                    </div>
+
+                    <!-- Воскресенье -->
+                    <div class="day-column">
+                        <div class="day-header">
+                            <span class="day-label">31 мар</span>
+                        </div>
+                        <div class="day-events">
+                            <div class="event-card planned">
+                                <div class="event-time">11:00</div>
+                                <div class="event-content">
+                                    <h5>Восстановление после тренировки</h5>
+                                    <p>10 мин • Восстановление</p>
+                                </div>
+                                <button class="btn-event btn-outline">Запланировать</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Месячный календарь (скрыт по умолчанию) -->
+            <div class="month-calendar" id="monthView" style="display: none;">
+                <div class="month-header">
+                    <div class="month-name">Март 2026</div>
+                    <div class="month-days-header">
+                        <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+                    </div>
+                </div>
+                <div class="month-grid">
+                    <!-- Пустые дни начала месяца -->
+                    <div class="month-day empty"></div>
+                    <div class="month-day empty"></div>
+                    <div class="month-day empty"></div>
+                    
+                    <!-- Дни месяца -->
+                    <div class="month-day">
+                        <span class="month-date">1</span>
+                    </div>
+                    <div class="month-day">
+                        <span class="month-date">2</span>
+                    </div>
+                    <div class="month-day">
+                        <span class="month-date">3</span>
+                        <div class="month-event-dot"></div>
+                    </div>
+                    <div class="month-day">
+                        <span class="month-date">4</span>
+                    </div>
+                    <div class="month-day today">
+                        <span class="month-date">28</span>
+                        <div class="month-event-dot"></div>
+                        <div class="month-event-dot"></div>
+                    </div>
+                    <div class="month-day">
+                        <span class="month-date">29</span>
+                        <div class="month-event-dot"></div>
+                    </div>
+                    <div class="month-day">
+                        <span class="month-date">30</span>
+                    </div>
+                    <div class="month-day">
+                        <span class="month-date">31</span>
+                        <div class="month-event-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Список тренировок -->
+            <div class="schedule-list" id="listView" style="display: none;">
+                <div class="list-section">
+                    <h4 class="list-section-title">
+                        <i class="fas fa-clock"></i>
+                        Сегодня
+                    </h4>
+                    <div class="list-item current">
+                        <div class="list-time">
+                            <span class="time-value">10:00</span>
+                            <span class="time-status status-current">Сейчас</span>
+                        </div>
+                        <div class="list-content">
+                            <h5>Утренняя растяжка</h5>
+                            <p>20 минут • Гибкость • Программа: Гибкость за 30 дней</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm">Начать</button>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-time">
+                            <span class="time-value">19:00</span>
+                            <span class="time-status status-upcoming">Через 9 часов</span>
+                        </div>
+                        <div class="list-content">
+                            <h5>Вечернее расслабление</h5>
+                            <p>15 минут • Расслабление</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm">Напомнить</button>
+                    </div>
+                </div>
+
+                <div class="list-section">
+                    <h4 class="list-section-title">
+                        <i class="fas fa-calendar-day"></i>
+                        Завтра
+                    </h4>
+                    <div class="list-item">
+                        <div class="list-time">
+                            <span class="time-value">18:00</span>
+                        </div>
+                        <div class="list-content">
+                            <h5>Гибкость за 30 дней - Урок 9</h5>
+                            <p>25 минут • Программа</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm">Запланировать</button>
+                    </div>
+                </div>
+
+                <div class="list-section">
+                    <h4 class="list-section-title">
+                        <i class="fas fa-history"></i>
+                        Завершённые на этой неделе
+                    </h4>
+                    <div class="list-item completed">
+                        <div class="list-time">
+                            <span class="time-value">10:00</span>
+                            <span class="time-status status-completed">Завершено</span>
+                        </div>
+                        <div class="list-content">
+                            <h5>Утренняя растяжка</h5>
+                            <p>20 минут • Гибкость</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm">Повторить</button>
+                    </div>
+                    <div class="list-item completed">
+                        <div class="list-time">
+                            <span class="time-value">18:00</span>
+                            <span class="time-status status-completed">Завершено</span>
+                        </div>
+                        <div class="list-content">
+                            <h5>Гибкость за 30 дней - Урок 7</h5>
+                            <p>25 минут • Программа</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm">Повторить</button>
+                    </div>
+                    <div class="list-item completed">
+                        <div class="list-time">
+                            <span class="time-value">17:00</span>
+                            <span class="time-status status-completed">Завершено</span>
+                        </div>
+                        <div class="list-content">
+                            <h5>Силовая тренировка</h5>
+                            <p>40 минут • Сила</p>
+                        </div>
+                        <button class="btn btn-outline btn-sm">Повторить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Быстрое добавление тренировки -->
+            <div class="quick-add">
+                <button class="btn btn-primary" onclick="showAddWorkoutModal()">
+                    <i class="fas fa-plus"></i>
+                    Добавить тренировку
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно добавления тренировки -->
+    <div class="modal" id="addWorkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Запланировать тренировку</h3>
+                <button class="modal-close" onclick="closeAddWorkoutModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="add-workout-form">
+                    <div class="form-group">
+                        <label>Тип тренировки</label>
+                        <select class="form-input">
+                            <option>Утренняя растяжка</option>
+                            <option>Гибкость за 30 дней</option>
+                            <option>Сила и растяжка</option>
+                            <option>Вечернее расслабление</option>
+                            <option>Восстановление</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Дата</label>
+                            <input type="date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Время</label>
+                            <input type="time" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Напоминание</label>
+                        <select class="form-input">
+                            <option>За 15 минут</option>
+                            <option>За 30 минут</option>
+                            <option>За 1 час</option>
+                            <option>Не напоминать</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeAddWorkoutModal()">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Запланировать</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,307 @@
+/* Секция контактов */
+.contact-section {
+    padding: 80px 0;
+    background-color: var(--bg-color);
+}
+
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+}
+
+/* Карта */
+.contact-map-wrapper {
+    position: sticky;
+    top: 100px;
+}
+
+.map-container {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    height: 600px;
+}
+
+.map-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    filter: grayscale(0.2) contrast(1.1);
+}
+
+/* Карточка с контактами на карте */
+.contact-card {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.contact-info-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.contact-info-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.contact-info-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+.contact-info-text {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.contact-info-link {
+    font-size: 15px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.contact-info-link:hover {
+    color: var(--btn-color);
+}
+
+/* Форма */
+.contact-form-wrapper {
+    background: white;
+    padding: 50px 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.form-header {
+    margin-bottom: 35px;
+}
+
+.form-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.form-subtitle {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Элементы формы */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e0e6ed;
+    border-radius: 8px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-color);
+    background-color: white;
+    transition: var(--transition);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(97, 152, 255, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: #999;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 15px;
+}
+
+.btn-submit:hover {
+    background-color: #4a7fd6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(97, 152, 255, 0.4);
+}
+
+.form-note {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* Успешная отправка */
+.form-success {
+    text-align: center;
+    padding: 60px 40px;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    margin: 0 auto 25px;
+    animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.form-success h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.form-success p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* Дополнительная информация */
+.contact-extra {
+    padding: 60px 0;
+    background: white;
+}
+
+.extra-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.extra-item {
+    text-align: center;
+    padding: 30px;
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.extra-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
+
+.extra-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.extra-item h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.extra-item p {
+    color: #666;
+    line-height: 1.7;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-map-wrapper {
+        position: relative;
+        top: 0;
+    }
+    
+    .map-container {
+        height: 400px;
+    }
+    
+    .contact-card {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-form-wrapper {
+        padding: 30px 20px;
+    }
+    
+    .form-title {
+        font-size: 26px;
+    }
+    
+    .contact-card {
+        padding: 20px;
+    }
+}

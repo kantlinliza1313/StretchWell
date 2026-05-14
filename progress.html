@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогресс - StretchWell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/progress.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Боковая панель -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo-link">
+                <span class="logo-text">StretchWell</span>
+            </a>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
+            </a>
+            <a href="my_programs.html" class="nav-item">
+                <i class="fas fa-dumbbell"></i>
+                <span>Мои программы</span>
+            </a>
+            <a href="progress.html" class="nav-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Прогресс</span>
+            </a>
+            <a href="schedule.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Расписание</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <header class="top-bar">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="top-bar-center">
+                <h2 class="page-title">Прогресс</h2>
+            </div>
+            <div class="user-info">
+                <span class="user-name">Иван Иванов</span>
+                <div class="user-avatar-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=Иван+Иванов&background=6198FF&color=fff" alt="Avatar" class="user-avatar">
+                </div>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <!-- Заголовок -->
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    Мой прогресс
+                </h3>
+                <p class="section-subtitle">Отслеживайте свои достижения и улучшения</p>
+            </div>
+
+            <!-- Общая статистика -->
+            <div class="stats-summary">
+                <div class="stat-summary-card">
+                    <div class="stat-summary-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div class="stat-summary-info">
+                        <span class="stat-summary-value">12</span>
+                        <span class="stat-summary-label">Тренировок завершено</span>
+                    </div>
+                </div>
+                <div class="stat-summary-card">
+                    <div class="stat-summary-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-summary-info">
+                        <span class="stat-summary-value">85%</span>
+                        <span class="stat-summary-label">Увеличение гибкости</span>
+                    </div>
+                </div>
+                <div class="stat-summary-card">
+                    <div class="stat-summary-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-summary-info">
+                        <span class="stat-summary-value">480</span>
+                        <span class="stat-summary-label">Минут тренировок</span>
+                    </div>
+                </div>
+                <div class="stat-summary-card">
+                    <div class="stat-summary-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-summary-info">
+                        <span class="stat-summary-value">5</span>
+                        <span class="stat-summary-label">Дней подряд</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Графики -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-calendar-week"></i>
+                            Активность по неделям
+                        </h4>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-area"></i>
+                            Развитие гибкости
+                        </h4>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="flexibilityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-pie"></i>
+                            Распределение по типам
+                        </h4>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="workoutTypesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Время тренировок
+                        </h4>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Достижения -->
+            <div class="achievements-section">
+                <div class="section-header">
+                    <h4 class="section-subtitle">
+                        <i class="fas fa-trophy"></i>
+                        Достижения
+                    </h4>
+                    <p>Ваши успехи и награды</p>
+                </div>
+
+                <div class="achievements-grid">
+                    <!-- Разблокировано -->
+                    <div class="achievement-card unlocked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon">🏆</div>
+                            <div class="achievement-badge">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h5>Первые шаги</h5>
+                            <p>Завершите первую тренировку</p>
+                            <span class="achievement-date">Получено 15 января 2026</span>
+                        </div>
+                    </div>
+
+                    <div class="achievement-card unlocked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon">🔥</div>
+                            <div class="achievement-badge">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h5>Серия из 5 дней</h5>
+                            <p>Тренируйтесь 5 дней подряд</p>
+                            <span class="achievement-date">Получено 20 января 2026</span>
+                        </div>
+                    </div>
+
+                    <div class="achievement-card unlocked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon">⭐</div>
+                            <div class="achievement-badge">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h5>10 тренировок</h5>
+                            <p>Завершите 10 тренировок</p>
+                            <span class="achievement-date">Получено 25 января 2026</span>
+                        </div>
+                    </div>
+
+                    <div class="achievement-card unlocked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon">💪</div>
+                            <div class="achievement-badge">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h5>Силач</h5>
+                            <p>Завершите программу "Сила и растяжка"</p>
+                            <span class="achievement-date">Получено 10 февраля 2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Заблокировано -->
+                    <div class="achievement-card locked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon">🎯</div>
+                            <div class="achievement-badge">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h5>Мастер гибкости</h5>
+                            <p>Достигните 100% гибкости</p>
+                            <span class="achievement-progress">Прогресс: 85%</span>
+                        </div>
+                    </div>
+
+                    <div class="achievement-card locked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon">🏅</div>
+                            <div class="achievement-badge">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h5>Месяц тренировок</h5>
+                            <p>Занимайтесь 30 дней подряд</p>
+                            <span class="achievement-progress">Прогресс: 15/30 дней</span>
+                        </div>
+                    </div>
+
+                    <div class="achievement-card locked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon">🌟</div>
+                            <div class="achievement-badge">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h5>50 тренировок</h5>
+                            <p>Завершите 50 тренировок</p>
+                            <span class="achievement-progress">Прогресс: 12/50</span>
+                        </div>
+                    </div>
+
+                    <div class="achievement-card locked">
+                        <div class="achievement-icon-wrapper">
+                            <div class="achievement-icon">👑</div>
+                            <div class="achievement-badge">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                        </div>
+                        <div class="achievement-info">
+                            <h5>Профессионал</h5>
+                            <p>Завершите все программы</p>
+                            <span class="achievement-progress">Прогресс: 1/5 программ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Недавние результаты -->
+            <div class="recent-results">
+                <div class="section-header">
+                    <h4 class="section-subtitle">
+                        <i class="fas fa-history"></i>
+                        Недавние результаты
+                    </h4>
+                </div>
+
+                <div class="results-list">
+                    <div class="result-item">
+                        <div class="result-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="result-info">
+                            <h5>Утренняя растяжка</h5>
+                            <p>20 минут • Гибкость</p>
+                            <span class="result-date">Сегодня, 10:00</span>
+                        </div>
+                        <div class="result-stats">
+                            <span class="result-stat">
+                                <i class="fas fa-fire"></i> 120 ккал
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="result-info">
+                            <h5>Гибкость за 30 дней - Урок 8</h5>
+                            <p>25 минут • Программа</p>
+                            <span class="result-date">Вчера, 18:30</span>
+                        </div>
+                        <div class="result-stats">
+                            <span class="result-stat">
+                                <i class="fas fa-fire"></i> 150 ккал
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="result-info">
+                            <h5>Вечернее расслабление</h5>
+                            <p>15 минут • Расслабление</p>
+                            <span class="result-date">28 марта, 20:15</span>
+                        </div>
+                        <div class="result-stats">
+                            <span class="result-stat">
+                                <i class="fas fa-fire"></i> 80 ккал
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="result-info">
+                            <h5>Силовая тренировка</h5>
+                            <p>40 минут • Сила</p>
+                            <span class="result-date">27 марта, 17:00</span>
+                        </div>
+                        <div class="result-stats">
+                            <span class="result-stat">
+                                <i class="fas fa-fire"></i> 280 ккал
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chart.js для графиков -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // График активности
+        const activityCtx = document.getElementById('activityChart');
+        if (activityCtx) {
+            new Chart(activityCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Неделя 1', 'Неделя 2', 'Неделя 3', 'Неделя 4'],
+                    datasets: [{
+                        label: 'Тренировки',
+                        data: [3, 5, 4, 6],
+                        borderColor: '#6198FF',
+                        backgroundColor: 'rgba(97, 152, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // График гибкости
+        const flexibilityCtx = document.getElementById('flexibilityChart');
+        if (flexibilityCtx) {
+            new Chart(flexibilityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Неделя 1', 'Неделя 2', 'Неделя 3', 'Неделя 4'],
+                    datasets: [{
+                        label: 'Гибкость %',
+                        data: [60, 68, 75, 85],
+                        backgroundColor: 'rgba(97, 152, 255, 0.6)',
+                        borderColor: '#6198FF',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // График типов тренировок
+        const typesCtx = document.getElementById('workoutTypesChart');
+        if (typesCtx) {
+            new Chart(typesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Гибкость', 'Сила', 'Расслабление', 'Восстановление'],
+                    datasets: [{
+                        data: [45, 25, 20, 10],
+                        backgroundColor: [
+                            '#6198FF',
+                            '#43e97b',
+                            '#f093fb',
+                            '#4facfe'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // График времени
+        const timeCtx = document.getElementById('timeChart');
+        if (timeCtx) {
+            new Chart(timeCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+                    datasets: [{
+                        label: 'Минуты',
+                        data: [20, 40, 0, 25, 35, 15, 30],
+                        backgroundColor: '#6198FF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

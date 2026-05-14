@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отзывы | StretchWell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reviews.css">
+</head>
+<body>
+    <!-- Хедер -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🧘</span>
+                    <span class="logo-text">StretchWell</span>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="programs.html" class="nav-link">Программы</a></li>
+                        <li><a href="specialists.html" class="nav-link">Специалисты</a></li>
+                        <li><a href="reviews.html" class="nav-link active">Отзывы</a></li>
+                        <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="login.html" class="btn">Войти</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <section class="reviews-section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Узнайте, как мы помогаем людям улучшить свое здоровье</h1>
+            </div>
+            
+            <div class="reviews-grid" id="reviewsGrid">
+                <!-- Отзывы загрузятся из Firebase -->
+                <div style="text-align: center; padding: 60px; grid-column: 1/-1;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: #6198FF;"></i>
+                    <p style="margin-top: 20px; color: #7f8c8d;">Загрузка отзывов...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-icon">🧘</span>
+                    <span class="logo-text">StretchWell</span>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Главная</a>
+                    <a href="programs.html">Программы</a>
+                    <a href="specialists.html">Специалисты</a>
+                    <a href="reviews.html">Отзывы</a>
+                    <a href="contact.html">Контакты</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2026 StretchWell. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase конфиг -->
+    <script type="module" src="js/firebase-config.js"></script>
+    
+    <!-- Загрузка отзывов -->
+    <script type="module">
+        import { loadReviews } from './js/load-reviews.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadReviews();
+        });
+    </script>
+</body>
+</html>

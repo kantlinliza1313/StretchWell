@@ -1,0 +1,194 @@
+/* ============================================
+   СТРАНИЦА СПЕЦИАЛИСТОВ (в стиле отзывов)
+   ============================================ */
+
+/* Секция специалистов */
+.specialists-section {
+    padding: 60px 0;
+}
+
+/* Заголовок страницы */
+.page-hero {
+    background: #f8f9fa;;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    font-size: 18px;
+    color: #7f8c8d;
+}
+
+/* Основной контент */
+.specialists-main {
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Сетка специалистов */
+.specialists-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    margin-bottom: 40px;
+    padding: 50px 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Карточка специалиста */
+.specialist-card {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+    border: 1px solid #eef2f6;
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    flex: 0 1 calc(33.333% - 17px);
+}
+
+.specialist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(97, 152, 255, 0.1);
+    border-color: #6198FF;
+}
+
+/* Фото специалиста (круглое как аватар) */
+.specialist-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6198FF, #F5F5F5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px auto;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.specialist-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Информация о специалисте */
+.specialist-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.specialist-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.specialist-position {
+    font-size: 14px;
+    color: #6198FF;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Детали */
+.specialist-details {
+    margin-bottom: 20px;
+    flex: 1;
+    text-align: left;
+}
+
+.detail-item {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.7;
+}
+
+.detail-item strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* Цитата */
+.specialist-quote {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: auto;
+    text-align: left;
+    border-left: 3px solid #6198FF;
+}
+
+.specialist-quote i {
+    color: #6198FF;
+    font-size: 18px;
+    margin-right: 8px;
+}
+
+.specialist-quote p {
+    margin: 0;
+    font-style: italic;
+    color: #5a6c7d;
+    font-size: 14px;
+    line-height: 1.7;
+    display: inline;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .specialist-card {
+        flex: 0 1 calc(50% - 17px);
+    }
+}
+
+@media (max-width: 768px) {
+    .specialists-grid {
+        padding: 30px 15px;
+    }
+    
+    .specialist-card {
+        flex: 0 1 100%;
+        min-width: 100%;
+    }
+    
+    .page-title {
+        font-size: 28px;
+    }
+    
+    .page-subtitle {
+        font-size: 16px;
+    }
+    
+    .specialist-photo {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .specialist-name {
+        font-size: 20px;
+    }
+}

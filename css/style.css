@@ -1,0 +1,697 @@
+/* Сброс стилей и базовые настройки */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #6198FF;
+    --btn-color: #8DA4CE;
+    --bg-color: #F5F7FA;
+    --text-color: #333333;
+    --bg-light: #FFFFFF;
+    --border-radius: 12px;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Хедер */
+.header {
+    background-color: var(--bg-light);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--primary-color);
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 35px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: var(--transition);
+    font-size: 15px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-color);
+}
+
+/* Кнопки */
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background-color: var(--btn-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: var(--transition);
+    border: 2px solid var(--btn-color);
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #7a8db5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-large {
+    padding: 16px 40px;
+    font-size: 17px;
+}
+
+/* Hero Section с фоновой картинкой */
+.hero {
+    position: relative;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    padding: 120px 0;
+    overflow: hidden;
+}
+
+.hero-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero .container {
+    max-width: 100%;
+    margin-left: 0;
+    padding-left: 5%; /* Или фиксированное значение 40px/50px */
+}
+
+.hero-content {
+    max-width: 650px;
+    margin-left: 0;
+    margin-right: auto; /* Важно: прижимает контент влево */
+    text-align: left;
+}
+
+
+.hero-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(1.35) contrast(1.1) saturate(1.2);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.5) 60%, rgba(255,255,255,0.6) 100%);
+    z-index: 2;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 3;
+}
+
+.hero-content {
+    max-width: 650px;
+    margin-left: 0;
+    text-align: left;
+    padding-left: 0;
+}
+
+.hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 25px;
+    color: var(--text-color);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    margin-bottom: 40px;
+    color: #555;
+    line-height: 1.6;
+    max-width: 550px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+/* Адаптивность для Hero */
+@media (max-width: 968px) {
+    .hero {
+        min-height: 600px;
+        padding: 100px 0;
+    }
+    
+    .hero-title {
+        font-size: 42px;
+    }
+    
+    .hero-subtitle {
+        font-size: 18px;
+    }
+}
+
+/* Для больших экранов */
+@media (min-width: 1400px) {
+    .hero .container {
+        padding-left: 10%; /* Или 120px для очень широких экранов */
+    }
+}
+
+/* Адаптация для планшетов */
+@media (max-width: 968px) {
+    .hero .container {
+        padding-left: 30px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .hero {
+        min-height: 500px;
+        padding: 80px 0;
+    }
+    
+    .hero-content {
+        text-align: center;
+        max-width: 100%;
+        padding: 0 20px;
+    }
+    
+    .hero-title {
+        font-size: 36px;
+    }
+    
+    .hero-subtitle {
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+        justify-content: center;
+    }
+    
+    .btn-large {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        min-height: 450px;
+    }
+    
+    .hero-title {
+        font-size: 28px;
+    }
+}
+
+
+/* Услуги - горизонтальный слайдер с картинками */
+.services-section {
+    padding: 80px 0;
+    background-color: var(--bg-light);
+    position: relative;
+}
+
+.services-slider {
+    position: relative;
+    margin-top: 40px;
+}
+
+.services-track {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 20px 10px;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+.services-track::-webkit-scrollbar {
+    display: none;
+}
+
+.service-card {
+    flex: 0 0 320px;
+    scroll-snap-align: start;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(97, 152, 255, 0.2);
+    border-color: var(--primary-color);
+}
+
+.card-number {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1;
+    z-index: 3;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-image {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(97, 152, 255, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+    z-index: 2;
+}
+
+.service-card:hover .card-image img {
+    transform: scale(1.1);
+}
+
+.card-content {
+    padding: 30px 25px 25px;
+    text-align: center;
+    background: white;
+}
+
+.service-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.service-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-color);
+    line-height: 1.3;
+}
+
+.service-desc {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.7;
+}
+
+/* Стрелки навигации */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    background: white;
+    color: var(--primary-color);
+    font-size: 24px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(97, 152, 255, 0.3);
+}
+
+.slider-arrow:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-arrow {
+    left: -25px;
+}
+
+.next-arrow {
+    right: -25px;
+}
+
+.slider-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .service-card {
+        flex: 0 0 300px;
+    }
+    
+    .card-image {
+        height: 260px;
+    }
+    
+    .slider-arrow {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+    
+    .prev-arrow {
+        left: -15px;
+    }
+    
+    .next-arrow {
+        right: -15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .service-card {
+        flex: 0 0 280px;
+    }
+    
+    .card-image {
+        height: 240px;
+    }
+    
+    .service-title {
+        font-size: 20px;
+    }
+    
+    .service-icon {
+        font-size: 42px;
+    }
+    
+    .card-number {
+        font-size: 40px;
+        top: 10px;
+        right: 15px;
+    }
+    
+    .slider-arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-card {
+        flex: 0 0 260px;
+    }
+    
+    .card-image {
+        height: 220px;
+    }
+    
+    .service-title {
+        font-size: 18px;
+    }
+    
+    .service-desc {
+        font-size: 14px;
+    }
+    
+    .card-number {
+        font-size: 36px;
+    }
+}
+
+/* Выбор клиентов */
+.choice-section {
+    padding: 80px 0;
+    background-color: #ffffff; /* Белый фон */
+}
+
+.choice-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.choice-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px 25px 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 1px solid rgba(97, 152, 255, 0.1);
+    border: 2px solid #e0e0e0;
+}
+
+.choice-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(97, 152, 255, 0.15);
+    border-color: var(--primary-color);
+}
+
+.choice-number {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--primary-color);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: 15px;
+}
+
+.choice-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.choice-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
+}
+
+.choice-desc {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Футер */
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo-text {
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover,
+        .footer-links a.active {
+            color: #6198FF;
+        }
+
+        .footer-copyright {
+            color: #95a5a6;
+            font-size: 14px;
+        }
+
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .choice-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .choice-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .choice-card {
+        padding: 30px 20px;
+    }
+}
+
+/* Отзывы */
+.reviews-section {
+    padding: 80px 0;
+    background: #f8f9fa;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.review-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+}
+
+.review-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5a6c7d;
+    margin-bottom: 25px;
+    min-height: 150px;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.review-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.review-info {
+    flex: 1;
+}
+
+.review-name {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.review-rating {
+    color: #f1c40f;
+    font-size: 16px;
+    letter-spacing: 2px;
+}

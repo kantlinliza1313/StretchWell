@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Специалисты | StretchWell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/specialists.css">
+</head>
+<body>
+    <!-- Хедер -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-text">StretchWell</span>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="programs.html" class="nav-link">Программы</a></li>
+                        <li><a href="specialists.html" class="nav-link active">Специалисты</a></li>
+                        <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
+                        <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="login.html" class="btn btn-primary">Войти</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero секция -->
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title">Наши специалисты</h1>
+            <p class="page-subtitle">Профессиональные инструкторы помогут вам достичь целей</p>
+        </div>
+    </section>
+
+    <!-- Специалисты (загружаются из Firebase) -->
+    <main class="specialists-main">
+        <div class="container">
+            <div class="specialists-grid" id="specialistsGrid">
+                <!-- Специалисты загрузятся из Firebase -->
+                <div style="text-align: center; padding: 60px; grid-column: 1/-1;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: #6198FF;"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-text">StretchWell</span>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Главная</a>
+                    <a href="programs.html">Программы</a>
+                    <a href="specialists.html">Специалисты</a>
+                    <a href="reviews.html">Отзывы</a>
+                    <a href="contact.html">Контакты</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2026 StretchWell. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase конфиг -->
+    <script type="module" src="js/firebase-config.js"></script>
+    
+    <!-- Загрузка специалистов -->
+    <script type="module">
+        import { loadSpecialists } from './js/load-specialists.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSpecialists();
+        });
+    </script>
+</body>
+</html>

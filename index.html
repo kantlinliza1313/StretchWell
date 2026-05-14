@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StretchWell - Растяжка для здоровья</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Хедер -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-text">StretchWell</span>
+                </div>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link active">Главная</a></li>
+                        <li><a href="programs.html" class="nav-link">Программы</a></li>
+                        <li><a href="specialists.html" class="nav-link">Специалисты</a></li>
+                        <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
+                        <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="login.html" class="btn btn-primary">Войти</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section (статичный, не из базы) -->
+    <section class="hero">
+        <div class="hero-image-container">
+            <img src="images/photo6.jpg" alt="StretchWell" class="hero-bg-image">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        Будь в форме — почувствуй разницу!
+                    </h1>
+                    <p class="hero-subtitle">
+                        Персонализированные программы растяжки, которые помогут вам чувствовать себя лучше каждый день
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="programs.html" class="btn btn-large btn-primary">Программы</a>
+                        <a href="#services" class="btn btn-large btn-outline">Наши услуги</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Выбор клиентов (загружается из Firebase: collection "features") -->
+    <section class="choice-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Почему выбирают нас?</h2>
+            </div>
+            
+            <div class="choice-grid">
+                <!-- Данные загрузятся из Firebase -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Наши услуги (загружается из Firebase: collection "services") -->
+    <section id="services" class="services-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Наши услуги</h2>
+                <p class="section-subtitle">Решаем ваши проблемы с помощью профессиональной растяжки</p>
+            </div>
+            <div class="services-slider">
+                <div class="services-track">
+                    <!-- Данные загрузятся из Firebase -->
+                </div>
+                <button class="slider-arrow prev-arrow" aria-label="Предыдущие услуги">←</button>
+                <button class="slider-arrow next-arrow" aria-label="Следующие услуги">→</button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-icon">🧘</span>
+                    <span class="logo-text">StretchWell</span>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Главная</a>
+                    <a href="programs.html">Программы</a>
+                    <a href="specialists.html">Специалисты</a>
+                    <a href="reviews.html">Отзывы</a>
+                    <a href="contact.html">Контакты</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2026 StretchWell. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase конфиг -->
+    <script type="module" src="js/firebase-config.js"></script>
+    
+    <!-- Загрузка данных из базы -->
+    <script type="module">
+        import { loadHomepage } from './js/load-homepage.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHomepage();
+        });
+    </script>
+    <script type="module">
+</script>
+
+    <!-- Основной JS -->
+    <script src="js/main.js"></script>
+
+</body>
+</html>

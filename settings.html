@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки - StretchWell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Боковая панель -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo-link">
+                <span class="logo-text">StretchWell</span>
+            </a>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
+            </a>
+            <a href="my_programs.html" class="nav-item">
+                <i class="fas fa-dumbbell"></i>
+                <span>Мои программы</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Прогресс</span>
+            </a>
+            <a href="schedule.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Расписание</span>
+            </a>
+            <a href="settings.html" class="nav-item active">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <header class="top-bar">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="top-bar-center">
+                <h2 class="page-title">Настройки</h2>
+            </div>
+            <div class="user-info">
+                <span class="user-name">Иван Иванов</span>
+                <div class="user-avatar-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=Иван+Иванов&background=6198FF&color=fff" alt="Avatar" class="user-avatar">
+                </div>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <!-- Заголовок -->
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-cog"></i>
+                    Настройки аккаунта
+                </h3>
+                <p class="section-subtitle">Управляйте своей учётной записью и предпочтениями</p>
+            </div>
+
+            <!-- Личные данные -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #6198FF 0%, #4a7fd6 100%);">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="card-title-section">
+                        <h4 class="card-title">Личные данные</h4>
+                        <p class="card-subtitle">Основная информация о вашем профиле</p>
+                    </div>
+                </div>
+
+                <form class="settings-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Имя и фамилия</label>
+                            <input type="text" id="fullName" class="form-input" value="Иван Иванов">
+                        </div>
+                        <div class="form-group">
+                            <label for="birthDate">Дата рождения</label>
+                            <input type="date" id="birthDate" class="form-input" value="1990-01-15">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Электронная почта</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" class="form-input" value="demo@stretchwell.ru">
+                        </div>
+                        <span class="form-hint">На эту почту будут приходить уведомления</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Номер телефона</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" class="form-input" value="+7 (999) 123-45-67">
+                        </div>
+                        <span class="form-hint">Используется для восстановления доступа</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goal">Ваша цель</label>
+                        <select id="goal" class="form-input">
+                            <option value="flexibility" selected>Развитие гибкости</option>
+                            <option value="strength">Укрепление мышц</option>
+                            <option value="relax">Снятие напряжения и расслабление</option>
+                            <option value="recovery">Восстановление после тренировок</option>
+                            <option value="weightloss">Похудение</option>
+                            <option value="health">Общее оздоровление</option>
+                            <option value="sports">Подготовка к спортивным событиям</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience">Уровень подготовки</label>
+                        <select id="experience" class="form-input">
+                            <option value="beginner" selected>Новичок (никогда не занимался)</option>
+                            <option value="intermediate">Средний (есть небольшой опыт)</option>
+                            <option value="advanced">Продвинутый (занимаюсь регулярно)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Сохранить изменения
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Безопасность -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="card-title-section">
+                        <h4 class="card-title">Безопасность</h4>
+                        <p class="card-subtitle">Управление паролем и доступом</p>
+                    </div>
+                </div>
+
+                <form class="settings-form">
+                    <div class="form-group">
+                        <label for="currentPassword">Текущий пароль</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="currentPassword" class="form-input" placeholder="Введите текущий пароль">
+                            <button type="button" class="password-toggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newPassword">Новый пароль</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="newPassword" class="form-input" placeholder="Введите новый пароль">
+                                <button type="button" class="password-toggle">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Подтвердите пароль</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirmPassword" class="form-input" placeholder="Повторите новый пароль">
+                                <button type="button" class="password-toggle">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="password-requirements">
+                        <h5>Требования к паролю:</h5>
+                        <ul>
+                            <li class="requirement"><i class="fas fa-check"></i> Минимум 8 символов</li>
+                            <li class="requirement"><i class="fas fa-check"></i> Хотя бы одна заглавная буква</li>
+                            <li class="requirement"><i class="fas fa-check"></i> Хотя бы одна цифра</li>
+                            <li class="requirement"><i class="fas fa-times"></i> Специальный символ (!@#$%^&*)</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-key"></i> Изменить пароль
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Уведомления -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="card-title-section">
+                        <h4 class="card-title">Уведомления</h4>
+                        <p class="card-subtitle">Настройте способы связи с вами</p>
+                    </div>
+                </div>
+
+                <div class="notifications-list">
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <div class="notification-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="notification-text">
+                                <h5>Email-уведомления</h5>
+                                <p>Новости, обновления и важные сообщения</p>
+                            </div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <div class="notification-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="notification-text">
+                                <h5>Push-уведомления</h5>
+                                <p>Напоминания о тренировках и достижениях</p>
+                            </div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <div class="notification-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="notification-text">
+                                <h5>Напоминания о тренировках</h5>
+                                <p>Уведомления за 30 минут до запланированной тренировки</p>
+                            </div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <div class="notification-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="notification-text">
+                                <h5>Достижения и прогресс</h5>
+                                <p>Уведомления о новых достижениях и рекордах</p>
+                            </div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <div class="notification-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="notification-text">
+                                <h5>Акции и предложения</h5>
+                                <p>Специальные предложения и скидки</p>
+                            </div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Сохранить настройки
+                    </button>
+                </div>
+            </div>
+
+            <!-- Приватность -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="card-title-section">
+                        <h4 class="card-title">Приватность</h4>
+                        <p class="card-subtitle">Контроль над вашими данными</p>
+                    </div>
+                </div>
+
+                <div class="privacy-settings">
+                    <div class="privacy-item">
+                        <div class="privacy-info">
+                            <h5>Видимость профиля</h5>
+                            <p>Кто может видеть ваш профиль и прогресс</p>
+                        </div>
+                        <select class="form-input form-input-sm">
+                            <option value="private">Только я</option>
+                            <option value="friends">Друзья</option>
+                            <option value="public">Все пользователи</option>
+                        </select>
+                    </div>
+
+                    <div class="privacy-item">
+                        <div class="privacy-info">
+                            <h5>Показывать достижения</h5>
+                            <p>Отображать ваши достижения в профиле</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="privacy-item">
+                        <div class="privacy-info">
+                            <h5>Показывать статистику</h5>
+                            <p>Отображать вашу статистику тренировок</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Опасная зона -->
+            <div class="settings-card danger-zone">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="card-title-section">
+                        <h4 class="card-title">Опасная зона</h4>
+                        <p class="card-subtitle">Необратимые действия с аккаунтом</p>
+                    </div>
+                </div>
+
+                <div class="danger-content">
+                    <div class="danger-item">
+                        <div class="danger-info">
+                            <h5>Удалить аккаунт</h5>
+                            <p>Все ваши данные будут безвозвратно удалены. Это действие нельзя отменить.</p>
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="confirmDeleteAccount()">
+                            <i class="fas fa-trash-alt"></i> Удалить аккаунт
+                        </button>
+                    </div>
+
+                    <div class="danger-item">
+                        <div class="danger-info">
+                            <h5>Выйти со всех устройств</h5>
+                            <p>Завершить все активные сессии на других устройствах</p>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-danger-outline" onclick="logoutAllDevices()">
+                            <i class="fas fa-sign-out-alt"></i> Выйти везде
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Информация об аккаунте -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="card-title-section">
+                        <h4 class="card-title">Информация об аккаунте</h4>
+                        <p class="card-subtitle">Детали вашей учётной записи</p>
+                    </div>
+                </div>
+
+                <div class="account-info">
+                    <div class="info-row">
+                        <span class="info-label">ID аккаунта:</span>
+                        <span class="info-value">#SW-2026-001234</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Дата регистрации:</span>
+                        <span class="info-value">15 января 2026</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Статус:</span>
+                        <span class="info-value"><span class="badge badge-free">Бесплатный</span></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Последний вход:</span>
+                        <span class="info-value">30 марта 2026, 10:30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно подтверждения удаления -->
+    <div class="modal" id="deleteConfirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Удаление аккаунта</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4>Вы уверены?</h4>
+                    <p>Это действие нельзя отменить. Все ваши данные будут удалены:</p>
+                    <ul>
+                        <li>Прогресс тренировок</li>
+                        <li>Достижения</li>
+                        <li>Расписание</li>
+                        <li>Персональные данные</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="confirmEmail">Введите ваш email для подтверждения:</label>
+                    <input type="email" id="confirmEmail" class="form-input" placeholder="demo@stretchwell.ru">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeDeleteModal()">Отмена</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteAccount()">
+                        <i class="fas fa-trash-alt"></i> Удалить навсегда
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

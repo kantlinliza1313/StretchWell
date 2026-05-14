@@ -1,0 +1,345 @@
+/* Статистика сверху */
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-summary-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.stat-summary-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-summary-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.stat-summary-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-summary-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+}
+
+.stat-summary-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Секция графиков */
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.chart-header {
+    margin-bottom: 20px;
+}
+
+.chart-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.chart-title i {
+    color: #6198FF;
+}
+
+.chart-container {
+    position: relative;
+    height: 250px;
+}
+
+/* Достижения */
+.achievements-section {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.achievements-section .section-header {
+    margin-bottom: 25px;
+}
+
+.achievements-section .section-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.achievements-section .section-header p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.achievement-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.achievement-card.unlocked {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%);
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+}
+
+.achievement-card.unlocked:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
+}
+
+.achievement-card.locked {
+    border: 2px dashed #e0e6ed;
+}
+
+.achievement-icon-wrapper {
+    position: relative;
+}
+
+.achievement-icon {
+    font-size: 40px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 12px;
+}
+
+.achievement-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.achievement-card.unlocked .achievement-badge {
+    background: #43e97b;
+    color: white;
+}
+
+.achievement-card.locked .achievement-badge {
+    background: #ccc;
+    color: white;
+}
+
+.achievement-info {
+    flex: 1;
+}
+
+.achievement-info h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.achievement-info p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.achievement-date {
+    font-size: 12px;
+    color: #43e97b;
+    font-weight: 600;
+}
+
+.achievement-progress {
+    font-size: 12px;
+    color: #999;
+    font-weight: 600;
+}
+
+/* Недавние результаты */
+.recent-results {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.recent-results .section-header {
+    margin-bottom: 25px;
+}
+
+.recent-results .section-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.result-item:hover {
+    background: #f0f4f8;
+    transform: translateX(5px);
+}
+
+.result-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.result-info {
+    flex: 1;
+}
+
+.result-info h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.result-info p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.result-date {
+    font-size: 12px;
+    color: #999;
+}
+
+.result-stats {
+    display: flex;
+    gap: 15px;
+}
+
+.result-stat {
+    font-size: 13px;
+    color: #666;
+    font-weight: 600;
+}
+
+.result-stat i {
+    color: #f5576c;
+    margin-right: 5px;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+        height: 200px;
+    }
+
+    .result-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .result-stats {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

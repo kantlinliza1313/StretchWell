@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог программ - StretchWell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/my_programs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body class="dashboard-page">
+    <!-- Боковая панель -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo-link">
+                <span class="logo-text">StretchWell</span>
+            </a>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
+            </a>
+            <a href="my_programs.html" class="nav-item active">
+                <i class="fas fa-dumbbell"></i>
+                <span>Каталог программ</span>
+            </a>
+            <a href="dashboard.html#progress" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Прогресс</span>
+            </a>
+            <a href="dashboard.html#schedule" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Расписание</span>
+            </a>
+            <a href="dashboard.html#settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <!-- Верхняя панель -->
+        <header class="top-bar">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="top-bar-center">
+                <h2 class="page-title">Каталог программ</h2>
+            </div>
+            <div class="user-info">
+                <span class="user-name" id="topUserName">Пользователь</span>
+                <div class="user-avatar-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=User&background=6198FF&color=fff" 
+                         alt="Avatar" 
+                         class="user-avatar"
+                         id="userAvatar">
+                </div>
+            </div>
+        </header>
+
+        <!-- Контент страницы -->
+        <div class="page-content">
+            <!-- Приветствие -->
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h1>Выберите программу для тренировок 💪</h1>
+                    <p>Не знаете с чего начать? Пройдите короткий тест и мы подберём идеальную программу именно для вас!</p>
+                </div>
+                <button class="btn btn-test" onclick="startQuiz()">
+                    <i class="fas fa-clipboard-list"></i>
+                    Пройти тест и подобрать программу
+                </button>
+            </div>
+
+            <!-- Фильтры -->
+            <div class="filters-section">
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label><i class="fas fa-layer-group"></i> Уровень:</label>
+                        <select id="levelFilter" class="filter-select" onchange="applyFilters()">
+                            <option value="all">Все уровни</option>
+                            <option value="beginner">Новичок</option>
+                            <option value="intermediate">Средний</option>
+                            <option value="advanced">Продвинутый</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-bullseye"></i> Цель:</label>
+                        <select id="goalFilter" class="filter-select" onchange="applyFilters()">
+                            <option value="all">Все цели</option>
+                            <option value="flexibility">Гибкость</option>
+                            <option value="strength">Сила</option>
+                            <option value="relax">Расслабление</option>
+                            <option value="recovery">Восстановление</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label><i class="fas fa-clock"></i> Длительность:</label>
+                        <select id="durationFilter" class="filter-select" onchange="applyFilters()">
+                            <option value="all">Любая</option>
+                            <option value="short">До 15 мин</option>
+                            <option value="medium">15-30 мин</option>
+                            <option value="long">30+ мин</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-reset" onclick="resetFilters()">
+                        <i class="fas fa-redo"></i> Сбросить
+                    </button>
+                </div>
+            </div>
+
+            <!-- Каталог программ (загружается из Firebase) -->
+            <div class="programs-grid" id="programsGrid">
+                <!-- Данные загрузятся из Firebase -->
+            </div>
+
+            <!-- Сообщение если ничего не найдено -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>Программы не найдены</h3>
+                <p>Попробуйте изменить параметры фильтра</p>
+                <button class="btn btn-primary" onclick="resetFilters()">Сбросить фильтры</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно теста -->
+    <div class="modal" id="quizModal">
+        <div class="modal-content quiz-modal">
+            <div class="modal-header">
+                <h3>🎯 Подбор программы</h3>
+                <button class="modal-close" onclick="closeQuiz()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text" id="quizProgressText">Вопрос 1 из 5</span>
+                </div>
+                <div class="quiz-questions" id="quizQuestions"></div>
+                <div class="quiz-result" id="quizResult" style="display: none;">
+                    <div class="result-icon">🎉</div>
+                    <h4>Мы подобрали для вас программу:</h4>
+                    <div class="result-program" id="resultProgram"></div>
+                    <div class="result-actions">
+                        <button class="btn btn-primary" onclick="enrollFromQuiz()">
+                            <i class="fas fa-check"></i> Выбрать эту программу
+                        </button>
+                        <button class="btn btn-outline" onclick="showAllPrograms()">
+                            <i class="fas fa-th-list"></i> Смотреть все
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module" src="js/firebase-config.js"></script>
+    
+    <!-- Загрузка программ и логика -->
+    <script type="module" src="js/load-my-programs.js"></script>
+    
+    <!-- Основной JS -->
+    <script src="js/main.js"></script>
+</body>
+</html>
