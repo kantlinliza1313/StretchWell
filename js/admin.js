@@ -85,7 +85,8 @@ function switchSection(section) {
         services: 'Услуги', 
         users: 'Пользователи',
         specialists: 'Специалисты',
-        reviews: 'Отзывы'
+        reviews: 'Отзывы',
+        contactMessages: 'Сообщения с сайта' 
     };
     document.getElementById('pageTitle').textContent = titles[section] || 'Панель управления';
     
@@ -97,6 +98,7 @@ function switchSection(section) {
         case 'users': loadUsersTable(); break;
         case 'specialists': loadSpecialistsTable(); break;
         case 'reviews': loadReviewsTable(); break;
+        case 'contactMessages': loadContactMessages(); break;
         case 'dashboard': loadDashboardStats(); break;
     }
 }
@@ -1588,6 +1590,134 @@ async function loadSettings() {
         console.error('❌ Ошибка загрузки настроек:', error);
     }
 }
+
+// ============================================
+// 🔹 СООБЩЕНИЯ С КОНТАКТНОЙ ФОРМЫ
+// ============================================
+async function loadContactMessages() {
+    const tbody = document.getElementById('contactMessagesTable');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="7">Загрузка...</td></tr>';
+    
+    try {
+        const q = query(
+            collection(db, 'contactMessages'),
+            orderBy('createdAt', 'desc')
+        );
+        const snapshot = await getDocs(q);
+        const messages = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        if (!messages.length) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;">Нет сообщений</td></tr>';
+            return;
+        }
+        
+        const subjectLabels = {
+            general: 'Общий вопрос',
+            registration: 'Регистрация',
+            programs: 'Программы',
+            technical: 'Техподдержка',
+            other: 'Другое'
+        };
+        
+        tbody.innerHTML = messages.map(m => {
+            const date = m.createdAt?.toDate 
+                ? m.createdAt.toDate().toLocaleString('ru-RU') 
+                : '—';
+            
+            return `
+                <tr class="${m.read ? '' : 'unread-row'}">
+                    <td><strong>${escapeHtml(m.name)}</strong></td>
+                    <td><a href="mailto:${escapeHtml(m.email)}">${escapeHtml(m.email)}</a></td>
+                    <td>${escapeHtml(m.phone || '—')}</td>
+                    <td><span class="badge badge-info">${subjectLabels[m.subject] || m.subject}</span></td>
+                    <td style="max-width:250px;">${escapeHtml((m.message || '').substring(0, 80))}${(m.message || '').length > 80 ? '...' : ''}</td>
+                    <td>${date}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn-icon btn-edit" onclick="window.viewContactMessage('${m.id}')" title="Просмотр">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon btn-delete" onclick="window.deleteContactMessage('${m.id}')" title="Удалить">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('❌ Ошибка:', error);
+        tbody.innerHTML = `<tr><td colspan="7">Ошибка: ${error.message}</td></tr>`;
+    }
+}
+
+window.viewContactMessage = async function(messageId) {
+    try {
+        const docSnap = await getDoc(doc(db, 'contactMessages', messageId));
+        if (!docSnap.exists()) {
+            Swal.fire('Ошибка', 'Сообщение не найдено', 'error');
+            return;
+        }
+        
+        const m = docSnap.data();
+        const date = m.createdAt?.toDate 
+            ? m.createdAt.toDate().toLocaleString('ru-RU') 
+            : '—';
+        
+        // Отмечаем как прочитанное
+        if (!m.read) {
+            await updateDoc(doc(db, 'contactMessages', messageId), { read: true });
+        }
+        
+        Swal.fire({
+            title: `<strong>${escapeHtml(m.subject)}</strong>`,
+            html: `
+                <div style="text-align:left;">
+                    <p><strong>От:</strong> ${escapeHtml(m.name)} (${escapeHtml(m.email)})</p>
+                    <p><strong>Телефон:</strong> ${escapeHtml(m.phone || '—')}</p>
+                    <p><strong>Дата:</strong> ${date}</p>
+                    <hr style="margin: 15px 0;">
+                    <p style="white-space: pre-wrap;">${escapeHtml(m.message)}</p>
+                </div>
+            `,
+            width: '600px',
+            confirmButtonText: 'Закрыть',
+            confirmButtonColor: '#6198FF'
+        });
+        
+        loadContactMessages();
+        
+    } catch (error) {
+        console.error('❌ Ошибка:', error);
+        Swal.fire('Ошибка', 'Не удалось загрузить сообщение', 'error');
+    }
+};
+
+window.deleteContactMessage = async function(messageId) {
+    const result = await Swal.fire({
+        title: 'Удалить сообщение?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e74c3c',
+        confirmButtonText: 'Да, удалить',
+        cancelButtonText: 'Отмена'
+    });
+    
+    if (result.isConfirmed) {
+        try {
+            await deleteDoc(doc(db, 'contactMessages', messageId));
+            Swal.fire('Удалено!', '', 'success');
+            loadContactMessages();
+        } catch (error) {
+            Swal.fire('Ошибка', 'Не удалось удалить', 'error');
+        }
+    }
+};
+
+// Добавьте в switchSection:
+// case 'contactMessages': loadContactMessages(); break;
 
 // ============================================
 // 🔹 ВЫХОД

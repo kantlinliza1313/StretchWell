@@ -10,7 +10,7 @@
 /* Заголовок страницы */
 .page-hero {
     background: #f8f9fa;;
-    padding: 60px 0;
+    padding: 20px 0 15px;
     text-align: center;
 }
 
@@ -19,18 +19,23 @@
     font-size: 36px;
     font-weight: 700;
     color: #2c3e50;
+    padding: 10px 0;
     margin-bottom: 10px;
 }
 
 .page-subtitle {
-    font-size: 18px;
-    color: #7f8c8d;
+   font-size: 25px;
+    color: #7f8c8d;  /* ✅ Серый текст (вместо opacity) */
+     margin-top: 0;
+     
+
+     
 }
 
 /* Основной контент */
 .specialists-main {
     background: #f8f9fa;
-    min-height: 100vh;
+    min-height: auto;  /* ← УБРАЛИ ЛИШНИЙ ОТСТУП */
 }
 
 /* Сетка специалистов */
@@ -39,8 +44,8 @@
     flex-wrap: wrap;
     gap: 25px;
     justify-content: center;
-    margin-bottom: 40px;
-    padding: 50px 20px;
+    margin-bottom: 20px;  /* ← УМЕНЬШЕНО с 40px */
+    padding: 30px 20px;  /* ← УМЕНЬШЕНО с 50px */
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;

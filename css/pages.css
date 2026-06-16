@@ -1,7 +1,7 @@
 /* Страница программ - карточки */
 .programs-hero {
     background: #f8f9fa;  /* ✅ Единый светло-серый фон (вместо градиента) */
-    padding: 80px 0 60px;
+    padding: 40px 0 30px;
     text-align: center;
     color: #2c3e50;  /* ✅ Тёмный текст (вместо белого) */
 }
@@ -10,17 +10,18 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 40px;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     color: #2c3e50;  /* ✅ Явно указываем цвет */
 }
 
 .page-subtitle {
-    font-size: 30px;
+    font-size: 25px;
     color: #7f8c8d;  /* ✅ Серый текст (вместо opacity) */
+     margin-top: 0;
 }
 
 .programs-main {
-    padding: 60px 0;
+    padding: 20px 0;
     background-color: #f8f9fa;  /* ✅ Тот же цвет что и .programs-hero */
 }
 
@@ -342,49 +343,69 @@
     color: var(--text-color);
 }
 
- /* Футер */
-        .footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 40px 0;
-        }
 
-        .footer-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+     /* Футер — в стиле хедера */
+.footer {
+    background-color: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    margin-top: 40px;
+}
 
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-        .footer-logo .logo-text {
-            color: white;
-        }
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-        .footer-links {
-            display: flex;
-            gap: 30px;
-        }
+.footer-logo .logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    color: #6198FF;
+}
 
-        .footer-links a {
-            color: #ecf0f1;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+.footer-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
 
-        .footer-links a:hover,
-        .footer-links a.active {
-            color: #6198FF;
-        }
+.footer-links a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
 
-        .footer-copyright {
-            color: #95a5a6;
-            font-size: 14px;
-        }
+.footer-links a:hover {
+    color: #6198FF;
+}
+
+.footer-copyright {
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+/* Адаптивность футера */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
 
 
 /* Адаптивность */
