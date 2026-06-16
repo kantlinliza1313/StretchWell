@@ -25,27 +25,34 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item">
-                <i class="fas fa-user"></i>
-                <span>Профиль</span>
-            </a>
-            <a href="my_programs.html" class="nav-item">
-                <i class="fas fa-dumbbell"></i>
-                <span>Мои программы</span>
-            </a>
-            <a href="progress.html" class="nav-item">
-                <i class="fas fa-chart-line"></i>
-                <span>Прогресс</span>
-            </a>
-            <a href="schedule.html" class="nav-item">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Расписание</span>
-            </a>
-            <a href="settings.html" class="nav-item active">
-                <i class="fas fa-cog"></i>
-                <span>Настройки</span>
-            </a>
-        </nav>
+    <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Профиль</span>
+    </a>
+    <a href="my_programs.html" class="nav-item">
+        <i class="fas fa-dumbbell"></i>
+        <span>Каталог программ</span>
+    </a>
+    <a href="progress.html" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Прогресс</span>
+    </a>
+    <a href="schedule.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Расписание</span>
+    </a>
+    <!-- 🔥 НОВЫЙ ПУНКТ: СООБЩЕНИЯ -->
+    <a href="client-messages.html" class="nav-item">
+        <i class="fas fa-envelope"></i>
+        <span>Сообщения</span>
+        <span class="badge badge-info" id="msgCount" style="display:none">0</span>
+    </a>
+    <a href="settings.html" class="nav-item active">
+        <i class="fas fa-cog"></i>
+        <span>Настройки</span>
+    </a>
+</nav>
+
 
         <div class="sidebar-footer">
             <a href="index.html" class="nav-item logout">
@@ -65,7 +72,7 @@
                 <h2 class="page-title">Настройки</h2>
             </div>
             <div class="user-info">
-                <span class="user-name">Иван Иванов</span>
+                <span class="user-name"></span>
                 <div class="user-avatar-wrapper">
                     <img src="https://ui-avatars.com/api/?name=Иван+Иванов&background=6198FF&color=fff" alt="Avatar" class="user-avatar">
                 </div>
@@ -131,7 +138,6 @@
                             <option value="strength">Укрепление мышц</option>
                             <option value="relax">Снятие напряжения и расслабление</option>
                             <option value="recovery">Восстановление после тренировок</option>
-                            <option value="weightloss">Похудение</option>
                             <option value="health">Общее оздоровление</option>
                             <option value="sports">Подготовка к спортивным событиям</option>
                         </select>
@@ -231,22 +237,6 @@
                     </div>
                 </div>
 
-                <div class="notifications-list">
-                    <div class="notification-item">
-                        <div class="notification-info">
-                            <div class="notification-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="notification-text">
-                                <h5>Email-уведомления</h5>
-                                <p>Новости, обновления и важные сообщения</p>
-                            </div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
 
                     <div class="notification-item">
                         <div class="notification-info">
@@ -280,38 +270,6 @@
                         </label>
                     </div>
 
-                    <div class="notification-item">
-                        <div class="notification-info">
-                            <div class="notification-icon">
-                                <i class="fas fa-trophy"></i>
-                            </div>
-                            <div class="notification-text">
-                                <h5>Достижения и прогресс</h5>
-                                <p>Уведомления о новых достижениях и рекордах</p>
-                            </div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="notification-item">
-                        <div class="notification-info">
-                            <div class="notification-icon">
-                                <i class="fas fa-gift"></i>
-                            </div>
-                            <div class="notification-text">
-                                <h5>Акции и предложения</h5>
-                                <p>Специальные предложения и скидки</p>
-                            </div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
 
                 <div class="form-actions">
                     <button type="button" class="btn btn-primary">
@@ -320,54 +278,6 @@
                 </div>
             </div>
 
-            <!-- Приватность -->
-            <div class="settings-card">
-                <div class="card-header">
-                    <div class="card-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="card-title-section">
-                        <h4 class="card-title">Приватность</h4>
-                        <p class="card-subtitle">Контроль над вашими данными</p>
-                    </div>
-                </div>
-
-                <div class="privacy-settings">
-                    <div class="privacy-item">
-                        <div class="privacy-info">
-                            <h5>Видимость профиля</h5>
-                            <p>Кто может видеть ваш профиль и прогресс</p>
-                        </div>
-                        <select class="form-input form-input-sm">
-                            <option value="private">Только я</option>
-                            <option value="friends">Друзья</option>
-                            <option value="public">Все пользователи</option>
-                        </select>
-                    </div>
-
-                    <div class="privacy-item">
-                        <div class="privacy-info">
-                            <h5>Показывать достижения</h5>
-                            <p>Отображать ваши достижения в профиле</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="privacy-item">
-                        <div class="privacy-info">
-                            <h5>Показывать статистику</h5>
-                            <p>Отображать вашу статистику тренировок</p>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
 
             <!-- Опасная зона -->
             <div class="settings-card danger-zone">
@@ -392,17 +302,7 @@
                         </button>
                     </div>
 
-                    <div class="danger-item">
-                        <div class="danger-info">
-                            <h5>Выйти со всех устройств</h5>
-                            <p>Завершить все активные сессии на других устройствах</p>
-                        </div>
-                        <button type="button" class="btn btn-outline btn-danger-outline" onclick="logoutAllDevices()">
-                            <i class="fas fa-sign-out-alt"></i> Выйти везде
-                        </button>
-                    </div>
-                </div>
-            </div>
+                
 
             <!-- Информация об аккаунте -->
             <div class="settings-card">
@@ -424,10 +324,6 @@
                     <div class="info-row">
                         <span class="info-label">Дата регистрации:</span>
                         <span class="info-value">15 января 2026</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Статус:</span>
-                        <span class="info-value"><span class="badge badge-free">Бесплатный</span></span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Последний вход:</span>
@@ -470,5 +366,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Firebase -->
+<script type="module" src="js/firebase-config.js"></script>
+<script type="module" src="js/firebase-auth.js"></script>
+<script type="module" src="js/settings.js"></script>
+
+
 </body>
 </html>

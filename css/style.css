@@ -695,3 +695,256 @@ body {
     font-size: 16px;
     letter-spacing: 2px;
 }
+
+/* ===== МОДАЛЬНОЕ ОКНО ОШИБКИ ===== */
+.error-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.error-modal.active {
+    display: flex;
+}
+
+.error-modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 30px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+.error-icon {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.error-icon svg {
+    animation: scaleIn 0.3s ease;
+}
+
+.error-title {
+    font-size: 24px;
+    color: #2c3e50;
+    margin: 0 0 12px 0;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.error-message {
+    font-size: 16px;
+    color: #7f8c8d;
+    margin: 0 0 30px 0;
+    line-height: 1.5;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.error-btn {
+    background: linear-gradient(135deg, #6198FF 0%, #8DA4CE 100%);
+    color: white;
+    border: none;
+    padding: 14px 50px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(97, 152, 255, 0.4);
+}
+
+.error-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(97, 152, 255, 0.6);
+}
+
+.error-btn:active {
+    transform: translateY(0);
+}
+
+/* Подсветка полей с ошибкой */
+.form-input.error {
+    border-color: #EF5350 !important;
+    background-color: #fff5f5 !important;
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+/* для сообщения криента
+/* ============================================
+   СТРАНИЦА СООБЩЕНИЙ
+   ============================================ */
+.messages-container {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.messages-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f2f5;
+}
+
+.messages-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    border-left: 4px solid transparent;
+}
+
+.message-item:hover {
+    background: #f0f4f8;
+    transform: translateX(3px);
+}
+
+.message-item.unread {
+    background: #f0f7ff;
+    border-left-color: #6198FF;
+}
+
+.message-avatar {
+    flex-shrink: 0;
+}
+
+.message-avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #6198FF;
+}
+
+.message-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.message-from {
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.message-date {
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+.message-subject {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.message-preview {
+    font-size: 14px;
+    color: #5a6c7d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.message-unread-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 10px;
+    height: 10px;
+    background: #6198FF;
+    border-radius: 50%;
+}
+
+/* Модальное окно сообщения */
+.message-full-header h4 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-size: 20px;
+}
+
+.message-full-body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .message-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .message-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}

@@ -305,3 +305,84 @@
         padding: 20px;
     }
 }
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+}
+
+.notification.success { background: #43e97b; }
+.notification.error { background: #e74c3c; }
+.notification.info { background: #6198FF; }
+
+@keyframes slideIn {
+    from { transform: translateX(400px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Кнопка отправки */
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #6198FF 0%, #8DA4CE 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(97, 152, 255, 0.4);
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Сообщение об успехе */
+.form-success {
+    text-align: center;
+    padding: 40px;
+    background: #f0fff4;
+    border-radius: 12px;
+    border: 2px solid #43e97b;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: #43e97b;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: 0 auto 20px;
+}
+
+.form-success h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.form-success p {
+    color: #7f8c8d;
+}

@@ -874,3 +874,30 @@
     align-items: center;
     gap: 5px;
 }
+
+/* Информация о тренере на карточке программы */
+.program-trainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #f0f7ff;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #5a6c7d;
+}
+
+.program-trainer i {
+    color: #6198FF;
+    font-size: 16px;
+}
+
+.program-trainer span {
+    font-weight: 600;
+}
+
+/* В результатах квиза */
+.result-program-info p {
+    margin: 5px 0;
+}

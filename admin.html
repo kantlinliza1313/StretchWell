@@ -25,6 +25,10 @@
                 <i class="fas fa-dumbbell"></i>
                 <span>Программы</span>
             </a>
+            <a href="#" class="nav-item" data-section="trainers">
+                <i class="fas fa-user-tie"></i>
+                <span>Тренеры</span>
+            </a>
             <a href="#" class="nav-item" data-section="features">
                 <i class="fas fa-star"></i>
                 <span>Преимущества</span>
@@ -54,7 +58,6 @@
 
     <!-- Основной контент -->
     <main class="admin-main">
-        <!-- Верхняя панель -->
         <header class="admin-header">
             <h1 id="pageTitle">Панель управления</h1>
             <div class="admin-user">
@@ -65,7 +68,6 @@
             </div>
         </header>
 
-        <!-- Контент (ВСЕ СЕКЦИИ ВНУТРИ) -->
         <div class="admin-content">
             
             <!-- ДАШБОРД -->
@@ -76,6 +78,13 @@
                         <div class="stat-info">
                             <span class="stat-value" id="statUsers">0</span>
                             <span class="stat-label">Пользователей</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-user-tie" style="color: #ffa751;"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statTrainers">0</span>
+                            <span class="stat-label">Тренеров</span>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -92,17 +101,10 @@
                             <span class="stat-label">Преимуществ</span>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <i class="fas fa-heartbeat" style="color: #43e97b;"></i>
-                        <div class="stat-info">
-                            <span class="stat-value" id="statServices">0</span>
-                            <span class="stat-label">Услуг</span>
-                        </div>
-                    </div>
                 </div>
                 <div class="welcome-message" style="margin-top: 40px; text-align: center; padding: 40px; background: white; border-radius: 12px;">
                     <h2>👋 Добро пожаловать в панель управления!</h2>
-                    <p style="color: #666; margin-top: 10px;">Здесь вы можете управлять контентом сайта</p>
+                    <p style="color: #666; margin-top: 10px;">Здесь вы можете управлять контентом сайта и тренерами</p>
                 </div>
             </section>
 
@@ -130,6 +132,26 @@
                             <tr><td colspan="6">Загрузка...</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </section>
+
+            <!-- ============================================ -->
+            <!-- 🔹 НОВАЯ СЕКЦИЯ: ТРЕНЕРЫ -->
+            <!-- ============================================ -->
+            <section id="trainers" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-tie"></i> Тренеры</h2>
+                    <button class="btn btn-primary" onclick="window.openTrainerModal()">
+                        <i class="fas fa-user-plus"></i> Добавить тренера
+                    </button>
+                </div>
+                
+                <div class="trainers-grid" id="trainersGrid">
+                    <!-- Тренеры загрузятся из Firebase -->
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Загрузка тренеров...</p>
+                    </div>
                 </div>
             </section>
 
@@ -268,7 +290,128 @@
     </main> 
 
     <!-- ============================================ -->
-    <!-- 🔹 МОДАЛЬНЫЕ ОКНА (после main) -->
+    <!-- 🔹 МОДАЛЬНОЕ ОКНО: ТРЕНЕР -->
+    <!-- ============================================ -->
+    <div class="modal" id="trainerModal">
+        <div class="modal-overlay" onclick="window.closeTrainerModal()"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="trainerModalTitle"><i class="fas fa-user-plus"></i> Добавить тренера</h3>
+                <button class="modal-close" onclick="window.closeTrainerModal()">&times;</button>
+            </div>
+            
+            <form id="trainerForm" class="modal-form">
+                <input type="hidden" id="trainerId">
+                
+                <!-- Основная информация -->
+                <div class="form-section-title">
+                    <i class="fas fa-user"></i> Основная информация
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Имя тренера *</label>
+                        <input type="text" id="tName" class="form-input" required placeholder="Иван Петров">
+                    </div>
+                    <div class="form-group">
+                        <label>Email для входа *</label>
+                        <input type="email" id="tEmail" class="form-input" required placeholder="trainer@stretchwell.ru">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Пароль *</label>
+                        <input type="password" id="tPassword" class="form-input" required minlength="6" placeholder="Минимум 6 символов">
+                        <small style="color: #7f8c8d; font-size: 12px;">При редактировании оставьте пустым, чтобы не менять</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="tel" id="tPhone" class="form-input" placeholder="+7 (___) ___-__-__">
+                    </div>
+                </div>
+                
+                <!-- Профессиональная информация -->
+                <div class="form-section-title" style="margin-top: 25px;">
+                    <i class="fas fa-briefcase"></i> Профессиональная информация
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Специализация *</label>
+                        <select id="tSpecialization" class="form-input" required>
+                            <option value="">Выберите специализацию</option>
+                            <option value="flexibility">Гибкость и растяжка</option>
+                            <option value="strength">Силовые тренировки</option>
+                            <option value="yoga">Йога</option>
+                            <option value="pilates">Пилатес</option>
+                            <option value="rehabilitation">Реабилитация</option>
+                            <option value="cardio">Кардио</option>
+                            <option value="general">Общая физическая подготовка</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Опыт работы</label>
+                        <input type="text" id="tExperience" class="form-input" placeholder="5 лет">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Описание / Биография</label>
+                    <textarea id="tDescription" class="form-input" rows="3" placeholder="Расскажите о достижениях, образовании, подходе к тренировкам..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Сертификаты и образование</label>
+                    <textarea id="tEducation" class="form-input" rows="2" placeholder="• МГУ, факультет физкультуры&#10;• Сертификат Yoga Alliance RYT-200"></textarea>
+                </div>
+                
+                <!-- Фото -->
+                <div class="form-section-title" style="margin-top: 25px;">
+                    <i class="fas fa-image"></i> Фото и соцсети
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>URL фото</label>
+                        <input type="text" id="tPhotoUrl" class="form-input" placeholder="https://... или images/trainer.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>Instagram</label>
+                        <input type="text" id="tInstagram" class="form-input" placeholder="@username">
+                    </div>
+                </div>
+                
+                <!-- Статус -->
+                <div class="form-section-title" style="margin-top: 25px;">
+                    <i class="fas fa-cog"></i> Настройки доступа
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><input type="checkbox" id="tActive" checked> <span style="margin-left: 8px;">Активен (может входить в систему)</span></label>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="tCanCreatePrograms" checked> <span style="margin-left: 8px;">Может создавать программы</span></label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><input type="checkbox" id="tCanViewClients" checked> <span style="margin-left: 8px;">Может просматривать клиентов</span></label>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="window.closeTrainerModal()">Отмена</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Сохранить тренера
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 🔹 ОСТАЛЬНЫЕ МОДАЛЬНЫЕ ОКНА (без изменений) -->
     <!-- ============================================ -->
 
     <!-- Программа -->
@@ -355,6 +498,20 @@
                 <div class="form-group">
                     <label>Программа по неделям (каждая с новой строки)</label>
                     <textarea id="pSchedule" class="form-input" rows="3" placeholder="Неделя 1: Подготовка&#10;Неделя 2: Укрепление"></textarea>
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <label style="margin: 0;"><i class="fas fa-video"></i> Уроки программы</label>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addLesson()">
+                            <i class="fas fa-plus"></i> Добавить урок
+                        </button>
+                    </div>
+                    <div id="lessonsContainer" style="border: 2px solid #eef2f6; border-radius: 8px; padding: 15px;">
+                        <div id="noLessons" style="text-align: center; color: #7f8c8d; padding: 20px;">
+                            <i class="fas fa-inbox" style="font-size: 32px; margin-bottom: 10px;"></i>
+                            <p>Пока нет уроков. Нажмите "Добавить урок"</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label><input type="checkbox" id="pActive" checked> <span style="margin-left: 8px;">Активна</span></label>
@@ -496,71 +653,62 @@
         </div>
     </div>
 
-  <!-- 🔹 МОДАЛЬНОЕ ОКНО: ПОЛЬЗОВАТЕЛЬ -->
-<div class="modal" id="userModal">
-    <div class="modal-overlay" onclick="window.closeUserModal()"></div>
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="userModalTitle">Добавить пользователя</h3>
-            <button class="modal-close" onclick="window.closeUserModal()">&times;</button>
+    <!-- Пользователь -->
+    <div class="modal" id="userModal">
+        <div class="modal-overlay" onclick="window.closeUserModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="userModalTitle">Добавить пользователя</h3>
+                <button class="modal-close" onclick="window.closeUserModal()">&times;</button>
+            </div>
+            <form id="userForm" class="modal-form">
+                <input type="hidden" id="userId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Имя *</label>
+                        <input type="text" id="uName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Роль *</label>
+                        <select id="uRole" class="form-input" onchange="window.toggleAdminFields()">
+                            <option value="client">Клиент</option>
+                            <option value="admin">Администратор</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="uEmail" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль <small style="color: #7f8c8d; font-weight: normal;">(минимум 8 символов)</small></label>
+                    <input type="password" id="uPassword" class="form-input" required minlength="8">
+                </div>
+                <div class="form-row" id="clientFields">
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="tel" id="uPhone" class="form-input" placeholder="+7 (___) ___-__-__">
+                    </div>
+                    <div class="form-group">
+                        <label>Цель</label>
+                        <select id="uGoal" class="form-input">
+                            <option value="flexibility">Гибкость</option>
+                            <option value="strength">Сила</option>
+                            <option value="relax">Расслабление</option>
+                            <option value="recovery">Восстановление</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" id="uActive" checked> <span style="margin-left: 8px;">Активен</span></label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="window.closeUserModal()">Отмена</button>
+                    <button type="submit" class="btn btn-primary">💾 Создать</button>
+                </div>
+            </form>
         </div>
-        
-        <form id="userForm" class="modal-form">
-            <input type="hidden" id="userId">
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Имя *</label>
-                    <input type="text" id="uName" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label>Роль *</label>
-                    <select id="uRole" class="form-input" onchange="window.toggleAdminFields()">
-                        <option value="client">Клиент</option>
-                        <option value="admin">Администратор</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Email *</label>
-                <input type="email" id="uEmail" class="form-input" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Пароль <small style="color: #7f8c8d; font-weight: normal;">(минимум 8 символов)</small></label>
-                <input type="password" id="uPassword" class="form-input" required minlength="8">
-                <small id="passwordHint" style="color: #7f8c8d; font-size: 12px; display: none;">Для админов минимум 10 символов</small>
-            </div>
-            
-            <div class="form-row" id="clientFields">
-                <div class="form-group">
-                    <label>Телефон</label>
-                    <input type="tel" id="uPhone" class="form-input" placeholder="+7 (___) ___-__-__">
-                </div>
-                <div class="form-group">
-                    <label>Цель</label>
-                    <select id="uGoal" class="form-input">
-                        <option value="flexibility">Гибкость</option>
-                        <option value="strength">Сила</option>
-                        <option value="relax">Расслабление</option>
-                        <option value="recovery">Восстановление</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label><input type="checkbox" id="uActive" checked> <span style="margin-left: 8px;">Активен</span></label>
-            </div>
-            
-            <div class="modal-actions">
-                <button type="button" class="btn btn-outline" onclick="window.closeUserModal()">Отмена</button>
-                <button type="submit" class="btn btn-primary">💾 Создать</button>
-            </div>
-        </form>
     </div>
-</div>
-
     <!-- Firebase -->
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/admin.js"></script>

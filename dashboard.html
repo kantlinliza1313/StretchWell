@@ -9,10 +9,86 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <!-- Иконки -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
+    <!-- Стили модального окна (чтобы не было ошибок прогрузки) -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eef2f6;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #2c3e50;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #7f8c8d;
+            line-height: 1;
+        }
+        
+        .modal-close:hover {
+            color: #2c3e50;
+        }
+        
+        #editProfileForm {
+            padding: 20px;
+        }
+        
+        #editProfileForm .form-group {
+            margin-bottom: 15px;
+        }
+        
+        #editProfileForm label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body class="dashboard-page">
     <!-- Боковая панель -->
@@ -26,26 +102,34 @@
             </button>
         </div>
 
-       <a href="dashboard.html" class="nav-item active">
-    <i class="fas fa-user"></i>
-    <span>Профиль</span>
-</a>
-<a href="my_programs.html" class="nav-item">
-    <i class="fas fa-dumbbell"></i>
-    <span>Мои программы</span>
-</a>
-<a href="progress.html" class="nav-item">
-    <i class="fas fa-chart-line"></i>
-    <span>Прогресс</span>
-</a>
-<a href="schedule.html" class="nav-item">
-    <i class="fas fa-calendar-alt"></i>
-    <span>Расписание</span>
-</a>
-<a href="settings.html" class="nav-item">
-    <i class="fas fa-cog"></i>
-    <span>Настройки</span>
-</a>
+        <nav class="sidebar-nav">
+    <a href="dashboard.html" class="nav-item active">
+        <i class="fas fa-user"></i>
+        <span>Профиль</span>
+    </a>
+    <a href="my_programs.html" class="nav-item">
+        <i class="fas fa-dumbbell"></i>
+        <span>Каталог программ</span>
+    </a>
+    <a href="progress.html" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Прогресс</span>
+    </a>
+    <a href="schedule.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Расписание</span>
+    </a>
+    <!-- 🔥 НОВЫЙ ПУНКТ: СООБЩЕНИЯ -->
+    <a href="client-messages.html" class="nav-item">
+        <i class="fas fa-envelope"></i>
+        <span>Сообщения</span>
+        <span class="badge badge-info" id="msgCount" style="display:none">0</span>
+    </a>
+    <a href="settings.html" class="nav-item">
+        <i class="fas fa-cog"></i>
+        <span>Настройки</span>
+    </a>
+</nav>
 
         <div class="sidebar-footer">
             <a href="index.html" class="nav-item logout" onclick="logout()">
@@ -64,444 +148,184 @@
             </button>
             
             <div class="top-bar-center">
-                <h2 class="page-title" id="pageTitle">Профиль</h2>
+                <h2 class="page-title">Профиль</h2>
             </div>
 
             <div class="user-info">
-                <span class="user-name" id="topUserName">Иван Иванов</span>
+                <span class="user-name" id="topUserName">Загрузка...</span>
                 <div class="user-avatar-wrapper">
-                    <img src="https://ui-avatars.com/api/?name=Иван+Иванов&background=6198FF&color=fff" 
+                    <img src="https://ui-avatars.com/api/?name=User&background=6198FF&color=fff" 
                          alt="Avatar" 
                          class="user-avatar"
                          id="userAvatar">
-                    <span class="user-status online"></span>
                 </div>
             </div>
         </header>
 
-        <!-- Контент страниц -->
-        <div class="page-content" id="pageContent">
+        <!-- Контент страницы -->
+        <div class="page-content">
             
-            <!-- СТРАНИЦА: ПРОФИЛЬ -->
-            <section id="profile" class="page active">
-                <!-- Приветствие -->
-                <div class="welcome-card">
-                    <div class="welcome-text">
-                        <h1 id="welcomeName">С возвращением, Иван! 👋</h1>
-                        <p>Готовы к новой тренировке?</p>
-                    </div>
-                </div>
-
-                <!-- Статистика -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                            <i class="fas fa-dumbbell"></i>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="statLessons">12</span>
-                            <span class="stat-label">Тренировок</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                            <i class="fas fa-percentage"></i>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="statFlexibility">85%</span>
-                            <span class="stat-label">Гибкость</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="statMinutes">480</span>
-                            <span class="stat-label">Минут</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="statStreak">5</span>
-                            <span class="stat-label">Дней подряд</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Активная программа -->
-<!-- Активная программа -->
-<div class="section-card">
-    <div class="section-header">
-        <h3 class="section-title">
-            <i class="fas fa-bullseye"></i>
-            Активная программа
-        </h3>
-        <a href="my_programs.html" class="btn-link">Все программы →</a>
-    </div>
-    
-    <div class="program-card-active" id="activeProgramContainer">
-        <!-- Шаблон карточки (заполняется из Firebase) -->
-        <div class="program-card-template" style="display: none;">
-            <div class="program-image">
-                <img src="" alt="" id="activeProgramImage">
-                <div class="program-overlay">
-                    <span class="program-level" id="activeProgramLevel"></span>
+            <!-- Приветствие -->
+            <div class="welcome-card">
+                <div class="welcome-text">
+                    <h1 id="welcomeName"></h1>
                 </div>
             </div>
-            <div class="program-details">
-                <h4 class="program-name" id="activeProgramTitle"></h4>
-                <p class="program-desc" id="activeProgramDesc"></p>
-                
-                <div class="program-progress">
-                    <div class="progress-info">
-                        <span class="progress-label">Прогресс</span>
-                        <span class="progress-value" id="activeProgramProgress">0%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="activeProgramFill" style="width: 0%"></div>
-                    </div>
-                    <div class="program-meta">
-                        <span><i class="fas fa-check-circle"></i> <span id="activeCompletedLessons">0</span> из <span id="activeTotalLessons">0</span> уроков</span>
-                        <span><i class="fas fa-clock"></i> <span id="activeTimePerDay"></span></span>
-                    </div>
-                </div>
-                
-                <!-- КНОПКИ -->
-                <div class="program-buttons" style="display: flex; gap: 12px; margin-top: 20px;">
-                    <button class="btn btn-primary btn-continue" id="btnContinue" style="flex: 1;">
-                        <i class="fas fa-play"></i> Продолжить тренировку
-                    </button>
-                    <button class="btn btn-outline" id="btnChangeProgram" style="flex: 1;" onclick="changeProgram()">
-                        <i class="fas fa-exchange-alt"></i> Сменить программу
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Заглушка: нет программы -->
-        <div class="program-no-program" id="noProgramTemplate">
-            <div class="program-image">
-                <div style="width: 100%; height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
-                    🎯
-                </div>
-            </div>
-            <div class="program-details">
-                <h4 class="program-name">У вас пока нет активной программы</h4>
-                <p class="program-desc">Выберите программу из каталога и начните тренировки уже сегодня!</p>
-                
-                <!-- КНОПКИ для заглушки -->
-                <div class="program-buttons" style="display: flex; gap: 12px; margin-top: 20px;">
-                    <a href="my_programs.html" class="btn btn-primary btn-continue" style="flex: 1; text-align: center;">
-                        <i class="fas fa-plus-circle"></i> Выбрать программу
-                    </a>
-                    <button class="btn btn-outline" style="flex: 1;" onclick="changeProgram()">
-                        <i class="fas fa-list"></i> Каталог программ
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Индикатор загрузки -->
-        <div class="loading" id="programLoading">Загрузка...</div>
-    </div>
-</div>
 
-                <!-- Информация о профиле -->
-                <div class="section-card">
-                    <div class="section-header">
-                        <h3 class="section-title">
-                            <i class="fas fa-user-circle"></i>
-                            Информация о профиле
-                        </h3>
-                        <button class="btn btn-outline btn-sm" onclick="editProfile()">
-                            <i class="fas fa-edit"></i> Редактировать
-                        </button>
-                    </div>
-                    
-                    <div class="profile-info-grid">
-                        <div class="info-item">
-                            <label>Имя</label>
-                            <p id="profileName">Иван Иванов</p>
-                        </div>
-                        <div class="info-item">
-                            <label>Email</label>
-                            <p id="profileEmail">demo@stretchwell.ru</p>
-                        </div>
-                        <div class="info-item">
-                            <label>Телефон</label>
-                            <p id="profilePhone">+7 (999) 123-45-67</p>
-                        </div>
-                        <div class="info-item">
-                            <label>Дата регистрации</label>
-                            <p id="profileRegDate">15 января 2026</p>
-                        </div>
-                        <div class="info-item">
-                            <label>Статус аккаунта</label>
-                            <p><span class="badge badge-premium">Бесплатный</span></p>
-                        </div>
-                        <div class="info-item">
-                            <label>Цель</label>
-                            <p>Развитие гибкости и снятие напряжения</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- СТРАНИЦА: ПРОГРАММЫ -->
-            <section id="programs" class="page">
-                <div class="section-header">
-                    <h3 class="section-title">
+            <!-- Статистика -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                         <i class="fas fa-dumbbell"></i>
-                        Мои программы
-                    </h3>
-                </div>
-
-                <div class="programs-grid">
-                    <!-- Программа 1 -->
-                    <div class="program-card">
-                        <div class="program-card-image">
-                            <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=250&fit=crop" alt="Program">
-                            <span class="program-badge active">Активна</span>
-                        </div>
-                        <div class="program-card-content">
-                            <h4>Гибкость за 30 дней</h4>
-                            <p>Комплекс для развития гибкости</p>
-                            <div class="program-card-progress">
-                                <div class="progress-bar-small">
-                                    <div class="progress-fill" style="width: 65%"></div>
-                                </div>
-                                <span>65%</span>
-                            </div>
-                            <button class="btn btn-primary btn-sm btn-full" onclick="enrollProgram(1, 'Гибкость за 30 дней')">
-                                Продолжить
-                            </button>
-                        </div>
                     </div>
-
-                    <!-- Программа 2 -->
-                    <div class="program-card">
-                        <div class="program-card-image">
-                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop" alt="Program">
-                            <span class="program-badge new">Новая</span>
-                        </div>
-                        <div class="program-card-content">
-                            <h4>Сила и растяжка</h4>
-                            <p>Укрепление мышц и гибкость</p>
-                            <div class="program-card-progress">
-                                <div class="progress-bar-small">
-                                    <div class="progress-fill" style="width: 30%"></div>
-                                </div>
-                                <span>30%</span>
-                            </div>
-                            <button class="btn btn-primary btn-sm btn-full" onclick="enrollProgram(1, 'Гибкость за 30 дней')">
-                                Продолжить
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Программа 3 -->
-                    <div class="program-card">
-                        <div class="program-card-image">
-                            <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=250&fit=crop" alt="Program">
-                            <span class="program-badge completed">Завершена</span>
-                        </div>
-                        <div class="program-card-content">
-                            <h4>Утренняя йога</h4>
-                            <p>Бодрое начало дня</p>
-                            <div class="program-card-progress">
-                                <div class="progress-bar-small">
-                                    <div class="progress-fill" style="width: 100%"></div>
-                                </div>
-                                <span>100%</span>
-                            </div>
-                            <button class="btn btn-outline btn-sm btn-full" onclick="restartProgram()">
-                                Начать заново
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Добавить программу -->
-                    <div class="program-card add-program">
-                        <div class="add-program-content">
-                            <i class="fas fa-plus-circle"></i>
-                            <h4>Добавить программу</h4>
-                            <p>Выберите из каталога</p>
-                            <button class="btn btn-outline btn-sm btn-full" onclick="showCatalog()">
-                                Каталог программ
-                            </button>
-                        </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statLessons">0</span>
+                        <span class="stat-label">Тренировок</span>
                     </div>
                 </div>
-            </section>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statFlexibility">0%</span>
+                        <span class="stat-label">Прогресс</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statMinutes">0</span>
+                        <span class="stat-label">Минут</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statStreak">0</span>
+                        <span class="stat-label">Дней подряд</span>
+                    </div>
+                </div>
+            </div>
 
-            <!-- СТРАНИЦА: ПРОГРЕСС -->
-            <section id="progress" class="page">
+            <!-- Активная программа -->
+            <div class="section-card">
                 <div class="section-header">
                     <h3 class="section-title">
-                        <i class="fas fa-chart-line"></i>
-                        Мой прогресс
+                        <i class="fas fa-bullseye"></i>
+                        Активная программа
                     </h3>
+                    <a href="my_programs.html" class="btn-link">Все программы →</a>
                 </div>
-
-                <div class="progress-charts">
-                    <div class="chart-card">
-                        <h4>Активность по неделям</h4>
-                        <canvas id="activityChart"></canvas>
+                
+                <div class="program-card-active" id="activeProgramContainer">
+                    <!-- Шаблон карточки -->
+                    <div class="program-card-template" style="display: none;">
+                        <div class="program-image">
+                            <img src="" alt="" id="activeProgramImage">
+                            <div class="program-overlay">
+                                <span class="program-level" id="activeProgramLevel"></span>
+                            </div>
+                        </div>
+                        <div class="program-details">
+                            <h4 class="program-name" id="activeProgramTitle"></h4>
+                            <p class="program-desc" id="activeProgramDesc"></p>
+                            
+                            <div class="program-progress">
+                                <div class="progress-info">
+                                    <span class="progress-label">Прогресс</span>
+                                    <span class="progress-value" id="activeProgramProgress">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="activeProgramFill" style="width: 0%"></div>
+                                </div>
+                                <div class="program-meta">
+                                    <span><i class="fas fa-check-circle"></i> <span id="activeCompletedLessons">0</span> из <span id="activeTotalLessons">0</span> уроков</span>
+                                    <span><i class="fas fa-clock"></i> <span id="activeTimePerDay"></span></span>
+                                </div>
+                            </div>
+                            
+                            <div class="program-buttons">
+                                <button class="btn btn-primary btn-continue" id="btnContinue" onclick="openLessonsPage()">
+                                    <i class="fas fa-play"></i> Продолжить тренировку
+                                </button>
+                                <button class="btn btn-outline" id="btnChangeProgram" onclick="window.changeProgram()">
+                                    <i class="fas fa-exchange-alt"></i> Сменить программу
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="chart-card">
-                        <h4>Развитие гибкости</h4>
-                        <canvas id="flexibilityChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="achievements-section">
-                    <h4 class="section-subtitle">Достижения</h4>
-                    <div class="achievements-grid">
-                        <div class="achievement-card unlocked">
-                            <div class="achievement-icon"></div>
-                            <div class="achievement-info">
-                                <h5>Первые шаги</h5>
-                                <p>Завершите первую тренировку</p>
+                    <!-- Заглушка: нет программы -->
+                    <div class="program-no-program" id="noProgramTemplate" style="display: none;">
+                        <div class="program-image">
+                            <div style="width: 100%; height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
+                                🎯
                             </div>
                         </div>
-                        <div class="achievement-card unlocked">
-                            <div class="achievement-icon"></div>
-                            <div class="achievement-info">
-                                <h5>Серия из 5 дней</h5>
-                                <p>Тренируйтесь 5 дней подряд</p>
-                            </div>
-                        </div>
-                        <div class="achievement-card locked">
-                            <div class="achievement-icon"></div>
-                            <div class="achievement-info">
-                                <h5>Мастер гибкости</h5>
-                                <p>Достигните 100% гибкости</p>
-                            </div>
-                        </div>
-                        <div class="achievement-card locked">
-                            <div class="achievement-icon"></div>
-                            <div class="achievement-info">
-                                <h5>Силач</h5>
-                                <p>Завершите 50 тренировок</p>
+                        <div class="program-details">
+                            <h4 class="program-name">У вас пока нет активной программы</h4>
+                            <p class="program-desc">Выберите программу из каталога и начните тренировки уже сегодня!</p>
+                            
+                            <div class="program-buttons">
+                                <a href="my_programs.html" class="btn btn-primary btn-continue">
+                                    <i class="fas fa-plus-circle"></i> Выбрать программу
+                                </a>
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Индикатор загрузки -->
+                    <div class="loading" id="programLoading">Загрузка...</div>
                 </div>
-            </section>
+            </div>
 
-            <!-- СТРАНИЦА: РАСПИСАНИЕ -->
-            <section id="schedule" class="page">
+            <!-- Информация о профиле -->
+            <div class="section-card">
                 <div class="section-header">
                     <h3 class="section-title">
-                        <i class="fas fa-calendar-alt"></i>
-                        Расписание тренировок
+                        <i class="fas fa-user-circle"></i>
+                        Информация о профиле
                     </h3>
+                    <button class="btn btn-outline btn-sm" onclick="editProfile()">
+                        <i class="fas fa-edit"></i> Редактировать
+                    </button>
                 </div>
-
-                <div class="schedule-container">
-                    <div class="schedule-day">
-                        <div class="day-header today">
-                            <span class="day-name">Сегодня</span>
-                            <span class="day-date">30 марта</span>
-                        </div>
-                        <div class="schedule-item">
-                            <div class="schedule-time">
-                                <i class="fas fa-clock"></i> 10:00
-                            </div>
-                            <div class="schedule-content">
-                                <h5>Утренняя растяжка</h5>
-                                <p>20 минут • Гибкость</p>
-                            </div>
-                            <button class="btn btn-sm btn-primary">Начать</button>
-                        </div>
+                
+                <div class="profile-info-grid">
+                    <div class="info-item">
+                        <label>Имя</label>
+                        <p id="profileName">Загрузка...</p>
                     </div>
-
-                    <div class="schedule-day">
-                        <div class="day-header">
-                            <span class="day-name">Завтра</span>
-                            <span class="day-date">31 марта</span>
-                        </div>
-                        <div class="schedule-item">
-                            <div class="schedule-time">
-                                <i class="fas fa-clock"></i> 18:00
-                            </div>
-                            <div class="schedule-content">
-                                <h5>Силовая тренировка</h5>
-                                <p>40 минут • Сила</p>
-                            </div>
-                            <button class="btn btn-sm btn-outline">Напомнить</button>
-                        </div>
+                    <div class="info-item">
+                        <label>Email</label>
+                        <p id="profileEmail">Загрузка...</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Телефон</label>
+                        <p id="profilePhone">Загрузка...</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Дата регистрации</label>
+                        <p id="profileRegDate">Загрузка...</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Цель</label>
+                        <p id="profileGoal">Загрузка...</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Уровень подготовки</label>
+                        <p id="profileExperience">Загрузка...</p>
                     </div>
                 </div>
-            </section>
-
-            <!-- СТРАНИЦА: НАСТРОЙКИ -->
-            <section id="settings" class="page">
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i class="fas fa-cog"></i>
-                        Настройки
-                    </h3>
-                </div>
-
-                <div class="settings-section">
-                    <h4 class="settings-title">Уведомления</h4>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <span>Push-уведомления</span>
-                            <small>Напоминания о тренировках</small>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <span>Email-уведомления</span>
-                            <small>Новости и обновления</small>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <h4 class="settings-title">Безопасность</h4>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <span>Сменить пароль</span>
-                        </div>
-                        <button class="btn btn-outline btn-sm" onclick="changePassword()">
-                            Изменить
-                        </button>
-                    </div>
-                </div>
-
-                <div class="settings-section danger-zone">
-                    <h4 class="settings-title">Опасная зона</h4>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <span>Удалить аккаунт</span>
-                            <small>Все данные будут удалены</small>
-                        </div>
-                        <button class="btn btn-danger btn-sm" onclick="deleteAccount()">
-                            Удалить
-                        </button>
-                    </div>
-                </div>
-            </section>
-
+            </div>
         </div>
     </main>
 
@@ -515,15 +339,21 @@
             <form id="editProfileForm">
                 <div class="form-group">
                     <label>Имя</label>
-                    <input type="text" id="editName" class="form-input" value="Иван Иванов">
+                    <input type="text" id="editName" class="form-input">
                 </div>
                 <div class="form-group">
                     <label>Телефон</label>
-                    <input type="tel" id="editPhone" class="form-input" value="+7 (999) 123-45-67">
+                    <input type="tel" id="editPhone" class="form-input">
                 </div>
                 <div class="form-group">
                     <label>Цель</label>
-                    <textarea id="editGoal" class="form-input" rows="3">Развитие гибкости и снятие напряжения</textarea>
+                    <select id="editGoal" class="form-input">
+                        <option value="flexibility">Развитие гибкости</option>
+                        <option value="strength">Укрепление мышц</option>
+                        <option value="relax">Снятие напряжения</option>
+                        <option value="recovery">Восстановление</option>
+                        <option value="health">Общее оздоровление</option>
+                    </select>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-outline" onclick="closeModal()">Отмена</button>
@@ -532,13 +362,12 @@
             </form>
         </div>
     </div>
-<!-- SweetAlert2 и Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Firebase: config + dashboard -->
-<script type="module" src="js/firebase-config.js"></script>
-<script type="module" src="js/firebase-dashboard.js"></script>
-
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Firebase -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/firebase-dashboard.js"></script>
 </body>
 </html>

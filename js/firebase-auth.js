@@ -48,8 +48,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         goal: 'flexibility',
                         experience: 'beginner',
                         createdAt: serverTimestamp(),
-                        stats: { lessons: 0, flexibility: 0, minutes: 0, streak: 0 },
-                        enrolledPrograms: []
+                        
+                        // ✅ СТАТИСТИКА
+                        stats: {
+                            totalLessons: 0,
+                            totalMinutes: 0,
+                            progress: 0,
+                            streak: 0,
+                            lastWorkoutDate: null
+                        },
+                        
+                        // ✅ ИСТОРИЯ АКТИВНОСТИ
+                        activityLog: [],
+                        
+                        // ✅ ПРОГРАММЫ
+                        enrolledPrograms: [],
+                        
+                        // ✅ ДОСТИЖЕНИЯ
+                        achievements: []
                     });
                     console.log('✅ Пользователь создан в базе');
                 }
@@ -79,8 +95,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // 🔥 ПРОВЕРКА РОЛИ И ПЕРЕНАПРАВЛЕНИЕ
                 console.log('🔄 Перенаправление, роль:', userData.role);
+                
+                // ✅ Получаем текущую страницу
+                const currentPage = window.location.pathname;
+                
+                // ✅ НЕ перенаправляем если уже на страницах кабинета
+                const isOnDashboard = currentPage.includes('dashboard.html');
+                const isOnLessons = currentPage.includes('lessons.html');
+                const isOnPrograms = currentPage.includes('my_programs.html');
+                const isOnProgress = currentPage.includes('progress.html');
+                const isOnSchedule = currentPage.includes('schedule.html');
+                const isOnSettings = currentPage.includes('settings.html');
+                const isOnTrainerDashboard = currentPage.includes('trainer-dashboard.html');  // ✅ НОВОЕ
+                const isOnTrainerPrograms = currentPage.includes('trainer-programs.html');    // ✅ НОВОЕ
+                const isOnTrainerClients = currentPage.includes('trainer-clients.html');      // ✅ НОВОЕ
+                
+                if (isOnDashboard || isOnLessons || isOnPrograms || isOnProgress || 
+                    isOnSchedule || isOnSettings || isOnTrainerDashboard || 
+                    isOnTrainerPrograms || isOnTrainerClients) {
+                    console.log('📄 Уже на странице кабинета, не перенаправляем');
+                    return;
+                }
+                
+                // ✅ Перенаправляем по роли
                 if (userData.role === 'admin') {
                     window.location.href = 'admin.html';
+                } else if (userData.role === 'trainer') {  // ✅ ИСПРАВЛЕНО: проверка тренера
+                    window.location.href = 'trainer-dashboard.html';
                 } else {
                     window.location.href = 'dashboard.html';
                 }
@@ -161,4 +202,4 @@ window.logout = function() {
     });
 };
 
-console.log('🔐 Login.js загружен');
+console.log('🔐 Firebase-auth.js загружен');

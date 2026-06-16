@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/contact.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
     <!-- Хедер -->
@@ -40,15 +41,15 @@
             <!-- Карта и контактная информация -->
             <div class="contact-map-wrapper">
                 <div class="map-container">
-                    <iframe 
-                        src="https://maps.google.com/maps?width=100%&height=600&hl=en&hq=&t=&z=13&ie=UTF8&iwloc=B&output=embed" 
-                        frameborder="0" 
-                        scrolling="no" 
-                        marginheight="0" 
-                        marginwidth="0"
-                        class="map-frame"
-                        id="googleMap">
-                    </iframe>
+                   <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d73204.0336325753!2d82.78637509726562!3d55.01471980000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x42dfe673776ed2d9%3A0x6832e2213888f25d!2z0KHRgtGD0LTQuNGPINC50L7Qs9C4INC4INGE0LjRgtC90LXRgdCwICLQnNGP0YLQsCI!5e0!3m2!1sru!2sru!4v1781477232584!5m2!1sru!2sru" 
+    width="100%" 
+    height="450" 
+    style="border:0;" 
+    allowfullscreen="" 
+    loading="lazy" 
+    referrerpolicy="no-referrer-when-downgrade">
+</iframe>
                     
                     <!-- Карточка с контактами поверх карты -->
                     <div class="contact-card">
@@ -78,68 +79,46 @@
                     <p class="form-subtitle">Хочешь зарегистрироваться или есть вопросы? Напишите нам, и мы ответим в ближайшее время</p>
                 </div>
 
-                <form class="contact-form" id="contactForm" action="send-email.php" method="POST">
-                    <div class="form-group">
-                        <label for="name" class="form-label">Ваше имя</label>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            name="name" 
-                            class="form-input" 
-                            placeholder="Введите ваше имя"
-                            required>
-                    </div>
+                <form class="contact-form" id="contactForm">
+    <div class="form-group">
+        <label for="name" class="form-label">Ваше имя</label>
+        <input type="text" id="name" name="name" class="form-input" placeholder="Введите ваше имя" required>
+    </div>
 
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            class="form-input" 
-                            placeholder="your@email.com"
-                            required>
-                    </div>
+    <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" required>
+    </div>
 
-                    <div class="form-group">
-                        <label for="phone" class="form-label">Телефон (необязательно)</label>
-                        <input 
-                            type="tel" 
-                            id="phone" 
-                            name="phone" 
-                            class="form-input" 
-                            placeholder="+7 (___) ___-__-__">
-                    </div>
+    <div class="form-group">
+        <label for="phone" class="form-label">Телефон</label>
+        <input type="tel" id="phone" name="phone" class="form-input" placeholder="+7 (___) ___-__-__">
+    </div>
 
-                    <div class="form-group">
-                        <label for="subject" class="form-label">Тема сообщения</label>
-                        <select id="subject" name="subject" class="form-input">
-                            <option value="general">Общий вопрос</option>
-                            <option value="programs">Программы тренировок</option>
-                            <option value="technical">Техническая поддержка</option>
-                            <option value="other">Другое</option>
-                        </select>
-                    </div>
+    <div class="form-group">
+        <label for="subject" class="form-label">Тема сообщения</label>
+        <select id="subject" name="subject" class="form-input">
+            <option value="general">Общий вопрос</option>
+            <option value="registration">Хочу зарегистрироваться</option>
+            <option value="programs">Программы тренировок</option>
+            <option value="technical">Техническая поддержка</option>
+            <option value="other">Другое</option>
+        </select>
+    </div>
 
-                    <div class="form-group">
-                        <label for="message" class="form-label">Сообщение</label>
-                        <textarea 
-                            id="message" 
-                            name="message" 
-                            class="form-textarea" 
-                            placeholder="Опишите ваш вопрос..."
-                            rows="5"
-                            required></textarea>
-                    </div>
+    <div class="form-group">
+        <label for="message" class="form-label">Сообщение</label>
+        <textarea id="message" name="message" class="form-textarea" placeholder="Опишите ваш вопрос..." rows="5" required></textarea>
+    </div>
 
-                    <button type="submit" class="btn btn-submit">
-                        Отправить сообщение
-                    </button>
+    <button type="submit" class="btn btn-submit" id="submitBtn">
+        <i class="fas fa-paper-plane"></i> Отправить сообщение
+    </button>
 
-                    <p class="form-note">
-                        Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
-                    </p>
-                </form>
+    <p class="form-note">
+        Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
+    </p>
+</form>
 
                 <!-- Сообщение об успешной отправке -->
                 <div class="form-success" id="formSuccess" style="display: none;">

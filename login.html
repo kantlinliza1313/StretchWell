@@ -116,6 +116,21 @@
             </div>
         </div>
 
+        <!-- Модальное окно ошибки -->
+<div id="errorModal" class="error-modal">
+    <div class="error-modal-content">
+        <div class="error-icon">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="38" stroke="#EF5350" stroke-width="3" fill="none"/>
+                <path d="M28 28L52 52M52 28L28 52" stroke="#EF5350" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h2 class="error-title">Ошибка...</h2>
+        <p class="error-message" id="errorMessageText">Заполните все обязательные поля!</p>
+        <button class="error-btn" onclick="closeErrorModal()">OK</button>
+    </div>
+</div>
+
         <!-- Ссылка на главную -->
         <a href="index.html" class="back-home">
             <i class="fas fa-arrow-left"></i> На главную

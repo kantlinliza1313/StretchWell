@@ -687,3 +687,326 @@
         max-width: 100%;
     }
 }
+
+/* Чекбокс выполнения */
+.event-checkbox {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.checkbox-wrapper {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-wrapper input {
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+}
+
+.checkmark {
+    width: 24px;
+    height: 24px;
+    background-color: #eef2f6;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    border: 2px solid #d1d5db;
+}
+
+.checkbox-wrapper input:checked ~ .checkmark {
+    background-color: #6198FF;
+    border-color: #6198FF;
+}
+
+.checkmark:after {
+    content: "";
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    display: none;
+    margin-bottom: 3px;
+}
+
+.checkbox-wrapper input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Карточка с пропущенным уроком */
+.event-card.missed {
+    opacity: 0.6;
+    border-left: 3px solid #e74c3c;
+}
+
+/* Анимация */
+.event-card {
+    transition: all 0.3s;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Кнопки редактирования в карточке */
+.event-time {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-edit-time {
+    background: none;
+    border: none;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 2px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.event-card:hover .btn-edit-time {
+    opacity: 1;
+}
+
+.btn-edit-time:hover {
+    color: #6198FF;
+}
+
+.event-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-note {
+    background: none;
+    border: none;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.btn-note:hover {
+    color: #6198FF;
+}
+
+/* Модальное окно настроек */
+#scheduleSettingsModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+#scheduleSettingsModal.active {
+    display: flex;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #5a6c7d;
+}
+
+/* Карточка урока */
+.event-card {
+    background: white;
+    border: 2px solid #eef2f6;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.event-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+/* Статусы карточек */
+.event-card.completed {
+    border-color: #43e97b;
+    background: #f0fff4;
+}
+
+.event-card.current {
+    border-color: #6198FF;
+    background: #f0f7ff;
+    box-shadow: 0 2px 8px rgba(97, 152, 255, 0.2);
+}
+
+.event-card.locked {
+    border-color: #e1e8ed;
+    background: #f8f9fa;
+    opacity: 0.7;
+}
+
+.event-card.missed {
+    border-color: #fee;
+    background: #fff5f5;
+}
+
+/* Заблокированный урок */
+.event-locked {
+    text-align: center;
+    color: #95a5a6;
+    padding: 10px;
+}
+
+.event-locked i {
+    font-size: 24px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.event-locked small {
+    font-size: 12px;
+}
+
+/* Кнопки редактирования */
+.event-time {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.btn-edit-time {
+    background: none;
+    border: none;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 2px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.event-card:hover .btn-edit-time {
+    opacity: 1;
+}
+
+.btn-edit-time:hover {
+    color: #6198FF;
+}
+
+/* Действия */
+.event-actions {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
+.btn-note {
+    background: none;
+    border: none;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.btn-note:hover {
+    color: #6198FF;
+}
+
+/* Чекбокс */
+.event-checkbox {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+.checkbox-wrapper {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-wrapper input {
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+}
+
+.checkmark {
+    width: 24px;
+    height: 24px;
+    background-color: #eef2f6;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    border: 2px solid #d1d5db;
+}
+
+.checkbox-wrapper input:checked ~ .checkmark {
+    background-color: #6198FF;
+    border-color: #6198FF;
+}
+
+.checkmark:after {
+    content: "";
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    display: none;
+    margin-bottom: 3px;
+}
+
+.checkbox-wrapper input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Модальное окно настроек */
+#scheduleSettingsModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+#scheduleSettingsModal.active {
+    display: flex;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #5a6c7d;
+}

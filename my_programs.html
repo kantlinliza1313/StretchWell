@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/my_programs.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="dashboard-page">
     <!-- Боковая панель -->
@@ -24,28 +24,34 @@
             </button>
         </div>
 
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item">
-                <i class="fas fa-user"></i>
-                <span>Профиль</span>
-            </a>
-            <a href="my_programs.html" class="nav-item active">
-                <i class="fas fa-dumbbell"></i>
-                <span>Каталог программ</span>
-            </a>
-            <a href="dashboard.html#progress" class="nav-item">
-                <i class="fas fa-chart-line"></i>
-                <span>Прогресс</span>
-            </a>
-            <a href="dashboard.html#schedule" class="nav-item">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Расписание</span>
-            </a>
-            <a href="dashboard.html#settings" class="nav-item">
-                <i class="fas fa-cog"></i>
-                <span>Настройки</span>
-            </a>
-        </nav>
+          <nav class="sidebar-nav">
+    <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Профиль</span>
+    </a>
+    <a href="my_programs.html" class="nav-item active">
+        <i class="fas fa-dumbbell"></i>
+        <span>Каталог программ</span>
+    </a>
+    <a href="progress.html" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Прогресс</span>
+    </a>
+    <a href="schedule.html" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Расписание</span>
+    </a>
+    <!-- 🔥 НОВЫЙ ПУНКТ: СООБЩЕНИЯ -->
+    <a href="client-messages.html" class="nav-item">
+        <i class="fas fa-envelope"></i>
+        <span>Сообщения</span>
+        <span class="badge badge-info" id="msgCount" style="display:none">0</span>
+    </a>
+    <a href="settings.html" class="nav-item">
+        <i class="fas fa-cog"></i>
+        <span>Настройки</span>
+    </a>
+</nav>
 
         <div class="sidebar-footer">
             <a href="index.html" class="nav-item logout" onclick="logout()">
