@@ -95,9 +95,6 @@
                 <button class="view-btn" data-view="month">
                     <i class="fas fa-calendar"></i> Месяц
                 </button>
-                <button class="view-btn" data-view="list">
-                    <i class="fas fa-list"></i> Список
-                </button>
             </div>
 
             <!-- Навигация по датам -->
@@ -185,53 +182,8 @@
             </div>
         </div>
     </main>
-<!-- Модальное окно настройки расписания -->
-<div id="scheduleSettingsModal" class="modal">
-    <div class="modal-content" style="max-width: 500px;">
-        <div class="modal-header">
-            <h3>⚙️ Настройки расписания</h3>
-            <button class="modal-close" onclick="closeScheduleSettings()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <form id="scheduleSettingsForm">
-                <div class="form-group">
-                    <label>Начальная дата</label>
-                    <input type="date" id="prefStartDate" class="form-input">
-                </div>
-                <div class="form-group">
-                    <label>Время тренировки</label>
-                    <input type="time" id="prefTime" class="form-input" value="10:00">
-                </div>
-                <div class="form-group">
-                    <label>Частота</label>
-                    <select id="prefFrequency" class="form-input">
-                        <option value="1">Каждый день</option>
-                        <option value="2">Через день (3 раза в неделю)</option>
-                        <option value="3">2 раза в неделю</option>
-                        <option value="7">Раз в неделю</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="prefSkipWeekends">
-                        Пропускать выходные
-                    </label>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-outline" onclick="closeScheduleSettings()">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Сохранить и перегенерировать</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<!-- Кнопка настройки (добавьте в интерфейс) -->
-<div style="text-align: right; margin: 20px 0;">
-    <button class="btn btn-outline btn-sm" onclick="openScheduleSettings()">
-        <i class="fas fa-cog"></i> Настроить расписание
-    </button>
-</div>
+
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

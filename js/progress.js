@@ -54,7 +54,6 @@ async function loadProgressData() {
 function updateStatsSummary() {
     const stats = userData.stats || {};
     
-    // ✅ ИСПОЛЬЗУЕМ ID вместо nth-child
     const elements = {
         lessons: document.getElementById('statTotalLessons'),
         progress: document.getElementById('statProgress'),
@@ -143,12 +142,10 @@ function updateCharts() {
     // 🥧 График типов тренировок
     const typesCtx = document.getElementById('workoutTypesChart');
     if (typesCtx) {
-        // Считаем распределение по целям программ
         const goalCounts = {};
         const enrolledPrograms = userData.enrolledPrograms || [];
         
         enrolledPrograms.forEach(p => {
-            // Можно добавить логику если есть goal в программе
             goalCounts['Гибкость'] = (goalCounts['Гибкость'] || 0) + 1;
         });
         
@@ -211,7 +208,6 @@ function aggregateByWeek(activityLog) {
     const weeks = {};
     const today = new Date();
     
-    // Последние 4 недели
     for (let i = 3; i >= 0; i--) {
         const weekStart = new Date(today);
         weekStart.setDate(weekStart.getDate() - (i * 7));
@@ -219,12 +215,10 @@ function aggregateByWeek(activityLog) {
         weeks[weekKey] = { lessons: 0, minutes: 0 };
     }
     
-    // Считаем активность
     activityLog.forEach(log => {
         const logDate = log.date?.toDate ? log.date.toDate() : new Date(log.date);
         const logKey = logDate.toISOString().split('T')[0];
         
-        // Находим подходящую неделю
         for (const weekKey of Object.keys(weeks)) {
             const weekStart = new Date(weekKey);
             const weekEnd = new Date(weekStart);
@@ -247,11 +241,11 @@ function aggregateByWeek(activityLog) {
 
 // Агрегация по дням недели
 function aggregateByDayOfWeek(activityLog) {
-    const days = [0, 0, 0, 0, 0, 0, 0]; // Пн-Вс
+    const days = [0, 0, 0, 0, 0, 0, 0];
     
     activityLog.forEach(log => {
         const logDate = log.date?.toDate ? log.date.toDate() : new Date(log.date);
-        const dayIndex = (logDate.getDay() + 6) % 7; // 0=Пн, 6=Вс
+        const dayIndex = (logDate.getDay() + 6) % 7;
         days[dayIndex] += log.minutesWatched || 0;
     });
     
@@ -263,7 +257,6 @@ function updateAchievements() {
     const stats = userData.stats || {};
     const achievements = userData.achievements || [];
     
-    // Конфигурация достижений
     const achievementConfigs = {
         first_workout: { title: 'Первые шаги', desc: 'Завершите первую тренировку', requirement: () => stats.totalLessons >= 1 },
         streak_5: { title: 'Серия из 5 дней', desc: 'Тренируйтесь 5 дней подряд', requirement: () => stats.streak >= 5 },
@@ -275,7 +268,6 @@ function updateAchievements() {
         all_programs: { title: 'Профессионал', desc: 'Завершите все программы', requirement: () => achievements.includes('all_completed') }
     };
     
-    // Обновляем каждую карточку
     Object.keys(achievementConfigs).forEach(achievementId => {
         const card = document.querySelector(`[data-achievement="${achievementId}"]`);
         if (!card) return;
@@ -292,7 +284,6 @@ function updateAchievements() {
                 lockIcon.className = 'fas fa-lock-open';
             }
             
-            // Дата получения
             const achievementData = achievements.find(a => typeof a === 'object' && a.id === achievementId);
             const dateEl = card.querySelector('.achievement-date');
             if (achievementData?.date && dateEl) {
@@ -308,7 +299,6 @@ function updateAchievements() {
                 lockIcon.className = 'fas fa-lock';
             }
             
-            // Обновляем прогресс
             const progressEl = card.querySelector('.achievement-progress');
             if (progressEl) {
                 if (achievementId === 'flex_100') {
@@ -327,10 +317,13 @@ function updateAchievements() {
     });
 }
 
+// ============================================
+// 🔥 ФУНКЦИИ ШЕРИНГА (ОБНОВЛЁННЫЕ)
+// ============================================
+
 // Поделиться всеми достижениями
 window.shareAllAchievements = function() {
     const stats = userData.stats || {};
-    const userName = userData.name || 'Пользователь';
     
     const shareText = `🏆 Мои достижения в StretchWell!\n\n` +
                      `✅ Тренировок завершено: ${stats.totalLessons}\n` +
@@ -339,7 +332,6 @@ window.shareAllAchievements = function() {
                      `🔥 Дней подряд: ${stats.streak}\n\n` +
                      `Присоединяйся ко мне!`;
     
-    // Показываем модальное окно
     document.getElementById('shareText').textContent = shareText;
     document.getElementById('shareModal').classList.add('active');
 }
@@ -349,18 +341,11 @@ window.closeShareModal = function() {
     document.getElementById('shareModal').classList.remove('active');
 }
 
-// Поделиться в Telegram
-window.shareToTelegram = function() {
+// 🔥 Поделиться в MAX (российский мессенджер)
+window.shareToMax = function() {
     const text = document.getElementById('shareText').textContent;
-    const url = `https://t.me/share/url?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-    closeShareModal();
-}
-
-// Поделиться в WhatsApp
-window.shareToWhatsApp = function() {
-    const text = document.getElementById('shareText').textContent;
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    // URL для шеринга в MAX
+    const url = `https://max.ru/share?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
     closeShareModal();
 }
@@ -387,7 +372,26 @@ window.copyToClipboard = function() {
         closeShareModal();
     }).catch(err => {
         console.error('❌ Ошибка копирования:', err);
-        Swal.fire('Ошибка', 'Не удалось скопировать', 'error');
+        // Fallback для старых браузеров
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            Swal.fire({
+                icon: 'success',
+                title: 'Скопировано!',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        } catch (e) {
+            Swal.fire('Ошибка', 'Не удалось скопировать', 'error');
+        }
+        document.body.removeChild(textarea);
+        closeShareModal();
     });
 }
 
@@ -395,6 +399,7 @@ window.copyToClipboard = function() {
 document.getElementById('shareModal')?.addEventListener('click', function(e) {
     if (e.target === this) closeShareModal();
 });
+
 // Обновление недавних результатов
 function updateRecentResults() {
     const activityLog = userData.activityLog || [];
@@ -402,7 +407,6 @@ function updateRecentResults() {
     
     if (!container) return;
     
-    // Берём последние 4 записи
     const recent = activityLog.slice(-4).reverse();
     
     if (recent.length === 0) {
@@ -415,7 +419,6 @@ function updateRecentResults() {
         const timeStr = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
         const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
         
-        // Определяем относительную дату
         let relativeDate = dateStr;
         const today = new Date();
         const yesterday = new Date(today);

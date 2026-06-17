@@ -12,12 +12,17 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-// Глобальные переменные
+// ============================================
+// 🔹 ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+// ============================================
 let currentUser = null;
 let userData = null;
 let currentWeekStart = null;
+let currentMonthDate = null; // 🔥 Для навигации по месяцам
 
-// Проверка авторизации
+// ============================================
+// 🔹 ПРОВЕРКА АВТОРИЗАЦИИ
+// ============================================
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUser = user;
@@ -28,7 +33,9 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Загрузка данных расписания
+// ============================================
+// 🔹 ЗАГРУЗКА ДАННЫХ РАСПИСАНИЯ
+// ============================================
 async function loadScheduleData() {
     try {
         console.log('📅 Загрузка расписания...');
@@ -46,12 +53,14 @@ async function loadScheduleData() {
         // Генерируем расписание для всех программ если нет
         await generateAllSchedules();
         
-        // Устанавливаем текущую неделю
+        // Устанавливаем текущую неделю и месяц
         currentWeekStart = getWeekStart(new Date());
+        currentMonthDate = new Date(); // 🔥 Текущий месяц
         console.log('📅 Текущая неделя:', currentWeekStart);
         
         // Отображаем
         renderWeekView();
+        renderMonthView(); // 🔥 Сразу рендерим месяц
         updateUserInfo();
         
     } catch (error) {
@@ -59,7 +68,9 @@ async function loadScheduleData() {
     }
 }
 
-// Генерация расписания для ВСЕХ программ
+// ============================================
+// 🔹 ГЕНЕРАЦИЯ РАСПИСАНИЯ ДЛЯ ВСЕХ ПРОГРАММ
+// ============================================
 async function generateAllSchedules() {
     console.log('🔄 Генерация расписаний для всех программ...');
     
@@ -71,27 +82,21 @@ async function generateAllSchedules() {
         
         if (program.status !== 'active' && program.status !== 'paused') continue;
         
-        // Если расписания нет или оно пустое — генерируем
         if (!program.schedule || program.schedule.length === 0) {
             console.log(`📅 Генерация расписания для программы: ${program.title}`);
             
-            // Загружаем данные программы из базы
             const programQuery = query(collection(db, 'programs'), where('slug', '==', program.slug));
             const programSnap = await getDocs(programQuery);
             
             if (!programSnap.empty) {
                 const programData = programSnap.docs[0].data();
-                
-                // Генерируем расписание с последовательной разблокировкой
                 program.schedule = generateProgramSchedule(program, programData);
                 needsUpdate = true;
-                
                 console.log(`✅ Сгенерировано ${program.schedule.length} уроков`);
             } else {
                 console.warn(`⚠️ Программа не найдена: ${program.slug}`);
             }
         } else {
-            // Обновляем статус разблокировки для существующих уроков
             program.schedule = updateUnlockedStatus(program.schedule, program.completedLessons || []);
         }
     }
@@ -105,7 +110,9 @@ async function generateAllSchedules() {
     }
 }
 
-// Генерация расписания для одной программы
+// ============================================
+// 🔹 ГЕНЕРАЦИЯ РАСПИСАНИЯ ДЛЯ ОДНОЙ ПРОГРАММЫ
+// ============================================
 function generateProgramSchedule(enrollment, programData) {
     const schedule = [];
     const lessons = programData?.lessons || [];
@@ -115,42 +122,38 @@ function generateProgramSchedule(enrollment, programData) {
         return [];
     }
     
-    // Начальная дата: с даты записи или сегодня
     let currentDate = enrollment.enrolledAt ? new Date(enrollment.enrolledAt) : new Date();
     currentDate.setHours(0, 0, 0, 0);
     
     console.log(`📅 Генерация ${lessons.length} уроков, старт: ${currentDate.toISOString()}`);
     
-    // Для каждого урока в программе
     for (let i = 0; i < lessons.length; i++) {
         const lesson = lessons[i];
         const isCompleted = enrollment.completedLessons?.includes(i) || false;
         
         schedule.push({
             lessonIndex: i,
-            date: currentDate.toISOString().split('T')[0],  // YYYY-MM-DD
-            time: '10:00',  // Или берите из настроек
+            date: currentDate.toISOString().split('T')[0],
+            time: '10:00',
             completed: isCompleted,
             unlocked: i === 0 || isCompleted || (enrollment.completedLessons?.includes(i - 1) || false),
             lessonTitle: lesson.title || lesson.dayTitle || `День ${i + 1}`,
             duration: lesson.duration || '20 мин',
             videoUrl: lesson.videoUrl || '',
             notes: '',
-            dayNumber: i + 1  // Номер дня из программы (День 1, День 2...)
+            dayNumber: i + 1
         });
         
-        // 🔥 СЛЕДУЮЩИЙ ДЕНЬ (каждый день подряд, без пропусков!)
         currentDate.setDate(currentDate.getDate() + 1);
     }
     
     console.log('✅ Сгенерировано расписание:', schedule.length, 'уроков');
-    console.log('📅 Первый урок:', schedule[0]?.date);
-    console.log('📅 Последний урок:', schedule[schedule.length - 1]?.date);
-    
     return schedule;
 }
 
-// Обновление статуса разблокировки
+// ============================================
+// 🔹 ОБНОВЛЕНИЕ СТАТУСА РАЗБЛОКИРОВКИ
+// ============================================
 function updateUnlockedStatus(schedule, completedLessons) {
     return schedule.map((item, index) => {
         const isCompleted = completedLessons.includes(index);
@@ -164,6 +167,9 @@ function updateUnlockedStatus(schedule, completedLessons) {
     });
 }
 
+// ============================================
+// 🔹 ОТОБРАЖЕНИЕ НЕДЕЛЬНОГО ВИДА
+// ============================================
 // Отображение недельного вида
 function renderWeekView() {
     const weekDays = getWeekDays(currentWeekStart);
@@ -172,24 +178,16 @@ function renderWeekView() {
     console.log('📊 Отрисовка недели:', currentWeekStart);
     console.log('📋 Программ:', enrolledPrograms.length);
     
-    // Для каждого дня недели
+    // 🔥 ОБНОВЛЯЕМ ДАТЫ В ШАПКЕ (week-day)
     weekDays.forEach((day, index) => {
-        const dayColumn = document.querySelectorAll('.day-column')[index];
-        if (!dayColumn) return;
+        const weekDayEl = document.querySelectorAll('.week-day')[index];
+        if (!weekDayEl) return;
         
-        const dayEvents = dayColumn.querySelector('.day-events');
-        const dayLabel = dayColumn.querySelector('.day-label');
-        const dayDateEl = dayColumn.querySelector('[data-day="date"]');
-        const dayTodayEl = dayColumn.querySelector('.day-today');
+        const dayDateEl = weekDayEl.querySelector('.day-date');
+        const dayTodayEl = weekDayEl.querySelector('.day-today');
         
-        const dateStr = day.toISOString().split('T')[0];
-        
-        // Обновляем отображение даты
-        if (dayDateEl) dayDateEl.textContent = day.getDate();
-        
-        if (dayLabel) {
-            const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
-            dayLabel.textContent = `${day.getDate()} ${months[day.getMonth()]}`;
+        if (dayDateEl) {
+            dayDateEl.textContent = day.getDate();
         }
         
         if (dayTodayEl) {
@@ -197,18 +195,33 @@ function renderWeekView() {
             dayTodayEl.style.display = isToday ? 'inline' : 'none';
             
             if (isToday) {
-                dayColumn.classList.add('today-column');
+                weekDayEl.classList.add('today');
             } else {
-                dayColumn.classList.remove('today-column');
+                weekDayEl.classList.remove('today');
             }
         }
+    });
+    
+    // 🔥 ЗАПОЛНЯЕМ КОЛОНКИ С РАСПИСАНИЕМ (day-column)
+    weekDays.forEach((day, index) => {
+        const dayColumn = document.querySelectorAll('.day-column')[index];
+        if (!dayColumn) return;
         
-        // Находим занятия на этот день из ВСЕХ программ
+        const dayEvents = dayColumn.querySelector('.day-events');
+        const dayLabel = dayColumn.querySelector('.day-label');
+        
+        const dateStr = day.toISOString().split('T')[0];
+        
+        if (dayLabel) {
+            const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+            dayLabel.textContent = `${day.getDate()} ${months[day.getMonth()]}`;
+        }
+        
+        // Находим занятия на этот день
         const dayLessons = [];
         
         enrolledPrograms.forEach(program => {
             const schedule = program.schedule || [];
-            
             const lessonsForDay = schedule.filter(s => s.date === dateStr);
             
             lessonsForDay.forEach(lesson => {
@@ -240,18 +253,227 @@ function renderWeekView() {
     if (periodEl) {
         const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
         const monthName = months[weekEnd.getMonth()];
-        periodEl.textContent = `${currentWeekStart.getDate()} — ${weekEnd.getDate()} ${monthName} 2026`;
+        periodEl.textContent = `${currentWeekStart.getDate()} — ${weekEnd.getDate()} ${monthName} ${weekEnd.getFullYear()}`;
     }
 }
 
-// Создание карточки урока
+// ============================================
+// 🔹 🔥 ОТОБРАЖЕНИЕ МЕСЯЧНОГО КАЛЕНДАРЯ
+// ============================================
+function renderMonthView() {
+    const currentDate = currentMonthDate || new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    console.log('📅 Отрисовка месяца:', month, year);
+    
+    // Обновляем заголовок
+    const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                       'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    const monthNameEl = document.getElementById('monthName');
+    if (monthNameEl) {
+        monthNameEl.textContent = `${monthNames[month]} ${year}`;
+    }
+    
+    // Получаем все тренировки за месяц
+    const enrolledPrograms = (userData.enrolledPrograms || []).filter(p => p.status === 'active' || p.status === 'paused');
+    const allLessons = [];
+    
+    enrolledPrograms.forEach(program => {
+        const schedule = program.schedule || [];
+        const monthLessons = schedule.filter(s => {
+            const lessonDate = new Date(s.date);
+            return lessonDate.getMonth() === month && lessonDate.getFullYear() === year;
+        });
+        
+        monthLessons.forEach(lesson => {
+            allLessons.push({
+                ...lesson,
+                programSlug: program.slug,
+                programTitle: program.title
+            });
+        });
+    });
+    
+    // Создаём сетку месяца
+    const grid = document.getElementById('monthGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    // Первый и последний день месяца
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    
+    // День недели первого дня (0 = Вс, 1 = Пн, ...)
+    let startingDay = firstDay.getDay();
+    startingDay = startingDay === 0 ? 6 : startingDay - 1;
+    
+    // Пустые ячейки до первого дня
+    for (let i = 0; i < startingDay; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'month-day empty';
+        grid.appendChild(emptyCell);
+    }
+    
+    // Дни месяца
+    const today = new Date();
+    const totalDays = lastDay.getDate();
+    
+    for (let day = 1; day <= totalDays; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const cellDate = new Date(year, month, day);
+        
+        const cell = document.createElement('div');
+        cell.className = 'month-day';
+        
+        // Сегодняшний день
+        const isToday = cellDate.toDateString() === today.toDateString();
+        if (isToday) {
+            cell.classList.add('today');
+        }
+        
+        // Находим тренировки на этот день
+        const dayLessons = allLessons.filter(l => l.date === dateStr);
+        const hasEvents = dayLessons.length > 0;
+        
+        if (hasEvents) {
+            cell.classList.add('has-events');
+        }
+        
+        // Проверяем завершённость
+        const completedCount = dayLessons.filter(l => l.completed).length;
+        const totalCount = dayLessons.length;
+        
+        // HTML ячейки
+        let cellContent = `<div class="month-date">${day}</div>`;
+        
+        if (hasEvents) {
+            // Показываем список тренировок (до 3 штук)
+            const lessonsHtml = dayLessons.slice(0, 3).map(lesson => {
+                const statusIcon = lesson.completed 
+                    ? '<i class="fas fa-check-circle" style="color: #43e97b;"></i>' 
+                    : (lesson.unlocked === false 
+                        ? '<i class="fas fa-lock" style="color: #95a5a6;"></i>' 
+                        : '<i class="fas fa-play-circle" style="color: #6198FF;"></i>');
+                
+                return `
+                    <div class="month-event-item ${lesson.completed ? 'completed' : ''}">
+                        ${statusIcon}
+                        <span class="month-event-title">${escapeHtml(lesson.lessonTitle)}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            const moreCount = dayLessons.length > 3 ? `<div class="month-more">+${dayLessons.length - 3} ещё</div>` : '';
+            
+            cellContent += `
+                <div class="month-events-list">
+                    ${lessonsHtml}
+                    ${moreCount}
+                </div>
+                <div class="month-progress">
+                    <div class="month-progress-bar">
+                        <div class="month-progress-fill" style="width: ${totalCount > 0 ? (completedCount / totalCount * 100) : 0}%"></div>
+                    </div>
+                    <span class="month-progress-text">${completedCount}/${totalCount}</span>
+                </div>
+            `;
+        }
+        
+        cell.innerHTML = cellContent;
+        
+        // Клик по дню
+        cell.addEventListener('click', () => {
+            showDayDetails(dateStr, dayLessons);
+        });
+        
+        grid.appendChild(cell);
+    }
+    
+    // 🔥 Обновляем период в навигации
+    const periodEl = document.getElementById('currentWeek');
+    if (periodEl && document.getElementById('monthView').style.display !== 'none') {
+        periodEl.textContent = `${monthNames[month]} ${year}`;
+    }
+}
+
+// ============================================
+// 🔹 ПОКАЗ ДЕТАЛЕЙ ДНЯ
+// ============================================
+function showDayDetails(dateStr, lessons) {
+    const date = new Date(dateStr);
+    const dateFormatted = date.toLocaleDateString('ru-RU', { 
+        weekday: 'long',
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+    });
+    
+    if (lessons.length === 0) {
+        Swal.fire({
+            title: dateFormatted,
+            text: 'Нет тренировок на этот день',
+            icon: 'info',
+            confirmButtonColor: '#6198FF'
+        });
+        return;
+    }
+    
+    const completedCount = lessons.filter(l => l.completed).length;
+    const progress = Math.round((completedCount / lessons.length) * 100);
+    
+    const lessonsHtml = lessons.map(lesson => {
+        const statusIcon = lesson.completed 
+            ? '<i class="fas fa-check-circle" style="color: #43e97b; font-size: 20px;"></i>' 
+            : (lesson.unlocked === false 
+                ? '<i class="fas fa-lock" style="color: #95a5a6; font-size: 20px;"></i>' 
+                : '<i class="fas fa-play-circle" style="color: #6198FF; font-size: 20px;"></i>');
+        
+        const statusClass = lesson.completed ? 'completed' : (lesson.unlocked === false ? 'locked' : 'available');
+        
+        return `
+            <div class="day-detail-item ${statusClass}" style="padding: 12px; margin: 8px 0; background: #f8f9fa; border-radius: 10px; border-left: 4px solid ${lesson.completed ? '#43e97b' : (lesson.unlocked === false ? '#95a5a6' : '#6198FF')}; display: flex; align-items: center; gap: 12px;">
+                ${statusIcon}
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; color: #2c3e50;">${escapeHtml(lesson.lessonTitle)}</div>
+                    <div style="font-size: 13px; color: #7f8c8d; margin-top: 3px;">
+                        <i class="fas fa-clock"></i> ${lesson.time} • ${lesson.duration}
+                    </div>
+                    <div style="font-size: 12px; color: #6198FF; margin-top: 3px;">
+                        <i class="fas fa-dumbbell"></i> ${escapeHtml(lesson.programTitle)}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    Swal.fire({
+        title: `<strong>${dateFormatted}</strong>`,
+        html: `
+            <div style="text-align: left; max-height: 400px; overflow-y: auto;">
+                <div style="background: linear-gradient(135deg, #6198FF 0%, #8DA4CE 100%); color: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 700;">${progress}%</div>
+                    <div style="font-size: 13px; opacity: 0.9;">Прогресс дня: ${completedCount} из ${lessons.length}</div>
+                </div>
+                ${lessonsHtml}
+            </div>
+        `,
+        width: '550px',
+        confirmButtonText: 'Закрыть',
+        confirmButtonColor: '#6198FF'
+    });
+}
+
+// ============================================
+// 🔹 СОЗДАНИЕ КАРТОЧКИ УРОКА
+// ============================================
 function createLessonCard(lesson, dateStr) {
     const isCompleted = lesson.completed;
-    const isUnlocked = lesson.unlocked !== false; // по умолчанию true если не указано
+    const isUnlocked = lesson.unlocked !== false;
     const isToday = dateStr === new Date().toISOString().split('T')[0];
     const isPast = new Date(dateStr) < new Date(new Date().setHours(0, 0, 0, 0));
     
-    // Определяем класс
     let statusClass = 'planned';
     if (isCompleted) statusClass = 'completed';
     else if (!isUnlocked) statusClass = 'locked';
@@ -272,9 +494,9 @@ function createLessonCard(lesson, dateStr) {
                 ` : ''}
             </div>
             <div class="event-content">
-                <h5>${lesson.lessonTitle}</h5>
-                <p>${lesson.duration} • ${lesson.programTitle || 'Программа'}</p>
-                ${lesson.notes ? `<small style="color: #95a5a6;">📝 ${lesson.notes}</small>` : ''}
+                <h5>${escapeHtml(lesson.lessonTitle)}</h5>
+                <p>${lesson.duration} • ${escapeHtml(lesson.programTitle || 'Программа')}</p>
+                ${lesson.notes ? `<small style="color: #95a5a6;">📝 ${escapeHtml(lesson.notes)}</small>` : ''}
             </div>
             ${!isUnlocked ? `
                 <div class="event-locked">
@@ -304,7 +526,9 @@ function createLessonCard(lesson, dateStr) {
     `;
 }
 
-// Редактирование времени урока
+// ============================================
+// 🔹 РЕДАКТИРОВАНИЕ ВРЕМЕНИ УРОКА
+// ============================================
 window.editLessonTime = async function(programSlug, lessonIndex, currentTime) {
     const newTime = prompt('Новое время (формат ЧЧ:ММ):', currentTime);
     if (!newTime) return;
@@ -330,6 +554,7 @@ window.editLessonTime = async function(programSlug, lessonIndex, currentTime) {
         await updateDoc(userRef, { enrolledPrograms });
         userData.enrolledPrograms = enrolledPrograms;
         renderWeekView();
+        renderMonthView(); // 🔥 Обновляем и месяц
         
     } catch (error) {
         console.error('❌ Ошибка:', error);
@@ -337,7 +562,9 @@ window.editLessonTime = async function(programSlug, lessonIndex, currentTime) {
     }
 }
 
-// Добавление заметки к уроку
+// ============================================
+// 🔹 ДОБАВЛЕНИЕ ЗАМЕТКИ
+// ============================================
 window.addLessonNote = async function(programSlug, lessonIndex) {
     const note = prompt('Заметка к уроку:');
     if (note === null) return;
@@ -363,13 +590,16 @@ window.addLessonNote = async function(programSlug, lessonIndex) {
         await updateDoc(userRef, { enrolledPrograms });
         userData.enrolledPrograms = enrolledPrograms;
         renderWeekView();
+        renderMonthView(); // 🔥 Обновляем и месяц
         
     } catch (error) {
         console.error('❌ Ошибка:', error);
     }
 }
 
-// Переключение выполнения урока
+// ============================================
+// 🔹 ПЕРЕКЛЮЧЕНИЕ ВЫПОЛНЕНИЯ УРОКА
+// ============================================
 window.toggleLessonCompletion = async function(checkbox) {
     const programSlug = checkbox.dataset.program;
     const lessonIndex = parseInt(checkbox.dataset.lesson);
@@ -383,7 +613,6 @@ window.toggleLessonCompletion = async function(checkbox) {
         
         const enrolledPrograms = userData.enrolledPrograms.map(p => {
             if (p.slug === programSlug) {
-                // Обновляем расписание
                 const schedule = p.schedule.map(s => {
                     if (s.lessonIndex === lessonIndex) {
                         return { ...s, completed: isCompleted };
@@ -391,7 +620,6 @@ window.toggleLessonCompletion = async function(checkbox) {
                     return s;
                 });
                 
-                // Обновляем completedLessons
                 let completedLessons = p.completedLessons || [];
                 if (isCompleted) {
                     if (!completedLessons.includes(lessonIndex)) {
@@ -401,11 +629,8 @@ window.toggleLessonCompletion = async function(checkbox) {
                     completedLessons = completedLessons.filter(i => i !== lessonIndex);
                 }
                 
-                // Пересчитываем прогресс
                 const totalLessons = p.schedule?.length || 1;
                 const progress = Math.round((completedLessons.length / totalLessons) * 100);
-                
-                // Обновляем статус разблокировки для всех уроков
                 const updatedSchedule = updateUnlockedStatus(schedule, completedLessons);
                 
                 return {
@@ -425,6 +650,7 @@ window.toggleLessonCompletion = async function(checkbox) {
         
         userData.enrolledPrograms = enrolledPrograms;
         renderWeekView();
+        renderMonthView(); // 🔥 Обновляем и месяц
         
         Swal.fire({
             icon: isCompleted ? 'success' : 'info',
@@ -440,37 +666,109 @@ window.toggleLessonCompletion = async function(checkbox) {
     }
 }
 
-// Настройка обработчиков
+// ============================================
+// 🔹 🔥 НАВИГАЦИЯ ПО МЕСЯЦАМ
+// ============================================
+window.navigateMonth = function(direction) {
+    if (!currentMonthDate) currentMonthDate = new Date();
+    
+    currentMonthDate.setMonth(currentMonthDate.getMonth() + direction);
+    renderMonthView();
+    
+    // Обновляем заголовок навигации
+    const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                       'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    const periodEl = document.getElementById('currentWeek');
+    if (periodEl) {
+        periodEl.textContent = `${monthNames[currentMonthDate.getMonth()]} ${currentMonthDate.getFullYear()}`;
+    }
+}
+
+// ============================================
+// 🔹 ОБРАБОТЧИКИ СОБЫТИЙ (ОБНОВЛЁННЫЕ)
+// ============================================
 function setupEventListeners() {
+    // Переключатель вида
     document.querySelectorAll('.view-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
             const view = this.dataset.view;
-            document.getElementById('weekView').style.display = view === 'week' ? 'block' : 'none';
-            document.getElementById('monthView').style.display = view === 'month' ? 'block' : 'none';
-            document.getElementById('listView').style.display = view === 'list' ? 'block' : 'none';
+            const weekView = document.getElementById('weekView');
+            const monthView = document.getElementById('monthView');
+            const navPanel = document.querySelector('.schedule-navigation');
+            
+            // 🔥 Показываем/скрываем навигацию
+            if (navPanel) {
+                navPanel.style.display = 'flex';
+            }
+            
+            if (weekView) weekView.style.display = view === 'week' ? 'block' : 'none';
+            if (monthView) {
+                monthView.style.display = view === 'month' ? 'block' : 'none';
+                if (view === 'month') {
+                    renderMonthView();
+                }
+            }
+            
+            // 🔥 Обновляем заголовок в зависимости от вида
+            const periodEl = document.getElementById('currentWeek');
+            if (periodEl && view === 'week') {
+                const weekEnd = new Date(currentWeekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+                const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+                periodEl.textContent = `${currentWeekStart.getDate()} — ${weekEnd.getDate()} ${months[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
+            } else if (periodEl && view === 'month') {
+                const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                                   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+                periodEl.textContent = `${monthNames[currentMonthDate.getMonth()]} ${currentMonthDate.getFullYear()}`;
+            }
         });
     });
     
+    // 🔥 Навигация недели/месяца
     document.getElementById('prevWeek')?.addEventListener('click', () => {
-        currentWeekStart.setDate(currentWeekStart.getDate() - 7);
-        renderWeekView();
+        const activeView = document.querySelector('.view-btn.active');
+        const view = activeView?.dataset.view || 'week';
+        
+        if (view === 'week') {
+            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            renderWeekView();
+        } else if (view === 'month') {
+            navigateMonth(-1);
+        }
     });
     
     document.getElementById('nextWeek')?.addEventListener('click', () => {
-        currentWeekStart.setDate(currentWeekStart.getDate() + 7);
-        renderWeekView();
+        const activeView = document.querySelector('.view-btn.active');
+        const view = activeView?.dataset.view || 'week';
+        
+        if (view === 'week') {
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            renderWeekView();
+        } else if (view === 'month') {
+            navigateMonth(1);
+        }
     });
     
     document.getElementById('todayBtn')?.addEventListener('click', () => {
-        currentWeekStart = getWeekStart(new Date());
-        renderWeekView();
+        const activeView = document.querySelector('.view-btn.active');
+        const view = activeView?.dataset.view || 'week';
+        
+        if (view === 'week') {
+            currentWeekStart = getWeekStart(new Date());
+            renderWeekView();
+        } else if (view === 'month') {
+            currentMonthDate = new Date();
+            renderMonthView();
+        }
     });
 }
 
-// Вспомогательные функции
+// ============================================
+// 🔹 ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// ============================================
 function getWeekStart(date) {
     const d = new Date(date);
     const day = d.getDay();
@@ -496,6 +794,17 @@ function updateUserInfo() {
     if (avatarEl) {
         avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6198FF&color=fff`;
     }
+}
+
+// 🔥 Экранирование HTML
+function escapeHtml(text) {
+    if (!text) return '';
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 console.log('📅 Schedule.js загружен');

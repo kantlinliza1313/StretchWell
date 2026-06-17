@@ -549,3 +549,26 @@
         font-size: 48px;
     }
 }
+/* ============================================
+   🔥 КНОПКА MAX (РОССИЙСКИЙ МЕССЕНДЖЕР)
+   ============================================ */
+.share-option-btn.max {
+    background: linear-gradient(135deg, #0077FF 0%, #0055CC 100%);
+    color: white;
+}
+
+.share-option-btn.max:hover {
+    background: linear-gradient(135deg, #0055CC 0%, #003D99 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 119, 255, 0.4);
+}
+
+.share-option-btn.max i {
+    font-size: 24px;
+}
+
+/* Удалённые кнопки (если вдруг остались стили) */
+.share-option-btn.telegram,
+.share-option-btn.whatsapp {
+    display: none;
+}

@@ -48,11 +48,9 @@ async function loadProgram() {
         return;
     }
     
-    // Сохраняем slug глобально
     window.currentProgramSlug = programSlug;
     
     try {
-        // Загружаем программу из Firebase
         const q = query(
             collection(db, 'programs'), 
             where('slug', '==', programSlug)
@@ -66,17 +64,11 @@ async function loadProgram() {
         
         currentProgram = { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
         
-        // Загружаем данные пользователя для прогресса
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
         const userData = userDoc.data();
         
-        // Обновляем информацию о пользователе в шапке
         updateUserInfo(userData);
-        
-        // Обновляем UI программы
         updateProgramUI(userData);
-        
-        // Рендерим уроки
         await renderLessons();
         
         console.log('✅ Программа загружена:', currentProgram.title);
@@ -92,7 +84,6 @@ async function loadProgram() {
 // 🔹 ОБНОВЛЕНИЕ UI ПРОГРАММЫ
 // ============================================
 function updateProgramUI(userData) {
-    // Основная информация
     document.getElementById('programTitle').textContent = currentProgram.title;
     document.getElementById('programName').textContent = currentProgram.title;
     document.getElementById('programDesc').textContent = currentProgram.shortDescription || '';
@@ -100,13 +91,11 @@ function updateProgramUI(userData) {
     const lessons = currentProgram.lessons || [];
     document.getElementById('totalLessons').textContent = lessons.length;
     
-    // Общая длительность
     const totalMinutes = lessons.reduce((sum, lesson) => {
         return sum + (parseDuration(lesson.duration) || 0);
     }, 0);
     document.getElementById('totalDuration').textContent = totalMinutes;
     
-    // Прогресс
     const enrolledProgram = userData.enrolledPrograms?.find(p => p.slug === currentProgram.slug);
     const completedLessons = enrolledProgram?.completedLessons || [];
     const progress = lessons.length > 0 
@@ -138,7 +127,6 @@ async function renderLessons() {
     const grid = document.getElementById('lessonsGrid');
     const lessons = currentProgram.lessons || [];
     
-    // Сохраняем глобально для навигации
     allLessons = lessons;
     window.programLessons = lessons;
     
@@ -148,7 +136,6 @@ async function renderLessons() {
     }
     
     try {
-        // Получаем прогресс пользователя
         const userRef = doc(db, 'users', currentUser.uid);
         const userDoc = await getDoc(userRef);
         const userData = userDoc.data();
@@ -156,11 +143,9 @@ async function renderLessons() {
         const enrolledProgram = userData.enrolledPrograms?.find(p => p.slug === currentProgram.slug);
         const completedLessons = enrolledProgram?.completedLessons || [];
         
-        // Обновляем прогресс в UI
         const progress = Math.round((completedLessons.length / lessons.length) * 100);
         document.getElementById('progressPercent').textContent = progress + '%';
         
-        // Создаём карточки уроков
         grid.innerHTML = lessons.map((lesson, index) => {
             return renderLessonCard(lesson, index, completedLessons);
         }).join('');
@@ -179,9 +164,7 @@ async function renderLessons() {
 function renderLessonCard(lesson, index, completedLessons) {
     const isCompleted = completedLessons.includes(index);
     const isLocked = index > 0 && !completedLessons.includes(index - 1) && completedLessons.length > 0 && !completedLessons.includes(index);
-    const isFirstLesson = index === 0;
     
-    // Определяем статус
     let statusClass = '';
     let statusBadge = '';
     
@@ -200,7 +183,6 @@ function renderLessonCard(lesson, index, completedLessons) {
     const title = lesson.title || `День ${lesson.day || (index + 1)}`;
     const dayNumber = lesson.day || (index + 1);
     
-    // Экранируем данные для onclick
     const lessonData = encodeURIComponent(JSON.stringify({
         title: title,
         duration: duration,
@@ -267,15 +249,12 @@ window.openVideo = function(lessonIndex, lessonData) {
     const playerEl = document.getElementById('videoPlayer');
     const completeBtn = document.getElementById('completeLessonBtn');
     
-    // Устанавливаем данные урока
     titleEl.textContent = lessonData.title || `Урок ${lessonIndex + 1}`;
     durationEl.textContent = lessonData.duration || '15 мин';
     
-    // Загружаем видео
     const videoUrl = lessonData.videoUrl || '';
     
     if (videoUrl.includes('drive.google.com')) {
-        // Google Drive
         const fileId = extractGoogleDriveFileId(videoUrl);
         if (fileId) {
             playerEl.src = `https://drive.google.com/file/d/${fileId}/preview`;
@@ -285,7 +264,6 @@ window.openVideo = function(lessonIndex, lessonData) {
             return;
         }
     } else if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
-        // YouTube
         const videoId = extractYouTubeId(videoUrl);
         if (videoId) {
             playerEl.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
@@ -293,19 +271,14 @@ window.openVideo = function(lessonIndex, lessonData) {
             playerEl.src = '';
         }
     } else if (videoUrl) {
-        // Прямая ссылка
         playerEl.src = videoUrl;
     } else {
         playerEl.src = '';
     }
     
-    // Проверяем, завершён ли урок
     checkLessonCompletion(lessonIndex, completeBtn);
-    
-    // Обновляем кнопки навигации
     updateNavigationButtons();
     
-    // Показываем модальное окно
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
@@ -346,7 +319,7 @@ window.closeVideoModal = function() {
     const playerEl = document.getElementById('videoPlayer');
     
     if (modal) modal.classList.remove('active');
-    if (playerEl) playerEl.src = ''; // Останавливаем видео
+    if (playerEl) playerEl.src = '';
     
     document.body.style.overflow = '';
     
@@ -362,11 +335,9 @@ window.navigateLesson = function(direction) {
     if (newIndex >= 0 && newIndex < allLessons.length) {
         const lesson = allLessons[newIndex];
         
-        // Закрываем текущее видео
         const playerEl = document.getElementById('videoPlayer');
         if (playerEl) playerEl.src = '';
         
-        // Открываем новое видео
         setTimeout(() => {
             openVideo(newIndex, {
                 title: lesson.title || `День ${lesson.day || (newIndex + 1)}`,
@@ -390,18 +361,15 @@ function updateNavigationButtons() {
     }
     
     if (nextBtn) {
-        // Проверяем, разблокирован ли следующий урок
         const nextIndex = currentLessonIndex + 1;
         if (nextIndex >= allLessons.length) {
             nextBtn.disabled = true;
         } else {
-            // Следующий урок разблокирован если текущий завершён
             checkNextLessonUnlocked(nextIndex, nextBtn);
         }
     }
 }
 
-// Проверка разблокировки следующего урока
 async function checkNextLessonUnlocked(nextIndex, button) {
     try {
         const userRef = doc(db, 'users', currentUser.uid);
@@ -411,7 +379,6 @@ async function checkNextLessonUnlocked(nextIndex, button) {
         const enrolledProgram = userData.enrolledPrograms?.find(p => p.slug === window.currentProgramSlug);
         const completedLessons = enrolledProgram?.completedLessons || [];
         
-        // Следующий урок разблокирован если предыдущий завершён
         const isUnlocked = nextIndex === 0 || completedLessons.includes(nextIndex - 1);
         button.disabled = !isUnlocked;
         
@@ -427,9 +394,28 @@ async function checkNextLessonUnlocked(nextIndex, button) {
 }
 
 // ============================================
-// 🔹 ЗАВЕРШЕНИЕ УРОКА
+// 🔹 ЗАВЕРШЕНИЕ УРОКА (РАБОЧАЯ ВЕРСИЯ)
 // ============================================
 window.completeLesson = async function() {
+    console.log('🎯 Завершение урока...');
+    console.log('📋 currentLessonIndex:', currentLessonIndex);
+    console.log('📋 currentProgramSlug:', window.currentProgramSlug);
+    
+    if (!currentUser) {
+        Swal.fire('Ошибка', 'Вы не авторизованы', 'error');
+        return;
+    }
+    
+    if (!window.currentProgramSlug) {
+        Swal.fire('Ошибка', 'Программа не выбрана', 'error');
+        return;
+    }
+    
+    if (allLessons.length === 0) {
+        Swal.fire('Ошибка', 'Нет уроков в программе', 'error');
+        return;
+    }
+    
     const result = await Swal.fire({
         title: 'Завершить урок?',
         text: 'Прогресс будет сохранён',
@@ -446,36 +432,64 @@ window.completeLesson = async function() {
     try {
         const userRef = doc(db, 'users', currentUser.uid);
         const userDoc = await getDoc(userRef);
+        
+        if (!userDoc.exists()) {
+            Swal.fire('Ошибка', 'Пользователь не найден', 'error');
+            return;
+        }
+        
         const userData = userDoc.data();
+        let enrolledPrograms = userData.enrolledPrograms || [];
+        
+        let programIndex = enrolledPrograms.findIndex(p => p.slug === window.currentProgramSlug);
+        
+        if (programIndex === -1) {
+            const newEnrollment = {
+                slug: window.currentProgramSlug,
+                title: currentProgram.title || 'Программа',
+                trainerId: currentProgram.trainerId || null,
+                trainerName: currentProgram.trainerName || null,
+                enrolledAt: new Date().toISOString(),
+                progress: 0,
+                status: 'active',
+                completedLessons: [],
+                lastAccessedAt: new Date().toISOString()
+            };
+            
+            enrolledPrograms.push(newEnrollment);
+            programIndex = enrolledPrograms.length - 1;
+        }
+        
+        const currentEnrollment = enrolledPrograms[programIndex];
+        let completedLessons = currentEnrollment.completedLessons || [];
+        
+        if (!completedLessons.includes(currentLessonIndex)) {
+            completedLessons.push(currentLessonIndex);
+            completedLessons.sort((a, b) => a - b);
+        }
+        
+        const totalLessons = allLessons.length || 1;
+        const newProgress = Math.round((completedLessons.length / totalLessons) * 100);
+        
+        enrolledPrograms[programIndex] = {
+            ...currentEnrollment,
+            completedLessons: completedLessons,
+            progress: newProgress,
+            lastAccessedAt: new Date().toISOString(),
+            status: currentEnrollment.status || 'active'
+        };
         
         const currentLesson = allLessons[currentLessonIndex];
         const lessonDuration = parseDuration(currentLesson.duration) || 20;
         
-        // ✅ ОБНОВЛЯЕМ ПРОГРЕСС КОНКРЕТНОЙ ПРОГРАММЫ
-        const enrolledPrograms = userData.enrolledPrograms?.map(p => {
-            if (p.slug === window.currentProgramSlug && p.status === 'active') {
-                let completedLessons = p.completedLessons || [];
-                if (!completedLessons.includes(currentLessonIndex)) {
-                    completedLessons.push(currentLessonIndex);
-                }
-                
-                const totalLessons = allLessons.length || 1;
-                const newProgress = Math.round((completedLessons.length / totalLessons) * 100);
-                
-                return {
-                    ...p,
-                    completedLessons: completedLessons,
-                    progress: newProgress,
-                    lastAccessedAt: new Date().toISOString()
-                };
-            }
-            return p;
-        }) || [];
+        const stats = userData.stats || {
+            totalLessons: 0,
+            totalMinutes: 0,
+            progress: 0,
+            streak: 0
+        };
         
-        // Общая статистика
-        const stats = userData.stats || {};
         let lastWorkout = null;
-        
         if (stats.lastWorkoutDate) {
             if (stats.lastWorkoutDate.toDate) {
                 lastWorkout = stats.lastWorkoutDate.toDate().toISOString().split('T')[0];
@@ -494,55 +508,24 @@ window.completeLesson = async function() {
             
             if (lastWorkout === yesterdayStr) {
                 newStreak += 1;
-            } else if (lastWorkout !== today) {
+            } else {
                 newStreak = 1;
             }
         }
         
-        // Лог активности
-        const activityLog = userData.activityLog || [];
-        const todayActivity = activityLog.find(log => {
-            let logDate = null;
-            if (log.date?.toDate) {
-                logDate = log.date.toDate().toISOString().split('T')[0];
-            } else if (typeof log.date === 'string') {
-                logDate = log.date.split('T')[0];
-            }
-            return logDate === today;
-        });
-        
-        if (todayActivity) {
-            todayActivity.lessonsCompleted = (todayActivity.lessonsCompleted || 0) + 1;
-            todayActivity.minutesWatched = (todayActivity.minutesWatched || 0) + lessonDuration;
-        } else {
-            activityLog.push({
-                date: new Date(),
-                lessonsCompleted: 1,
-                minutesWatched: lessonDuration
-            });
-        }
-        
-        // Общий прогресс
-        const totalProgress = calculateTotalProgress(enrolledPrograms);
-        
-        // Обновляем пользователя
         await updateDoc(userRef, {
             enrolledPrograms: enrolledPrograms,
-            stats: {
-                totalLessons: (stats.totalLessons || 0) + 1,
-                totalMinutes: (stats.totalMinutes || 0) + lessonDuration,
-                progress: totalProgress,
-                streak: newStreak,
-                lastWorkoutDate: new Date()
-            },
-            activityLog: activityLog,
+            'stats.totalLessons': (stats.totalLessons || 0) + 1,
+            'stats.totalMinutes': (stats.totalMinutes || 0) + lessonDuration,
+            'stats.streak': newStreak,
+            'stats.lastWorkoutDate': new Date(),
             updatedAt: serverTimestamp()
         });
         
-        // Обновляем UI
+        console.log('✅ Прогресс сохранён');
+        
         await renderLessons();
         
-        // Обновляем кнопку в модальном окне
         const completeBtn = document.getElementById('completeLessonBtn');
         if (completeBtn) {
             completeBtn.innerHTML = '<i class="fas fa-check-circle"></i> Урок завершён';
@@ -550,43 +533,57 @@ window.completeLesson = async function() {
             completeBtn.disabled = true;
         }
         
-        // Показываем успех
-        const updatedEnrollment = enrolledPrograms.find(p => p.slug === window.currentProgramSlug);
-        Swal.fire({
-            icon: 'success',
-            title: 'Урок завершён! 🎉',
-            html: `
-                <p>Прогресс программы обновлён</p>
-                <p style="margin-top: 10px; color: #6198FF; font-size: 18px;">
-                    <i class="fas fa-chart-line"></i> ${updatedEnrollment.progress}% пройдено
-                </p>
-                <p style="margin-top: 5px; font-size: 14px;">
-                    <i class="fas fa-clock"></i> +${lessonDuration} мин<br>
-                    <i class="fas fa-fire"></i> Серия: ${newStreak} дн.
-                </p>
-            `,
-            timer: 3500,
-            showConfirmButton: false
-        });
+        const isProgramComplete = completedLessons.length === totalLessons;
+        
+        if (isProgramComplete) {
+            Swal.fire({
+                icon: 'success',
+                title: '🏆 Программа полностью пройдена!',
+                html: `
+                    <p style="font-size: 18px; color: #43e97b; font-weight: 600;">
+                        Поздравляем! Вы прошли все ${totalLessons} уроков!
+                    </p>
+                `,
+                confirmButtonText: 'Отлично!',
+                confirmButtonColor: '#43e97b'
+            });
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Урок завершён! 🎉',
+                html: `
+                    <p>Прогресс программы обновлён</p>
+                    <p style="margin-top: 10px; color: #6198FF; font-size: 18px; font-weight: 600;">
+                        <i class="fas fa-chart-line"></i> ${newProgress}% пройдено
+                    </p>
+                    <p style="margin-top: 5px; font-size: 14px; color: #7f8c8d;">
+                        <i class="fas fa-check-circle"></i> ${completedLessons.length} из ${totalLessons} уроков<br>
+                        <i class="fas fa-fire"></i> Серия: ${newStreak} дн.
+                    </p>
+                `,
+                timer: 3500,
+                showConfirmButton: false
+            });
+        }
+        
+        updateNavigationButtons();
         
     } catch (error) {
         console.error('❌ Ошибка:', error);
-        Swal.fire('Ошибка', 'Не удалось сохранить прогресс', 'error');
+        Swal.fire('Ошибка', 'Не удалось сохранить прогресс: ' + error.message, 'error');
     }
-}
+};
 
 // ============================================
 // 🔹 ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 // ============================================
 
-// Парсинг длительности (например "15 мин" → 15)
 function parseDuration(durationStr) {
     if (!durationStr) return 20;
     const match = durationStr.match(/(\d+)/);
     return match ? parseInt(match[1]) : 20;
 }
 
-// Подсчёт общего прогресса
 function calculateTotalProgress(enrolledPrograms) {
     if (!enrolledPrograms || enrolledPrograms.length === 0) return 0;
     
@@ -597,7 +594,6 @@ function calculateTotalProgress(enrolledPrograms) {
     return Math.round(totalProgress / activePrograms.length);
 }
 
-// Извлечение ID файла из Google Drive
 function extractGoogleDriveFileId(url) {
     if (!url) return '';
     
@@ -618,7 +614,6 @@ function extractGoogleDriveFileId(url) {
     return '';
 }
 
-// Извлечение ID видео из YouTube
 function extractYouTubeId(url) {
     const patterns = [
         /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/,
@@ -634,8 +629,9 @@ function extractYouTubeId(url) {
 }
 
 // ============================================
-// 🔹 ОБРАБОТЧИКИ КЛАВИАТУРЫ
+// 🔹 ОБРАБОТЧИКИ СОБЫТИЙ
 // ============================================
+
 document.addEventListener('keydown', (e) => {
     const modal = document.getElementById('videoModal');
     const isModalOpen = modal && modal.classList.contains('active');
@@ -649,7 +645,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Закрытие модального окна по клику на overlay
 document.addEventListener('click', (e) => {
     const modal = document.getElementById('videoModal');
     if (e.target === modal || e.target.classList.contains('video-modal-overlay')) {
@@ -657,7 +652,23 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Функция выхода (для бокового меню)
+// Привязка кнопки "Завершить урок" (дублирующая для надёжности)
+document.addEventListener('DOMContentLoaded', () => {
+    const completeBtn = document.getElementById('completeLessonBtn');
+    if (completeBtn) {
+        // Проверяем что onclick уже есть в HTML
+        if (!completeBtn.getAttribute('onclick')) {
+            completeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (typeof window.completeLesson === 'function') {
+                    window.completeLesson();
+                }
+            });
+        }
+        console.log('✅ Кнопка "Завершить урок" готова');
+    }
+});
+
 window.logout = function() {
     import('./firebase-config.js').then(({ auth }) => {
         import("https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js").then(({ signOut }) => {

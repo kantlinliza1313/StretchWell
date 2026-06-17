@@ -313,29 +313,6 @@ function togglePasswordVisibility(e) {
     }
 }
 
-// === НАСТРОЙКИ УВЕДОМЛЕНИЙ ===
-async function saveNotificationSettings() {
-    try {
-        const pushEnabled = document.querySelector('.notification-item:nth-child(1) input[type="checkbox"]')?.checked ?? true;
-        const remindersEnabled = document.querySelector('.notification-item:nth-child(2) input[type="checkbox"]')?.checked ?? true;
-        
-        const userRef = doc(db, 'users', currentUser.uid);
-        
-        await updateDoc(userRef, {
-            notifications: {
-                push: pushEnabled,
-                reminders: remindersEnabled
-            },
-            updatedAt: serverTimestamp()
-        });
-        
-        Swal.fire('✅ Готово!', 'Настройки уведомлений сохранены', 'success');
-        
-    } catch (error) {
-        console.error('❌ Ошибка:', error);
-        Swal.fire('Ошибка', 'Не удалось сохранить настройки', 'error');
-    }
-}
 
 // === УДАЛЕНИЕ АККУНТА ===
 window.confirmDeleteAccount = function() {

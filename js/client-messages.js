@@ -3,7 +3,8 @@ import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 import { 
     collection, query, where, getDocs, orderBy, 
-    doc, updateDoc, serverTimestamp, addDoc, getDoc
+    doc, updateDoc, serverTimestamp, addDoc, getDoc,
+    deleteDoc  // 🔥 Добавлено для удаления
 } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
 let currentUser = null;
@@ -54,22 +55,31 @@ async function loadMessages() {
     list.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Загрузка...</div>';
     
     try {
-        // Загружаем сообщения ГДЕ КЛИЕНТ - ПОЛУЧАТЕЛЬ (от тренеров)
+        // Упрощённый запрос (без orderBy, чтобы не требовать индекс)
         const q = query(
             collection(db, 'messages'),
-            where('to', '==', currentUser.uid),
-            where('fromRole', '==', 'trainer'),
-            orderBy('createdAt', 'desc')
+            where('to', '==', currentUser.uid)
         );
         
         const snapshot = await getDocs(q);
-        allMessages = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        let messages = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        // Фильтруем только от тренеров и сортируем в JS
+        messages = messages
+            .filter(m => m.fromRole === 'trainer')
+            .sort((a, b) => {
+                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+                return dateB - dateA;
+            });
+        
+        allMessages = messages;
         
         console.log('📧 Загружено сообщений:', allMessages.length);
         
         // Считаем непрочитанные
         const unreadCount = allMessages.filter(m => !m.read).length;
-        const countEl = document.getElementById('unreadCount');
+        const countEl = document.getElementById('msgCount');
         if (countEl) {
             countEl.textContent = unreadCount;
             countEl.style.display = unreadCount > 0 ? 'inline-block' : 'none';
@@ -78,7 +88,7 @@ async function loadMessages() {
         if (allMessages.length === 0) {
             list.innerHTML = `
                 <div class="empty-state" style="text-align: center; padding: 60px 20px;">
-                    <i class="fas fa-inbox" style="font-size: 64px; color: #e1e8ed; margin-bottom: 20px;"></i>
+                    <i class="fas fa-inbox" style="font-size: 64px; color: #e1e8ed; margin-bottom: 20px; display: block;"></i>
                     <h3>Нет сообщений</h3>
                     <p>Когда тренер напишет вам, сообщения появятся здесь</p>
                 </div>
@@ -94,6 +104,9 @@ async function loadMessages() {
     }
 }
 
+// ============================================
+// 🔹 РЕНДЕР СООБЩЕНИЙ (С КНОПКОЙ УДАЛЕНИЯ)
+// ============================================
 function renderMessages(messages) {
     const list = document.getElementById('messagesList');
     if (!list) return;
@@ -107,11 +120,11 @@ function renderMessages(messages) {
             : '—';
         
         return `
-            <div class="message-item ${msg.read ? '' : 'unread'}" onclick="window.openMessage('${msg.id}')">
-                <div class="message-avatar">
+            <div class="message-item ${msg.read ? '' : 'unread'}">
+                <div class="message-avatar" onclick="window.openMessage('${msg.id}')">
                     <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(msg.fromName || 'Т')}&background=43e97b&color=fff" alt="">
                 </div>
-                <div class="message-content">
+                <div class="message-content" onclick="window.openMessage('${msg.id}')">
                     <div class="message-header">
                         <span class="message-from">${escapeHtml(msg.fromName)}</span>
                         <span class="message-date">${date}</span>
@@ -119,6 +132,17 @@ function renderMessages(messages) {
                     <div class="message-subject">${escapeHtml(msg.subject)}</div>
                     <div class="message-preview">${escapeHtml(msg.text.substring(0, 100))}${msg.text.length > 100 ? '...' : ''}</div>
                 </div>
+                
+                <!-- 🔥 КНОПКА УДАЛЕНИЯ В СПИСКЕ -->
+                <button class="btn-delete-message" 
+                        onclick="event.stopPropagation(); window.confirmDeleteMessage('${msg.id}', '${escapeHtml(msg.subject).replace(/'/g, "\\'")}')"
+                        title="Удалить сообщение"
+                        style="background: none; border: none; color: #e74c3c; cursor: pointer; padding: 10px; font-size: 16px; opacity: 0.5; transition: opacity 0.3s;"
+                        onmouseover="this.style.opacity='1'" 
+                        onmouseout="this.style.opacity='0.5'">
+                    <i class="fas fa-trash"></i>
+                </button>
+                
                 ${!msg.read ? '<div class="message-unread-badge"></div>' : ''}
             </div>
         `;
@@ -126,7 +150,7 @@ function renderMessages(messages) {
 }
 
 // ============================================
-// 🔹 ОТКРЫТИЕ СООБЩЕНИЯ
+// 🔹 ОТКРЫТИЕ СООБЩЕНИЯ (С КНОПКОЙ УДАЛЕНИЯ)
 // ============================================
 window.openMessage = async function(messageId) {
     const msg = allMessages.find(m => m.id === messageId);
@@ -134,9 +158,13 @@ window.openMessage = async function(messageId) {
     
     // Отмечаем как прочитанное
     if (!msg.read) {
-        await updateDoc(doc(db, 'messages', messageId), { read: true });
-        msg.read = true;
-        loadMessages(); // Перезагружаем список
+        try {
+            await updateDoc(doc(db, 'messages', messageId), { read: true });
+            msg.read = true;
+            loadMessages(); // Перезагружаем список
+        } catch (error) {
+            console.error('❌ Ошибка обновления:', error);
+        }
     }
     
     const modal = document.getElementById('messageModal');
@@ -165,13 +193,21 @@ window.openMessage = async function(messageId) {
                 ${escapeHtml(msg.text)}
             </div>
             
-            <div class="message-full-actions" style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
-                <button class="btn btn-outline" onclick="window.replyToTrainer('${msg.from}', '${msg.fromName}')">
-                    <i class="fas fa-reply"></i> Ответить
+            <div class="message-full-actions" style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between; align-items: center;">
+                <!-- 🔥 КНОПКА УДАЛЕНИЯ СЛЕВА -->
+                <button class="btn btn-danger" onclick="window.confirmDeleteMessage('${msg.id}', '${escapeHtml(msg.subject).replace(/'/g, "\\'")}')">
+                    <i class="fas fa-trash"></i> Удалить
                 </button>
-                <button class="btn btn-outline" onclick="window.closeMessageModal()">
-                    <i class="fas fa-times"></i> Закрыть
-                </button>
+                
+                <!-- КНОПКИ ОТВЕТА И ЗАКРЫТИЯ СПРАВА -->
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" onclick="window.replyToTrainer('${msg.from}', '${escapeHtml(msg.fromName).replace(/'/g, "\\'")}')">
+                        <i class="fas fa-reply"></i> Ответить
+                    </button>
+                    <button class="btn btn-outline" onclick="window.closeMessageModal()">
+                        <i class="fas fa-times"></i> Закрыть
+                    </button>
+                </div>
             </div>
         </div>
     `;
@@ -179,6 +215,87 @@ window.openMessage = async function(messageId) {
     modal.classList.add('active');
 }
 
+// ============================================
+// 🔥 ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ СООБЩЕНИЯ
+// ============================================
+window.confirmDeleteMessage = async function(messageId, subject) {
+    const result = await Swal.fire({
+        title: 'Удалить сообщение?',
+        html: `
+            <p>Вы уверены, что хотите удалить это сообщение?</p>
+            <p style="color: #e74c3c; font-size: 13px; margin-top: 10px;">
+                ⚠️ Действие необратимо
+            </p>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e74c3c',
+        cancelButtonColor: '#95a5a6',
+        confirmButtonText: '<i class="fas fa-trash"></i> Да, удалить',
+        cancelButtonText: 'Отмена'
+    });
+    
+    if (result.isConfirmed) {
+        await deleteMessage(messageId);
+    }
+};
+
+// ============================================
+// 🔥 УДАЛЕНИЕ СООБЩЕНИЯ
+// ============================================
+async function deleteMessage(messageId) {
+    try {
+        // 🔥 Проверяем что сообщение принадлежит пользователю
+        const msgRef = doc(db, 'messages', messageId);
+        const msgDoc = await getDoc(msgRef);
+        
+        if (!msgDoc.exists()) {
+            Swal.fire('Ошибка', 'Сообщение не найдено', 'error');
+            return;
+        }
+        
+        const msgData = msgDoc.data();
+        
+        // Проверяем права: можно удалить только если я получатель ИЛИ отправитель
+        if (msgData.to !== currentUser.uid && msgData.from !== currentUser.uid) {
+            Swal.fire('Ошибка', 'У вас нет прав на удаление этого сообщения', 'error');
+            return;
+        }
+        
+        // 🔥 Удаляем из Firebase
+        await deleteDoc(msgRef);
+        
+        // Удаляем из локального массива
+        allMessages = allMessages.filter(m => m.id !== messageId);
+        
+        // Закрываем модальное окно если оно открыто
+        const modal = document.getElementById('messageModal');
+        if (modal && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+        }
+        
+        // Показываем уведомление
+        Swal.fire({
+            icon: 'success',
+            title: 'Сообщение удалено',
+            timer: 1500,
+            showConfirmButton: false
+        });
+        
+        // Перезагружаем список
+        await loadMessages();
+        
+        console.log('✅ Сообщение удалено:', messageId);
+        
+    } catch (error) {
+        console.error('❌ Ошибка удаления:', error);
+        Swal.fire('Ошибка', 'Не удалось удалить сообщение: ' + error.message, 'error');
+    }
+}
+
+// ============================================
+// 🔹 ОТВЕТ ТРЕНЕРУ
+// ============================================
 window.replyToTrainer = function(trainerId, trainerName) {
     window.closeMessageModal();
     
@@ -211,7 +328,6 @@ window.replyToTrainer = function(trainerId, trainerName) {
             }
             
             try {
-                // Отправляем ответ тренеру
                 await addDoc(collection(db, 'messages'), {
                     from: currentUser.uid,
                     to: trainerId,
@@ -241,6 +357,7 @@ window.replyToTrainer = function(trainerId, trainerName) {
                 timer: 2000,
                 showConfirmButton: false
             });
+            loadMessages();
         }
     });
 }
@@ -280,7 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (menuToggle && sidebar) menuToggle.addEventListener('click', () => sidebar.classList.add('active'));
     if (sidebarClose && sidebar) sidebarClose.addEventListener('click', () => sidebar.classList.remove('active'));
     
-    // Закрытие модалки по Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             window.closeMessageModal();

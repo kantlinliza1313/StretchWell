@@ -24,34 +24,33 @@
             </button>
         </div>
 
-           <nav class="sidebar-nav">
-    <a href="dashboard.html" class="nav-item">
-        <i class="fas fa-user"></i>
-        <span>Профиль</span>
-    </a>
-    <a href="my_programs.html" class="nav-item">
-        <i class="fas fa-dumbbell"></i>
-        <span>Каталог программ</span>
-    </a>
-    <a href="progress.html" class="nav-item active">
-        <i class="fas fa-chart-line"></i>
-        <span>Прогресс</span>
-    </a>
-    <a href="schedule.html" class="nav-item">
-        <i class="fas fa-calendar-alt"></i>
-        <span>Расписание</span>
-    </a>
-    <!-- 🔥 НОВЫЙ ПУНКТ: СООБЩЕНИЯ -->
-    <a href="client-messages.html" class="nav-item">
-        <i class="fas fa-envelope"></i>
-        <span>Сообщения</span>
-        <span class="badge badge-info" id="msgCount" style="display:none">0</span>
-    </a>
-    <a href="settings.html" class="nav-item">
-        <i class="fas fa-cog"></i>
-        <span>Настройки</span>
-    </a>
-</nav>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
+            </a>
+            <a href="my_programs.html" class="nav-item">
+                <i class="fas fa-dumbbell"></i>
+                <span>Каталог программ</span>
+            </a>
+            <a href="progress.html" class="nav-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Прогресс</span>
+            </a>
+            <a href="schedule.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Расписание</span>
+            </a>
+            <a href="client-messages.html" class="nav-item">
+                <i class="fas fa-envelope"></i>
+                <span>Сообщения</span>
+                <span class="badge badge-info" id="msgCount" style="display:none">0</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </nav>
 
         <div class="sidebar-footer">
             <a href="index.html" class="nav-item logout" onclick="logout()">
@@ -140,137 +139,103 @@
             </div>
 
             <!-- Достижения -->
-<div class="section-card achievements-section">
-    <div class="section-header">
-        <h3 class="section-title">
-            <i class="fas fa-trophy"></i>
-            Достижения
-        </h3>
-        <span class="section-subtitle">Ваши успехи и награды</span>
-    </div>
-    
-    <div class="achievements-grid">
-        <!-- Достижение 1: Первые шаги -->
-        <div class="achievement-card unlocked" data-achievement="first_workout">
-            <div class="achievement-icon">🏆</div>
-            <div class="achievement-content">
-                <h5>Первые шаги</h5>
-                <p>Завершите первую тренировку</p>
-                <span class="achievement-date" id="date-first_workout"></span>
+            <div class="section-card achievements-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-trophy"></i>
+                        Достижения
+                    </h3>
+                    <span class="section-subtitle">Ваши успехи и награды</span>
+                </div>
+                
+                <div class="achievements-grid">
+                    <!-- Достижение 1: Первые шаги -->
+                    <div class="achievement-card unlocked" data-achievement="first_workout">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-content">
+                            <h5>Первые шаги</h5>
+                            <p>Завершите первую тренировку</p>
+                            <span class="achievement-date" id="date-first_workout"></span>
+                        </div>
+                        <div class="achievement-lock">
+                            <i class="fas fa-lock-open"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Достижение 2: Серия из 5 дней -->
+                    <div class="achievement-card locked" data-achievement="streak_5">
+                        <div class="achievement-icon">🔥</div>
+                        <div class="achievement-content">
+                            <h5>Серия из 5 дней</h5>
+                            <p>Тренируйтесь 5 дней подряд</p>
+                            <span class="achievement-progress" id="progress-streak_5">Прогресс: 0/5</span>
+                        </div>
+                        <div class="achievement-lock">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Достижение 3: 10 тренировок -->
+                    <div class="achievement-card locked" data-achievement="lessons_10">
+                        <div class="achievement-icon">⭐</div>
+                        <div class="achievement-content">
+                            <h5>10 тренировок</h5>
+                            <p>Завершите 10 тренировок</p>
+                            <span class="achievement-progress" id="progress-lessons_10">Прогресс: 0/10</span>
+                        </div>
+                        <div class="achievement-lock">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Достижение 4: Силач -->
+                    <div class="achievement-card locked" data-achievement="strength_master">
+                        <div class="achievement-icon">💪</div>
+                        <div class="achievement-content">
+                            <h5>Силач</h5>
+                            <p>Завершите программу "Сила"</p>
+                        </div>
+                        <div class="achievement-lock">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Достижение 5: Мастер гибкости -->
+                    <div class="achievement-card locked" data-achievement="flex_100">
+                        <div class="achievement-icon">🎯</div>
+                        <div class="achievement-content">
+                            <h5>Мастер гибкости</h5>
+                            <p>Достигните 100% прогресса</p>
+                            <span class="achievement-progress" id="progress-flex_100">Прогресс: 0%</span>
+                        </div>
+                        <div class="achievement-lock">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Достижение 6: Месяц тренировок -->
+                    <div class="achievement-card locked" data-achievement="streak_30">
+                        <div class="achievement-icon">🏅</div>
+                        <div class="achievement-content">
+                            <h5>Месяц тренировок</h5>
+                            <p>Занимайтесь 30 дней подряд</p>
+                            <span class="achievement-progress" id="progress-streak_30">Прогресс: 0/30</span>
+                        </div>
+                        <div class="achievement-lock">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Кнопка Поделиться -->
+                <div class="achievements-footer">
+                    <button class="btn btn-primary btn-share" onclick="shareAllAchievements()">
+                        <i class="fas fa-share-alt"></i>
+                        Поделиться
+                    </button>
+                </div>
             </div>
-            <div class="achievement-lock">
-                <i class="fas fa-lock-open"></i>
-            </div>
-        </div>
-        
-        <!-- Достижение 2: Серия из 5 дней -->
-        <div class="achievement-card locked" data-achievement="streak_5">
-            <div class="achievement-icon">🔥</div>
-            <div class="achievement-content">
-                <h5>Серия из 5 дней</h5>
-                <p>Тренируйтесь 5 дней подряд</p>
-                <span class="achievement-progress" id="progress-streak_5">Прогресс: 0/5</span>
-            </div>
-            <div class="achievement-lock">
-                <i class="fas fa-lock"></i>
-            </div>
-        </div>
-        
-        <!-- Достижение 3: 10 тренировок -->
-        <div class="achievement-card locked" data-achievement="lessons_10">
-            <div class="achievement-icon">⭐</div>
-            <div class="achievement-content">
-                <h5>10 тренировок</h5>
-                <p>Завершите 10 тренировок</p>
-                <span class="achievement-progress" id="progress-lessons_10">Прогресс: 0/10</span>
-            </div>
-            <div class="achievement-lock">
-                <i class="fas fa-lock"></i>
-            </div>
-        </div>
-        
-        <!-- Достижение 4: Силач -->
-        <div class="achievement-card locked" data-achievement="strength_master">
-            <div class="achievement-icon">💪</div>
-            <div class="achievement-content">
-                <h5>Силач</h5>
-                <p>Завершите программу "Сила"</p>
-            </div>
-            <div class="achievement-lock">
-                <i class="fas fa-lock"></i>
-            </div>
-        </div>
-        
-        <!-- Достижение 5: Мастер гибкости -->
-        <div class="achievement-card locked" data-achievement="flex_100">
-            <div class="achievement-icon">🎯</div>
-            <div class="achievement-content">
-                <h5>Мастер гибкости</h5>
-                <p>Достигните 100% прогресса</p>
-                <span class="achievement-progress" id="progress-flex_100">Прогресс: 0%</span>
-            </div>
-            <div class="achievement-lock">
-                <i class="fas fa-lock"></i>
-            </div>
-        </div>
-        
-        <!-- Достижение 6: Месяц тренировок -->
-        <div class="achievement-card locked" data-achievement="streak_30">
-            <div class="achievement-icon">🏅</div>
-            <div class="achievement-content">
-                <h5>Месяц тренировок</h5>
-                <p>Занимайтесь 30 дней подряд</p>
-                <span class="achievement-progress" id="progress-streak_30">Прогресс: 0/30</span>
-            </div>
-            <div class="achievement-lock">
-                <i class="fas fa-lock"></i>
-            </div>
-        </div>
-        
-       
-    <!-- Кнопка Поделиться (внизу) -->
-    <div class="achievements-footer">
-        <button class="btn btn-primary btn-share" onclick="shareAllAchievements()">
-            <i class="fas fa-share-alt"></i>
-            Поделиться
-        </button>
-    </div>
-</div>
 
-<!-- Модальное окно шеринга -->
-<div class="modal" id="shareModal">
-    <div class="modal-content share-modal">
-        <div class="modal-header">
-            <h3><i class="fas fa-share-alt"></i> Поделиться достижениями</h3>
-            <button class="modal-close" onclick="closeShareModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="share-preview">
-                <h4>Мои достижения в StretchWell</h4>
-                <p id="shareText">Я получил несколько достижений! Присоединяйся ко мне!</p>
-            </div>
-            
-            <div class="share-options">
-                <button class="share-option-btn telegram" onclick="shareToTelegram()">
-                    <i class="fab fa-telegram-plane"></i>
-                    <span>Telegram</span>
-                </button>
-                <button class="share-option-btn whatsapp" onclick="shareToWhatsApp()">
-                    <i class="fab fa-whatsapp"></i>
-                    <span>WhatsApp</span>
-                </button>
-                <button class="share-option-btn vk" onclick="shareToVK()">
-                    <i class="fab fa-vk"></i>
-                    <span>ВКонтакте</span>
-                </button>
-                <button class="share-option-btn copy" onclick="copyToClipboard()">
-                    <i class="fas fa-copy"></i>
-                    <span>Копировать</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
             <!-- Недавние результаты -->
             <div class="recent-results">
                 <div class="section-header">
@@ -285,6 +250,38 @@
             </div>
         </div>
     </main>
+
+    <!-- 🔥 МОДАЛЬНОЕ ОКНО ШЕРИНГА (ОБНОВЛЁННОЕ) -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content share-modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-share-alt"></i> Поделиться достижениями</h3>
+                <button class="modal-close" onclick="closeShareModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="share-preview">
+                    <h4>Мои достижения в StretchWell</h4>
+                    <p id="shareText">Я получил несколько достижений! Присоединяйся ко мне!</p>
+                </div>
+                
+                <!-- 🔥 НОВЫЕ КНОПКИ ШЕРИНГА -->
+                <div class="share-options">
+                    <button class="share-option-btn max" onclick="shareToMax()">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>MAX</span>
+                    </button>
+                    <button class="share-option-btn vk" onclick="shareToVK()">
+                        <i class="fab fa-vk"></i>
+                        <span>ВКонтакте</span>
+                    </button>
+                    <button class="share-option-btn copy" onclick="copyToClipboard()">
+                        <i class="fas fa-copy"></i>
+                        <span>Копировать</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

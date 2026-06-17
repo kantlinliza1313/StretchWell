@@ -988,3 +988,72 @@ input:checked + .toggle-slider:before {
         gap: 10px;
     }
 }
+/* Кнопка удаления в списке сообщений */
+.btn-delete-message {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    opacity: 0.5;
+    transition: all 0.3s;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.btn-delete-message:hover {
+    opacity: 1;
+    background: rgba(231, 76, 60, 0.1);
+    transform: scale(1.1);
+}
+
+/* Кнопка удаления в модальном окне */
+.btn-danger {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Улучшение item для размещения кнопки удаления */
+.message-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    border-left: 4px solid transparent;
+    align-items: center;
+}
+
+.message-avatar {
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.message-content {
+    cursor: pointer;
+    flex: 1;
+    min-width: 0;
+}
