@@ -13,9 +13,6 @@ import {
     serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-// ============================================
-// 🔹 ВТОРОЙ FIREBASE APP (для создания пользователей без выхода админа)
-// ============================================
 const adminApp = initializeApp(firebaseConfig, 'AdminSecondary');
 const adminAuth = getAuth(adminApp);
 
@@ -29,7 +26,7 @@ onAuthStateChanged(auth, async (user) => {
     if (isCreatingUser) return;
     
     if (user) {
-        console.log('✅ Пользователь авторизован:', user.email);
+        console.log('Пользователь авторизован:', user.email);
         try {
             const userDoc = await getDoc(doc(db, 'users', user.uid));
             if (userDoc.exists()) {
@@ -50,7 +47,7 @@ onAuthStateChanged(auth, async (user) => {
                 Swal.fire('Ошибка', 'Пользователь не найден', 'error');
             }
         } catch (error) { 
-            console.error('❌ Ошибка:', error); 
+            console.error('Ошибка:', error); 
         }
     } else {
         window.location.href = 'login.html';
@@ -124,13 +121,11 @@ async function loadDashboardStats() {
         if (statServices) statServices.textContent = (await getDocs(collection(db, 'services'))).size;
         
     } catch (e) { 
-        console.error('❌ Статистика:', e); 
+        console.error('Статистика:', e); 
     }
 }
 
-// ============================================
-// 🔹 УРОКИ ПРОГРАММ
-// ============================================
+// УРОКИ ПРОГРАММ
 window.addLesson = function() {
     currentLessons.push({
         day: currentLessons.length + 1,
@@ -227,9 +222,7 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
-// ============================================
-// 🔹 ПРОГРАММЫ
-// ============================================
+//  ПРОГРАММЫ
 async function loadProgramsTable() {
     const tbody = document.getElementById('programsTable');
     if (!tbody) return;
@@ -254,7 +247,7 @@ async function loadProgramsTable() {
                 </div></td>
             </tr>`).join('');
     } catch (e) { 
-        console.error('❌ Программы:', e); 
+        console.error('Программы:', e); 
         tbody.innerHTML = '<tr><td colspan="6">Ошибка</td></tr>'; 
     }
 }
@@ -348,12 +341,12 @@ document.getElementById('programForm')?.addEventListener('submit', async functio
             await addDoc(collection(db, 'programs'), data); 
         }
         localStorage.setItem('programsUpdated', Date.now());
-        Swal.fire('✅ Успешно!', id?'Обновлено':'Добавлено', 'success');
+        Swal.fire('Успешно!', id?'Обновлено':'Добавлено', 'success');
         window.closeProgramModal(); 
         loadProgramsTable();
     } catch (err) { 
         console.error(err); 
-        Swal.fire('❌ Ошибка', 'Не удалось: '+err.message, 'error'); 
+        Swal.fire('Ошибка', 'Не удалось: '+err.message, 'error'); 
     }
 });
 
@@ -397,9 +390,7 @@ window.toggleProgram = async function(id, state) {
     }
 };
 
-// ============================================
-// 🔹 ПРЕИМУЩЕСТВА
-// ============================================
+//  ПРЕИМУЩЕСТВА
 async function loadFeaturesTable() {
     const tbody = document.getElementById('featuresTableBody');
     if (!tbody) return;
@@ -422,7 +413,7 @@ async function loadFeaturesTable() {
                 </div></td>
             </tr>`).join('');
     } catch (e) { 
-        console.error('❌', e); 
+        console.error('', e); 
         tbody.innerHTML = '<tr><td colspan="6">Ошибка</td></tr>'; 
     }
 }
@@ -485,12 +476,12 @@ document.getElementById('featureForm')?.addEventListener('submit', async functio
             await addDoc(collection(db, 'features'), data); 
         }
         localStorage.setItem('featuresUpdated', Date.now()); 
-        Swal.fire('✅ Успешно!', id?'Обновлено':'Добавлено', 'success'); 
+        Swal.fire('Успешно!', id?'Обновлено':'Добавлено', 'success'); 
         window.closeFeatureModal(); 
         loadFeaturesTable();
     } catch (err) { 
         console.error(err); 
-        Swal.fire('❌ Ошибка', 'Не удалось', 'error'); 
+        Swal.fire('Ошибка', 'Не удалось', 'error'); 
     }
 });
 
@@ -534,9 +525,7 @@ window.toggleFeature = async function(id, state) {
     }
 };
 
-// ============================================
-// 🔹 УСЛУГИ
-// ============================================
+// УСЛУГИ
 async function loadServicesTable() {
     const tbody = document.getElementById('servicesTableBody');
     if (!tbody) return;
@@ -559,7 +548,7 @@ async function loadServicesTable() {
                 </div></td>
             </tr>`).join('');
     } catch (e) { 
-        console.error('❌', e); 
+        console.error('', e); 
         tbody.innerHTML = '<tr><td colspan="6">Ошибка</td></tr>'; 
     }
 }
@@ -622,12 +611,12 @@ document.getElementById('serviceForm')?.addEventListener('submit', async functio
             await addDoc(collection(db, 'services'), data); 
         }
         localStorage.setItem('servicesUpdated', Date.now()); 
-        Swal.fire('✅ Успешно!', id?'Обновлено':'Добавлено', 'success'); 
+        Swal.fire('Успешно!', id?'Обновлено':'Добавлено', 'success'); 
         window.closeServiceModal(); 
         loadServicesTable();
     } catch (err) { 
         console.error(err); 
-        Swal.fire('❌ Ошибка', 'Не удалось', 'error'); 
+        Swal.fire('Ошибка', 'Не удалось', 'error'); 
     }
 });
 
@@ -671,9 +660,7 @@ window.toggleService = async function(id, state) {
     }
 };
 
-// ============================================
-// 🔹 ПОЛЬЗОВАТЕЛИ (клиенты и админы)
-// ============================================
+// ПОЛЬЗОВАТЕЛИ (клиенты и админы)
 window.toggleAdminFields = function() {
     const role = document.getElementById('uRole').value;
     const clientFields = document.getElementById('clientFields');
@@ -740,7 +727,7 @@ async function loadUsersTable() {
         }).filter(html => html).join('');
         
     } catch (error) { 
-        console.error('❌ Ошибка:', error); 
+        console.error('Ошибка:', error); 
         tbody.innerHTML = `<tr><td colspan="6">Ошибка: ${error.message}</td></tr>`; 
     }
 }
@@ -832,7 +819,7 @@ document.getElementById('userForm')?.addEventListener('submit', async function(e
             };
             
             await updateDoc(doc(db, 'users', userId), updateData);
-            Swal.fire('✅ Успешно!', 'Пользователь обновлён', 'success');
+            Swal.fire('Успешно!', 'Пользователь обновлён', 'success');
             
         } else {
             isCreatingUser = true;
@@ -865,14 +852,14 @@ document.getElementById('userForm')?.addEventListener('submit', async function(e
                 isCreatingUser = false;
             }
             
-            Swal.fire('✅ Успешно!', `${role === 'admin' ? 'Администратор' : 'Клиент'} создан`, 'success');
+            Swal.fire('Успешно!', `${role === 'admin' ? 'Администратор' : 'Клиент'} создан`, 'success');
         }
         
         window.closeUserModal();
         loadUsersTable();
         
     } catch (error) {
-        console.error('❌ Ошибка:', error);
+        console.error('Ошибка:', error);
         isCreatingUser = false;
         
         let msg = 'Не удалось сохранить пользователя';
@@ -880,7 +867,7 @@ document.getElementById('userForm')?.addEventListener('submit', async function(e
         else if (error.code === 'auth/invalid-email') msg = 'Некорректный email';
         else if (error.code === 'auth/weak-password') msg = 'Слишком простой пароль';
         
-        Swal.fire('❌ Ошибка', msg, 'error');
+        Swal.fire('Ошибка', msg, 'error');
     }
 });
 
@@ -925,9 +912,7 @@ window.toggleUser = async function(userId, state) {
     }
 };
 
-// ============================================
-// 🔹 ТРЕНЕРЫ
-// ============================================
+// ТРЕНЕРЫ
 async function loadTrainersTable() {
     const grid = document.getElementById('trainersGrid');
     if (!grid) return;
@@ -945,7 +930,7 @@ async function loadTrainersTable() {
         renderTrainers(trainers);
         
     } catch (error) {
-        console.error('❌ Ошибка загрузки тренеров:', error);
+        console.error('Ошибка загрузки тренеров:', error);
         grid.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Ошибка загрузки</h3></div>';
     }
 }
@@ -1089,7 +1074,7 @@ window.loadTrainerData = async function(uid) {
     }
 };
 
-// 🔥 ЕДИНСТВЕННЫЙ обработчик формы тренера (убраны дубликаты!)
+//обработчик формы тренера
 document.getElementById('trainerForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -1125,7 +1110,6 @@ document.getElementById('trainerForm')?.addEventListener('submit', async functio
                 showConfirmButton: false
             });
         } else {
-            // СОЗДАНИЕ НОВОГО
             const password = document.getElementById('tPassword').value;
             
             if (!password || password.length < 6) {
@@ -1133,7 +1117,7 @@ document.getElementById('trainerForm')?.addEventListener('submit', async functio
                 return;
             }
             
-            // 🔥 Проверка: существует ли уже такой email?
+            // Проверка: существует ли уже такой email?
             const existingUser = await checkIfEmailExists(trainerData.email);
             
             if (existingUser) {
@@ -1244,7 +1228,7 @@ document.getElementById('trainerForm')?.addEventListener('submit', async functio
         loadTrainersTable();
         
     } catch (error) {
-        console.error('❌ Ошибка:', error);
+        console.error('Ошибка:', error);
         isCreatingUser = false;
         
         let errorMsg = 'Не удалось сохранить тренера';
@@ -1260,7 +1244,7 @@ document.getElementById('trainerForm')?.addEventListener('submit', async functio
     }
 });
 
-// 🔥 Вспомогательная функция: проверка существования email
+// Вспомогательная функция: проверка существования email
 async function checkIfEmailExists(email) {
     try {
         const q = query(
@@ -1283,9 +1267,9 @@ async function checkIfEmailExists(email) {
 // Вспомогательная функция: название роли
 function getRoleLabel(role) {
     const labels = {
-        admin: '👑 Администратор',
-        trainer: '🏋️ Тренер',
-        client: '👤 Клиент'
+        admin: 'Администратор',
+        trainer: 'Тренер',
+        client: 'Клиент'
     };
     return labels[role] || role;
 }
@@ -1322,14 +1306,11 @@ window.deleteTrainer = async function(uid, name) {
         loadTrainersTable();
         
     } catch (error) {
-        console.error('❌ Ошибка:', error);
+        console.error('Ошибка:', error);
         Swal.fire('Ошибка', 'Не удалось удалить тренера', 'error');
     }
 };
-
-// ============================================
-// 🔹 СПЕЦИАЛИСТЫ
-// ============================================
+// СПЕЦИАЛИСТЫ
 async function loadSpecialistsTable() {
     const tbody = document.getElementById('specialistsTableBody');
     if (!tbody) return;
@@ -1362,7 +1343,7 @@ async function loadSpecialistsTable() {
         `).join('');
         
     } catch (error) {
-        console.error('❌ Ошибка:', error);
+        console.error('Ошибка:', error);
         tbody.innerHTML = `<tr><td colspan="6">Ошибка: ${error.message}</td></tr>`;
     }
 }
@@ -1437,12 +1418,12 @@ document.getElementById('specialistForm')?.addEventListener('submit', async func
             await addDoc(collection(db, 'specialists'), data); 
         }
         localStorage.setItem('specialistsUpdated', Date.now());
-        Swal.fire('✅ Успешно!', id ? 'Обновлён' : 'Добавлен', 'success');
+        Swal.fire('Успешно!', id ? 'Обновлён' : 'Добавлен', 'success');
         window.closeSpecialistModal();
         loadSpecialistsTable();
     } catch (err) { 
         console.error(err); 
-        Swal.fire('❌ Ошибка', 'Не удалось', 'error'); 
+        Swal.fire('Ошибка', 'Не удалось', 'error'); 
     }
 });
 
@@ -1488,9 +1469,7 @@ window.toggleSpecialist = async function(id, state) {
     }
 };
 
-// ============================================
-// 🔹 ОТЗЫВЫ
-// ============================================
+// ОТЗЫВЫ
 async function loadReviewsTable() {
     const tbody = document.getElementById('reviewsTableBody');
     if (!tbody) return;
@@ -1526,7 +1505,7 @@ async function loadReviewsTable() {
         }).join('');
         
     } catch (error) {
-        console.error('❌ Ошибка загрузки отзывов:', error);
+        console.error('Ошибка загрузки отзывов:', error);
         tbody.innerHTML = `<tr><td colspan="5">Ошибка: ${error.message}</td></tr>`;
     }
 }
@@ -1549,15 +1528,13 @@ window.deleteReview = async function(reviewId, userName) {
             Swal.fire('Удалено!', 'Отзыв удалён', 'success');
             loadReviewsTable();
         } catch (error) {
-            console.error('❌ Ошибка удаления:', error);
+            console.error('Ошибка удаления:', error);
             Swal.fire('Ошибка', 'Не удалось удалить отзыв', 'error');
         }
     }
 };
 
-// ============================================
-// 🔹 НАСТРОЙКИ
-// ============================================
+// НАСТРОЙКИ
 async function loadSettings() {
     try {
         const settingsDoc = await getDoc(doc(db, 'settings', 'general'));
@@ -1591,9 +1568,7 @@ async function loadSettings() {
     }
 }
 
-// ============================================
-// 🔹 СООБЩЕНИЯ С КОНТАКТНОЙ ФОРМЫ
-// ============================================
+// СООБЩЕНИЯ С КОНТАКТНОЙ ФОРМЫ
 async function loadContactMessages() {
     const tbody = document.getElementById('contactMessagesTable');
     if (!tbody) return;
@@ -1648,7 +1623,7 @@ async function loadContactMessages() {
         }).join('');
         
     } catch (error) {
-        console.error('❌ Ошибка:', error);
+        console.error('Ошибка:', error);
         tbody.innerHTML = `<tr><td colspan="7">Ошибка: ${error.message}</td></tr>`;
     }
 }
@@ -1690,7 +1665,7 @@ window.viewContactMessage = async function(messageId) {
         loadContactMessages();
         
     } catch (error) {
-        console.error('❌ Ошибка:', error);
+        console.error('Ошибка:', error);
         Swal.fire('Ошибка', 'Не удалось загрузить сообщение', 'error');
     }
 };
@@ -1716,15 +1691,62 @@ window.deleteContactMessage = async function(messageId) {
     }
 };
 
-// Добавьте в switchSection:
-// case 'contactMessages': loadContactMessages(); break;
-
-// ============================================
-// 🔹 ВЫХОД
-// ============================================
 window.logout = function() { 
     signOut(auth).then(() => window.location.href = 'login.html').catch(e => console.error('Выход:', e)); 
 };
+//меню мобильное
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menuToggle');
+    
+    if (sidebar && menuToggle) {
+        sidebar.classList.toggle('active');
+        
+        const icon = menuToggle.querySelector('i');
+        if (sidebar.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    }
+}
+
+// Закрытие меню при клике на пункт
+document.querySelectorAll('.admin-nav .nav-item').forEach(item => {
+    item.addEventListener('click', function() {
+        if (window.innerWidth <= 1024) {
+            toggleSidebar();
+        }
+    });
+});
+
+// Закрытие меню при изменении размера окна
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 1024) {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.remove('active');
+        }
+    }
+});
+
+// Закрытие меню при клике вне его
+document.addEventListener('click', function(e) {
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menuToggle');
+    
+    if (window.innerWidth <= 1024 && 
+        sidebar && 
+        sidebar.classList.contains('active') &&
+        !sidebar.contains(e.target) && 
+        !menuToggle.contains(e.target)) {
+        toggleSidebar();
+    }
+});
+// Делаем функцию доступной глобально
+window.toggleSidebar = toggleSidebar;
 
 // Загружаем настройки при инициализации
 loadSettings();

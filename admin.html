@@ -10,10 +10,18 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="admin-page">
+     <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    
     <!-- Боковое меню -->
-    <aside class="admin-sidebar">
+    <aside class="admin-sidebar" id="sidebar">
         <div class="admin-logo">
             <h2>🎯 StretchWell Admin</h2>
+            <!-- 🔥 КНОПКА ЗАКРЫТИЯ МЕНЮ -->
+            <button class="sidebar-close" id="sidebarClose" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         
         <nav class="admin-nav">

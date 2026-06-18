@@ -462,6 +462,38 @@ window.toggleProgram = async function(id, state) {
     }
 };
 
+// Автоматическая генерация slug из названия
+document.getElementById('pTitle')?.addEventListener('input', function() {
+    const slugField = document.getElementById('pSlug');
+    if (slugField && !slugField.dataset.manual) {
+        // Простая транслитерация
+        const translit = {
+            'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
+            'е': 'e', 'ё': 'e', 'ж': 'zh', 'з': 'z', 'и': 'i',
+            'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
+            'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
+            'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch',
+            'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '',
+            'э': 'e', 'ю': 'yu', 'я': 'ya', ' ': '-'
+        };
+        
+        let slug = this.value.toLowerCase()
+            .split('')
+            .map(char => translit[char] || char)
+            .join('')
+            .replace(/[^a-z0-9-]/g, '')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+        
+        slugField.value = slug;
+    }
+});
+
+// Если пользователь редактирует slug вручную — отключаем автогенерацию
+document.getElementById('pSlug')?.addEventListener('input', function() {
+    this.dataset.manual = 'true';
+});
+
 // ============================================
 // 🔹 ВЫХОД
 // ============================================

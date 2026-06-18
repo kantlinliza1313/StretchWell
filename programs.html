@@ -11,14 +11,21 @@
     <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
-    <!-- Хедер -->
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
                     <span class="logo-text">StretchWell</span>
                 </div>
-                <nav class="nav">
+                
+                <!-- 🔥 КНОПКА БУРГЕР-МЕНЮ -->
+                <button class="burger-menu" id="burgerMenu" aria-label="Открыть меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <nav class="nav" id="mainNav">
                     <ul class="nav-list">
                         <li><a href="index.html" class="nav-link">Главная</a></li>
                         <li><a href="programs.html" class="nav-link active">Программы</a></li>
@@ -26,8 +33,12 @@
                         <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
                         <li><a href="contact.html" class="nav-link">Контакты</a></li>
                     </ul>
+                    <div class="header-actions-mobile">
+                        <a href="login.html" class="btn btn-primary btn-block">Войти</a>
+                    </div>
                 </nav>
-                <div class="header-actions">
+                
+                <div class="header-actions desktop-only">
                     <a href="login.html" class="btn btn-primary">Войти</a>
                 </div>
             </div>

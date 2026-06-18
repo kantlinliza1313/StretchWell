@@ -968,3 +968,389 @@ body {
         gap: 5px;
     }
 }
+
+/* ============================================
+   🔥 БУРГЕР-МЕНЮ ДЛЯ МОБИЛЬНЫХ
+   ============================================ */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.burger-menu span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #2c3e50;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.burger-menu.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.burger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-menu.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Кнопка "Войти" на мобильных */
+.header-actions-mobile {
+    display: none;
+    padding: 20px 0;
+    border-top: 1px solid #e1e8ed;
+    margin-top: 20px;
+}
+
+.header-actions-mobile .btn {
+    width: 100%;
+    text-align: center;
+}
+
+/* ============================================
+   🔥 АДАПТИВНОСТЬ ХЕДЕРА
+   ============================================ */
+@media (max-width: 992px) {
+    .burger-menu {
+        display: flex;
+    }
+    
+    .desktop-only {
+        display: none;
+    }
+    
+    .nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: white;
+        box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        padding: 80px 30px 30px;
+        overflow-y: auto;
+    }
+    
+    .nav.active {
+        right: 0;
+    }
+    
+    .nav-list {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .nav-list li {
+        width: 100%;
+    }
+    
+    .nav-link {
+        display: block;
+        padding: 15px 0;
+        font-size: 16px;
+        border-bottom: 1px solid #f0f2f5;
+    }
+    
+    .nav-link:hover {
+        background: #f5f7fa;
+        padding-left: 10px;
+    }
+    
+    .header-actions-mobile {
+        display: block;
+    }
+    
+    /* Затемнение фона при открытом меню */
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+    
+    .nav-overlay.active {
+        display: block;
+    }
+}
+
+/* ============================================
+   🔥 УЛУЧШЕНИЕ АДАПТИВНОСТИ HERO
+   ============================================ */
+@media (max-width: 768px) {
+    .hero {
+        min-height: 500px;
+        padding: 100px 0 60px;
+    }
+    
+    .hero-title {
+        font-size: 32px;
+        margin-bottom: 15px;
+    }
+    
+    .hero-subtitle {
+        font-size: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .btn-large {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        min-height: 450px;
+        padding: 90px 0 50px;
+    }
+    
+    .hero-title {
+        font-size: 26px;
+    }
+    
+    .hero-subtitle {
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   🔥 УЛУЧШЕНИЕ СЕКЦИИ "ПОЧЕМУ ВЫБИРАЮТ НАС"
+   ============================================ */
+@media (max-width: 768px) {
+    .choice-section {
+        padding: 50px 0;
+    }
+    
+    .choice-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-top: 25px;
+    }
+    
+    .choice-card {
+        padding: 25px 20px;
+    }
+    
+    .choice-number {
+        font-size: 36px;
+    }
+    
+    .choice-title {
+        font-size: 18px;
+    }
+    
+    .choice-desc {
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   🔥 УЛУЧШЕНИЕ УСЛУГ
+   ============================================ */
+@media (max-width: 768px) {
+    .services-section {
+        padding: 50px 0;
+    }
+    
+    .service-card {
+        flex: 0 0 85%;
+        max-width: 320px;
+    }
+    
+    .card-image {
+        height: 200px;
+    }
+    
+    .card-content {
+        padding: 20px;
+    }
+    
+    .service-title {
+        font-size: 18px;
+    }
+    
+    .service-icon {
+        font-size: 36px;
+    }
+    
+    .slider-arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-card {
+        flex: 0 0 90%;
+    }
+    
+    .card-image {
+        height: 180px;
+    }
+    
+    .card-number {
+        font-size: 32px;
+        top: 10px;
+        right: 15px;
+    }
+}
+
+/* ============================================
+   🔥 УЛУЧШЕНИЕ ФУТЕРА
+   ============================================ */
+@media (max-width: 768px) {
+    .footer {
+        padding: 30px 0;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .footer-logo {
+        justify-content: center;
+    }
+    
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px 20px;
+    }
+    
+    .footer-links a {
+        font-size: 14px;
+        padding: 8px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .footer-copyright {
+        font-size: 12px;
+    }
+}
+
+/* ============================================
+   🔥 ОБЩИЕ УЛУЧШЕНИЯ ДЛЯ МОБИЛЬНЫХ
+   ============================================ */
+
+/* Плавный скролл */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Отключение горизонтального скролла body */
+body {
+    overflow-x: hidden;
+}
+
+/* Минимальный размер для touch-элементов */
+@media (hover: none) {
+    .btn,
+    .nav-link,
+    .slider-arrow {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Улучшение читаемости на мобильных */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .section-title {
+        font-size: 24px !important;
+    }
+    
+    .section-subtitle {
+        font-size: 14px !important;
+    }
+}
+
+/* ============================================
+   🔥 ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ (до 360px)
+   ============================================ */
+@media (max-width: 360px) {
+    .hero-title {
+        font-size: 22px;
+    }
+    
+    .hero-subtitle {
+        font-size: 13px;
+    }
+    
+    .btn-large {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    .section-title {
+        font-size: 20px !important;
+    }
+    
+    .choice-card {
+        padding: 20px 15px;
+    }
+    
+    .choice-number {
+        font-size: 30px;
+    }
+    
+    .choice-title {
+        font-size: 16px;
+    }
+    
+    .footer-links {
+        gap: 10px 15px;
+    }
+    
+    .footer-links a {
+        font-size: 13px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+    .hero-title {
+        font-size: 38px;
+    }
+    
+    .hero-subtitle {
+        font-size: 17px;
+    }
+    
+    .choice-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .service-card {
+        flex: 0 0 280px;
+    }
+}

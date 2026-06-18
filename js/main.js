@@ -50,3 +50,66 @@ document.addEventListener('DOMContentLoaded', function() {
         track.setAttribute('tabindex', '0');
     }
 });
+
+// ============================================
+// 🔥 БУРГЕР-МЕНЮ ДЛЯ МОБИЛЬНЫХ
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const burgerMenu = document.getElementById('burgerMenu');
+    const mainNav = document.getElementById('mainNav');
+    
+    if (burgerMenu && mainNav) {
+        // Создаём overlay для затемнения
+        const overlay = document.createElement('div');
+        overlay.className = 'nav-overlay';
+        document.body.appendChild(overlay);
+        
+        // Открытие/закрытие меню
+        burgerMenu.addEventListener('click', function() {
+            this.classList.toggle('active');
+            mainNav.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+        });
+        
+        // Закрытие по клику на overlay
+        overlay.addEventListener('click', function() {
+            burgerMenu.classList.remove('active');
+            mainNav.classList.remove('active');
+            this.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        // Закрытие при клике на пункт меню
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 992) {
+                    burgerMenu.classList.remove('active');
+                    mainNav.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+        
+        // Закрытие при изменении размера окна
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 992) {
+                burgerMenu.classList.remove('active');
+                mainNav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+                burgerMenu.classList.remove('active');
+                mainNav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+});

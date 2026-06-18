@@ -11,27 +11,42 @@
 </head>
 <body>
     <!-- Хедер -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <span class="logo-text">StretchWell</span>
+    <!-- Хедер -->
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-text">StretchWell</span>
+            </div>
+            
+            <!-- 🔥 КНОПКА БУРГЕР-МЕНЮ -->
+            <button class="burger-menu" id="burgerMenu" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- 🔥 НАВИГАЦИЯ -->
+            <nav class="nav" id="mainNav">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link active">Главная</a></li>
+                    <li><a href="programs.html" class="nav-link">Программы</a></li>
+                    <li><a href="specialists.html" class="nav-link">Специалисты</a></li>
+                    <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
+                    <li><a href="contact.html" class="nav-link">Контакты</a></li>
+                </ul>
+                <div class="header-actions-mobile">
+                    <a href="login.html" class="btn btn-primary btn-block">Войти</a>
                 </div>
-                <nav class="nav">
-                    <ul class="nav-list">
-                        <li><a href="index.html" class="nav-link active">Главная</a></li>
-                        <li><a href="programs.html" class="nav-link">Программы</a></li>
-                        <li><a href="specialists.html" class="nav-link">Специалисты</a></li>
-                        <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
-                        <li><a href="contact.html" class="nav-link">Контакты</a></li>
-                    </ul>
-                </nav>
-                <div class="header-actions">
-                    <a href="login.html" class="btn btn-primary">Войти</a>
-                </div>
+            </nav>
+            
+            <!-- Кнопка "Войти" для десктопа -->
+            <div class="header-actions desktop-only">
+                <a href="login.html" class="btn btn-primary">Войти</a>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
     <!-- Hero Section (статичный, не из базы) -->
     <section class="hero">

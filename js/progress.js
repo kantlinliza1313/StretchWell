@@ -253,83 +253,134 @@ function aggregateByDayOfWeek(activityLog) {
 }
 
 // Обновление достижений
+// Обновление достижений
 function updateAchievements() {
     const stats = userData.stats || {};
     const achievements = userData.achievements || [];
     
+    // Конфигурация достижений
     const achievementConfigs = {
-        first_workout: { title: 'Первые шаги', desc: 'Завершите первую тренировку', requirement: () => stats.totalLessons >= 1 },
-        streak_5: { title: 'Серия из 5 дней', desc: 'Тренируйтесь 5 дней подряд', requirement: () => stats.streak >= 5 },
-        lessons_10: { title: '10 тренировок', desc: 'Завершите 10 тренировок', requirement: () => stats.totalLessons >= 10 },
-        strength_master: { title: 'Силач', desc: 'Завершите программу "Сила"', requirement: () => achievements.includes('strength_completed') },
-        flex_100: { title: 'Мастер гибкости', desc: 'Достигните 100% прогресса', requirement: () => stats.progress >= 100 },
-        streak_30: { title: 'Месяц тренировок', desc: 'Занимайтесь 30 дней подряд', requirement: () => stats.streak >= 30 },
-        lessons_50: { title: '50 тренировок', desc: 'Завершите 50 тренировок', requirement: () => stats.totalLessons >= 50 },
-        all_programs: { title: 'Профессионал', desc: 'Завершите все программы', requirement: () => achievements.includes('all_completed') }
+        first_workout: { 
+            title: 'Первые шаги', 
+            desc: 'Завершите первую тренировку', 
+            requirement: () => stats.totalLessons >= 1 
+        },
+        streak_5: { 
+            title: 'Серия из 5 дней', 
+            desc: 'Тренируйтесь 5 дней подряд', 
+            requirement: () => stats.streak >= 5 
+        },
+        lessons_10: { 
+            title: '10 тренировок', 
+            desc: 'Завершите 10 тренировок', 
+            requirement: () => stats.totalLessons >= 10 
+        },
+        strength_master: { 
+            title: 'Силач', 
+            desc: 'Завершите программу "Сила"', 
+            requirement: () => achievements.includes('strength_completed') 
+        },
+        flex_100: { 
+            title: 'Мастер гибкости', 
+            desc: 'Достигните 100% прогресса', 
+            requirement: () => stats.progress >= 100 
+        },
+        streak_30: { 
+            title: 'Месяц тренировок', 
+            desc: 'Занимайтесь 30 дней подряд', 
+            requirement: () => stats.streak >= 30 
+        }
     };
     
+    // Обновляем каждую карточку
     Object.keys(achievementConfigs).forEach(achievementId => {
         const card = document.querySelector(`[data-achievement="${achievementId}"]`);
-        if (!card) return;
+        if (!card) {
+            console.warn(`⚠️ Карточка достижения не найдена: ${achievementId}`);
+            return;
+        }
         
         const config = achievementConfigs[achievementId];
         const isUnlocked = achievements.includes(achievementId) || config.requirement();
         
+        console.log(`🏆 ${achievementId}: unlocked=${isUnlocked}, progress=${stats.progress}%, lessons=${stats.totalLessons}`);
+        
         if (isUnlocked) {
-            card.classList.add('unlocked');
+            // 🔓 РАЗБЛОКИРОВАНО
             card.classList.remove('locked');
+            card.classList.add('unlocked');
             
+            // Меняем иконку на открытый замок
             const lockIcon = card.querySelector('.achievement-lock i');
             if (lockIcon) {
                 lockIcon.className = 'fas fa-lock-open';
+                lockIcon.style.color = '#43e97b';
             }
             
+            // Показываем дату получения
             const achievementData = achievements.find(a => typeof a === 'object' && a.id === achievementId);
             const dateEl = card.querySelector('.achievement-date');
             if (achievementData?.date && dateEl) {
                 const date = achievementData.date.toDate ? achievementData.date.toDate() : new Date(achievementData.date);
                 dateEl.textContent = 'Получено ' + date.toLocaleDateString('ru-RU');
+                dateEl.style.display = 'block';
             }
-        } else {
-            card.classList.add('locked');
-            card.classList.remove('unlocked');
             
+            // Скрываем прогресс
+            const progressEl = card.querySelector('.achievement-progress');
+            if (progressEl) {
+                progressEl.style.display = 'none';
+            }
+            
+        } else {
+            // 🔒 ЗАБЛОКИРОВАНО
+            card.classList.remove('unlocked');
+            card.classList.add('locked');
+            
+            // Меняем иконку на закрытый замок
             const lockIcon = card.querySelector('.achievement-lock i');
             if (lockIcon) {
                 lockIcon.className = 'fas fa-lock';
+                lockIcon.style.color = '#95a5a6';
             }
             
+            // Скрываем дату
+            const dateEl = card.querySelector('.achievement-date');
+            if (dateEl) {
+                dateEl.style.display = 'none';
+            }
+            
+            // Показываем и обновляем прогресс
             const progressEl = card.querySelector('.achievement-progress');
             if (progressEl) {
+                progressEl.style.display = 'block';
+                
                 if (achievementId === 'flex_100') {
                     progressEl.textContent = `Прогресс: ${stats.progress}%`;
                 } else if (achievementId === 'streak_30') {
-                    progressEl.textContent = `Прогресс: ${stats.streak}/30 дней`;
-                } else if (achievementId === 'lessons_50') {
-                    progressEl.textContent = `Прогресс: ${stats.totalLessons}/50`;
-                } else if (achievementId === 'streak_5') {
-                    progressEl.textContent = `Прогресс: ${stats.streak}/5`;
+                    progressEl.textContent = `Прогресс: ${stats.streak || 0}/30 дней`;
                 } else if (achievementId === 'lessons_10') {
-                    progressEl.textContent = `Прогресс: ${stats.totalLessons}/10`;
+                    progressEl.textContent = `Прогресс: ${stats.totalLessons || 0}/10`;
+                } else if (achievementId === 'streak_5') {
+                    progressEl.textContent = `Прогресс: ${stats.streak || 0}/5`;
                 }
             }
         }
     });
 }
-
 // ============================================
-// 🔥 ФУНКЦИИ ШЕРИНГА (ОБНОВЛЁННЫЕ)
+// 🔥 ФУНКЦИИ ШЕРИНГА (УПРОЩЁННЫЕ)
 // ============================================
 
 // Поделиться всеми достижениями
 window.shareAllAchievements = function() {
     const stats = userData.stats || {};
     
-    const shareText = `🏆 Мои достижения в StretchWell!\n\n` +
-                     `✅ Тренировок завершено: ${stats.totalLessons}\n` +
-                     `📊 Общий прогресс: ${stats.progress}%\n` +
-                     `⏱️ Минут тренировок: ${stats.totalMinutes}\n` +
-                     `🔥 Дней подряд: ${stats.streak}\n\n` +
+    const shareText = `Мои достижения в StretchWell!\n\n` +
+                     `Тренировок завершено: ${stats.totalLessons}\n` +
+                     `Общий прогресс: ${stats.progress}%\n` +
+                     `Минут тренировок: ${stats.totalMinutes}\n` +
+                     `Дней подряд: ${stats.streak}\n\n` +
                      `Присоединяйся ко мне!`;
     
     document.getElementById('shareText').textContent = shareText;
@@ -341,57 +392,64 @@ window.closeShareModal = function() {
     document.getElementById('shareModal').classList.remove('active');
 }
 
-// 🔥 Поделиться в MAX (российский мессенджер)
-window.shareToMax = function() {
-    const text = document.getElementById('shareText').textContent;
-    // URL для шеринга в MAX
-    const url = `https://max.ru/share?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-    closeShareModal();
-}
-
-// Поделиться ВКонтакте
-window.shareToVK = function() {
-    const text = document.getElementById('shareText').textContent;
-    const url = `https://vk.com/share.php?comment=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-    closeShareModal();
-}
-
-// Копировать в буфер обмена
+// 🔥 Копировать в буфер обмена
 window.copyToClipboard = function() {
     const text = document.getElementById('shareText').textContent;
-    navigator.clipboard.writeText(text).then(() => {
-        Swal.fire({
-            icon: 'success',
-            title: 'Скопировано!',
-            text: 'Текст скопирован в буфер обмена',
-            timer: 2000,
-            showConfirmButton: false
+    
+    // Современный способ
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+            showCopySuccess();
+        }).catch(err => {
+            console.error('❌ Ошибка копирования:', err);
+            fallbackCopy(text);
         });
-        closeShareModal();
-    }).catch(err => {
-        console.error('❌ Ошибка копирования:', err);
+    } else {
         // Fallback для старых браузеров
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-            document.execCommand('copy');
-            Swal.fire({
-                icon: 'success',
-                title: 'Скопировано!',
-                timer: 2000,
-                showConfirmButton: false
-            });
-        } catch (e) {
+        fallbackCopy(text);
+    }
+}
+
+// Fallback для копирования
+function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+        const success = document.execCommand('copy');
+        if (success) {
+            showCopySuccess();
+        } else {
             Swal.fire('Ошибка', 'Не удалось скопировать', 'error');
         }
-        document.body.removeChild(textarea);
-        closeShareModal();
+    } catch (e) {
+        Swal.fire('Ошибка', 'Не удалось скопировать', 'error');
+    }
+    
+    document.body.removeChild(textarea);
+}
+
+// Показ успешного копирования
+function showCopySuccess() {
+    closeShareModal();
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Скопировано!',
+        html: `
+            <p style="margin-bottom: 10px;">Текст скопирован в буфер обмена</p>
+            <p style="font-size: 13px; color: #7f8c8d;">
+                Теперь вы можете вставить его в любой мессенджер<br>
+                (Telegram, WhatsApp, VK, MAX и др.)
+            </p>
+        `,
+        timer: 3000,
+        showConfirmButton: false
     });
 }
 
