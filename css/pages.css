@@ -753,3 +753,93 @@ html {
         align-items: center;
     }
 }
+
+/* ============================================
+   🔥 СТРАНИЦА ОТЗЫВОВ (ИСПРАВЛЕНО)
+   ============================================ */
+
+.reviews-hero {
+    background: white; /* Убрали синий фон */
+    padding: 30px 0; /* Уменьшили отступы сверху и снизу */
+    text-align: center;
+    border-bottom: 1px solid #e1e8ed; /* Добавили тонкую линию */
+}
+
+.reviews-hero .page-title {
+    font-size: 28px; /* Немного уменьшили размер */
+    margin-bottom: 8px; /* Уменьшили отступ снизу */
+    color: #2c3e50;
+}
+
+.reviews-hero .page-subtitle {
+    font-size: 15px;
+    color: #7f8c8d;
+    margin: 0; /* Убрали отступы */
+}
+
+.reviews-main {
+    padding: 30px 0; /* Уменьшили отступы */
+    background: #f8f9fa;
+    min-height: 400px;
+}
+
+/* Карточка отзыва */
+.review-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-left: 3px solid #6198FF;
+}
+
+.review-card p {
+    margin: 0 0 15px 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+.review-card .review-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.review-card .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6198FF 0%, #8DA4CE 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.review-card .author-info {
+    flex: 1;
+}
+
+.review-card .author-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    font-size: 15px;
+}
+
+.review-card .author-date {
+    font-size: 13px;
+    color: #95a5a6;
+    margin: 2px 0 0 0;
+}
+
+.review-card .stars {
+    color: #f39c12;
+    font-size: 16px;
+    letter-spacing: 2px;
+}

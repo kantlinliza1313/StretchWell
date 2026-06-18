@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои отзывы - StretchWell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-page">
+    <!-- Боковая панель -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo-link">
+                <span class="logo-text">StretchWell</span>
+            </a>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
+            </a>
+            <a href="my_programs.html" class="nav-item">
+                <i class="fas fa-dumbbell"></i>
+                <span>Каталог программ</span>
+            </a>
+            <a href="progress.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Прогресс</span>
+            </a>
+            <a href="schedule.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Расписание</span>
+            </a>
+            <a href="client-messages.html" class="nav-item">
+                <i class="fas fa-envelope"></i>
+                <span>Сообщения</span>
+                <span class="badge badge-info" id="msgCount" style="display:none">0</span>
+            </a>
+            <a href="dashboard-reviews.html" class="nav-item active">
+                <i class="fas fa-star"></i>
+                <span>Мои отзывы</span>
+            </a>
+            <a href="settings.html" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" class="nav-item logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <!-- Верхняя панель -->
+        <header class="top-bar">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="top-bar-center">
+                <h2 class="page-title">Мои отзывы</h2>
+            </div>
+
+            <div class="user-info">
+                <span class="user-name" id="topUserName">Загрузка...</span>
+                <div class="user-avatar-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=User&background=6198FF&color=fff" 
+                         alt="Avatar" 
+                         class="user-avatar"
+                         id="userAvatar">
+                </div>
+            </div>
+        </header>
+
+        <!-- Контент страницы -->
+        <div class="page-content">
+            
+            <!-- Кнопка добавить отзыв -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-star"></i>
+                        Оставить отзыв
+                    </h3>
+                </div>
+                
+                <div class="review-form-container">
+                    <form id="reviewForm">
+                        <!-- Рейтинг -->
+                        <div class="form-group">
+                            <label>Ваша оценка:</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5" required>
+                                <label for="star5"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1"><i class="fas fa-star"></i></label>
+                            </div>
+                        </div>
+                        
+                        <!-- Программа -->
+                        <div class="form-group">
+                            <label for="reviewProgram">О программе (необязательно):</label>
+                            <select id="reviewProgram" class="form-input">
+                                <option value="">-- Общая оценка приложения --</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Текст отзыва -->
+                        <div class="form-group">
+                            <label for="reviewText">Ваш отзыв:</label>
+                            <textarea id="reviewText" class="form-input" rows="4" 
+                                      placeholder="Расскажите о вашем опыте использования приложения..." 
+                                      required minlength="10" maxlength="500"></textarea>
+                            <small class="form-hint">Минимум 10 символов, максимум 500</small>
+                        </div>
+                        
+                        <!-- Кнопка -->
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Отправить отзыв
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Мои отзывы -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-comment-dots"></i>
+                        Мои отзывы
+                    </h3>
+                </div>
+                
+                <div id="myReviewsList">
+                    <div class="loading" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-spinner fa-spin"></i> Загрузка...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Все отзывы -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-users"></i>
+                        Отзывы других пользователей
+                    </h3>
+                </div>
+                
+                <div id="allReviewsList">
+                    <div class="loading" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-spinner fa-spin"></i> Загрузка...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Firebase -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/dashboard-reviews.js"></script>
+    
+    <!-- Скрипт для бокового меню -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebarClose');
+        
+        if (menuToggle && sidebar) {
+            const overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            document.body.appendChild(overlay);
+            
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            if (sidebarClose) {
+                sidebarClose.addEventListener('click', closeSidebar);
+            }
+            
+            overlay.addEventListener('click', closeSidebar);
+            
+            function closeSidebar() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    });
+    
+    function logout() {
+        if (confirm('Вы уверены, что хотите выйти?')) {
+            window.location.href = 'login.html';
+        }
+    }
+    </script>
+</body>
+</html>

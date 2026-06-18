@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>StretchWell - Растяжка для здоровья</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,23 +84,43 @@
             </div>
         </div>
     </section>
-
-    <!-- Наши услуги (загружается из Firebase: collection "services") -->
-    <section id="services" class="services-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Наши услуги</h2>
-                <p class="section-subtitle">Решаем ваши проблемы с помощью профессиональной растяжки</p>
-            </div>
-            <div class="services-slider">
-                <div class="services-track">
-                    <!-- Данные загрузятся из Firebase -->
-                </div>
-                <button class="slider-arrow prev-arrow" aria-label="Предыдущие услуги">←</button>
-                <button class="slider-arrow next-arrow" aria-label="Следующие услуги">→</button>
-            </div>
+<!-- Наши услуги -->
+<section class="services-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Наши услуги</h2>
+            <p class="section-subtitle">Решаем ваши проблемы с помощью профессиональной растяжки</p>
         </div>
-    </section>
+        
+        <!-- Слайдер программ -->
+        <div class="services-slider-container">
+            <!-- Стрелка влево (SVG) -->
+            <button class="slider-btn prev-btn" onclick="scrollServices(-1)" aria-label="Предыдущая программа">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            
+            <!-- Слайдер -->
+            <div class="services-slider" id="servicesSlider">
+                <div class="loading-programs">
+                    <div class="spinner"></div>
+                    <p>Загрузка программ...</p>
+                </div>
+            </div>
+            
+            <!-- Стрелка вправо (SVG) -->
+            <button class="slider-btn next-btn" onclick="scrollServices(1)" aria-label="Следующая программа">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Индикаторы -->
+        <div class="slider-dots" id="servicesDots"></div>
+    </div>
+</section>
 
 
     <!-- Футер -->
@@ -141,6 +161,7 @@
 
     <!-- Основной JS -->
     <script src="js/main.js"></script>
-
+<!-- 🔥 Загрузка программ -->
+<script type="module" src="js/programs-loader.js"></script>
 </body>
 </html>

@@ -28,7 +28,6 @@ onAuthStateChanged(auth, async (user) => {
             
             trainerData = userDoc.data();
             
-            // 🔥 ПРОВЕРКА: это точно тренер?
             if (trainerData.role !== 'trainer') {
                 console.warn('⚠️ Это не тренер! Роль:', trainerData.role);
                 
@@ -52,13 +51,9 @@ onAuthStateChanged(auth, async (user) => {
                 return;
             }
             
-            // Обновляем UI
             updateUI(trainerData);
-            
-            // Загружаем программы
             await loadProgramsTable();
             
-            // Если в URL ?action=new — открываем модалку
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('action') === 'new') {
                 setTimeout(() => window.openProgramModal(), 300);
@@ -87,6 +82,75 @@ function updateUI(data) {
     const avatarEl = document.getElementById('userAvatar');
     if (avatarEl) {
         avatarEl.src = data.photoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6198FF&color=fff`;
+    }
+}
+
+// ============================================
+// 🔥 АВТОМАТИЧЕСКАЯ ГЕНЕРАЦИЯ SLUG
+// ============================================
+window.generateSlug = function() {
+    const title = document.getElementById('pTitle').value;
+    const slugInput = document.getElementById('pSlug');
+    const programId = document.getElementById('programId').value;
+    
+    // Если это редактирование — не меняем slug
+    if (programId) return;
+    
+    // Если пользователь уже редактировал slug вручную — не трогаем
+    if (slugInput.dataset.manual === 'true') return;
+    
+    if (title) {
+        const slug = transliterate(title);
+        slugInput.value = slug;
+    } else {
+        slugInput.value = '';
+    }
+}
+
+// Функция транслитерации
+function transliterate(text) {
+    const ru = {
+        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
+        'е': 'e', 'ё': 'e', 'ж': 'zh', 'з': 'z', 'и': 'i',
+        'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
+        'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
+        'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch',
+        'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '',
+        'э': 'e', 'ю': 'yu', 'я': 'ya', ' ': '-',
+    };
+    
+    return text.toLowerCase()
+        .split('')
+        .map(char => ru[char] || char)
+        .join('')
+        .replace(/[^a-z0-9-]/g, '')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .substring(0, 50);
+}
+
+// ============================================
+// 🔥 ПРОВЕРКА УНИКАЛЬНОСТИ SLUG
+// ============================================
+async function validateSlug(slug, currentId = null) {
+    if (!slug) return true;
+    
+    try {
+        const q = query(
+            collection(db, 'programs'),
+            where('slug', '==', slug)
+        );
+        const snapshot = await getDocs(q);
+        
+        for (const docSnap of snapshot.docs) {
+            if (docSnap.id !== currentId) {
+                return false; // Slug занят другой программой
+            }
+        }
+        return true; // Slug свободен
+    } catch (error) {
+        console.error('Ошибка проверки slug:', error);
+        return true;
     }
 }
 
@@ -180,9 +244,13 @@ window.clearLessons = function() {
 }
 
 function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-              .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 // ============================================
@@ -194,7 +262,6 @@ async function loadProgramsTable() {
     tbody.innerHTML = '<tr><td colspan="7">Загрузка...</td></tr>';
     
     try {
-        // 🔥 ВАЖНО: загружаем ТОЛЬКО программы этого тренера
         const q = query(
             collection(db, 'programs'),
             where('trainerId', '==', trainerData.trainerId)
@@ -266,6 +333,15 @@ window.openProgramModal = function(id = null) {
     
     window.clearLessons();
     
+    // 🔥 СБРАС НАСТРОЙКИ SLUG
+    const slugInput = document.getElementById('pSlug');
+    if (slugInput) {
+        slugInput.dataset.manual = 'false';
+        slugInput.readOnly = false;
+        slugInput.style.background = '';
+        slugInput.style.cursor = '';
+    }
+    
     if (id) { 
         title.textContent = 'Редактировать программу'; 
         loadProgramData(id); 
@@ -295,7 +371,6 @@ async function loadProgramData(id) {
         if (snap.exists()) { 
             const d = snap.data();
             
-            // 🔥 ПРОВЕРКА: программа принадлежит этому тренеру?
             if (d.trainerId !== trainerData.trainerId) {
                 Swal.fire('Ошибка', 'Это не ваша программа', 'error');
                 window.closeProgramModal();
@@ -319,6 +394,15 @@ async function loadProgramData(id) {
             document.getElementById('pSchedule').value = d.schedule?.join('\n')||'';
             document.getElementById('pActive').checked = d.isActive!==false;
             
+            // 🔥 БЛОКИРУЕМ SLUG ПРИ РЕДАКТИРОВАНИИ
+            const slugInput = document.getElementById('pSlug');
+            if (slugInput) {
+                slugInput.readOnly = true;
+                slugInput.style.background = '#f8f9fa';
+                slugInput.style.cursor = 'not-allowed';
+                slugInput.dataset.manual = 'true';
+            }
+            
             if (d.lessons && Array.isArray(d.lessons)) {
                 currentLessons = d.lessons;
                 renderLessons();
@@ -331,15 +415,41 @@ async function loadProgramData(id) {
 }
 
 // ============================================
-// 🔹 СОХРАНЕНИЕ ПРОГРАММЫ
+// 🔹 СОХРАНЕНИЕ ПРОГРАММЫ (С ПРОВЕРКОЙ SLUG)
 // ============================================
 document.getElementById('programForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     const id = document.getElementById('programId').value;
     
+    let slug = document.getElementById('pSlug').value;
+    const title = document.getElementById('pTitle').value;
+    
+    // 🔥 Если slug пустой — генерируем из названия
+    if (!slug && title) {
+        slug = transliterate(title);
+        document.getElementById('pSlug').value = slug;
+    }
+    
+    // 🔥 ПРОВЕРКА УНИКАЛЬНОСТИ SLUG
+    const isUnique = await validateSlug(slug, id);
+    if (!isUnique) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Slug уже занят!',
+            html: `
+                <p>Программа с адресом <strong>${escapeHtml(slug)}</strong> уже существует.</p>
+                <p style="color: #7f8c8d; font-size: 13px; margin-top: 10px;">
+                    Попробуйте изменить название программы
+                </p>
+            `,
+            confirmButtonColor: '#6198FF'
+        });
+        return;
+    }
+    
     const data = { 
-        title: document.getElementById('pTitle').value, 
-        slug: document.getElementById('pSlug').value, 
+        title: title, 
+        slug: slug, 
         shortDescription: document.getElementById('pShortDesc').value, 
         fullDescription: document.getElementById('pFullDesc').value, 
         level: document.getElementById('pLevel').value, 
@@ -355,8 +465,6 @@ document.getElementById('programForm')?.addEventListener('submit', async functio
         lessons: currentLessons,
         isActive: document.getElementById('pActive').checked, 
         updatedAt: serverTimestamp(),
-        
-        // 🔥 ВАЖНО: привязка к тренеру
         trainerId: trainerData.trainerId,
         trainerUid: currentUser.uid,
         trainerName: trainerData.name
@@ -364,7 +472,6 @@ document.getElementById('programForm')?.addEventListener('submit', async functio
     
     try {
         if (id) {
-            // РЕДАКТИРОВАНИЕ — проверяем что программа наша
             const existingDoc = await getDoc(doc(db, 'programs', id));
             if (existingDoc.exists() && existingDoc.data().trainerId !== trainerData.trainerId) {
                 Swal.fire('Ошибка', 'Вы не можете редактировать чужую программу', 'error');
@@ -374,7 +481,6 @@ document.getElementById('programForm')?.addEventListener('submit', async functio
             await updateDoc(doc(db, 'programs', id), data);
             Swal.fire('✅ Успешно!', 'Программа обновлена', 'success');
         } else {
-            // СОЗДАНИЕ НОВОЙ
             data.createdAt = serverTimestamp();
             data.clientsCount = 0;
             await addDoc(collection(db, 'programs'), data);
@@ -399,7 +505,6 @@ window.editProgram = function(id) {
 };
 
 window.deleteProgram = async function(id, title) {
-    // 🔥 ПРОВЕРКА: программа принадлежит этому тренеру?
     try {
         const docSnap = await getDoc(doc(db, 'programs', id));
         if (docSnap.exists() && docSnap.data().trainerId !== trainerData.trainerId) {
@@ -433,7 +538,6 @@ window.deleteProgram = async function(id, title) {
 };
 
 window.toggleProgram = async function(id, state) {
-    // 🔥 ПРОВЕРКА: программа принадлежит этому тренеру?
     try {
         const docSnap = await getDoc(doc(db, 'programs', id));
         if (docSnap.exists() && docSnap.data().trainerId !== trainerData.trainerId) {
@@ -462,34 +566,16 @@ window.toggleProgram = async function(id, state) {
     }
 };
 
-// Автоматическая генерация slug из названия
+// ============================================
+// 🔹 ОБРАБОТЧИКИ ДЛЯ SLUG
+// ============================================
+
+// 🔥 Автогенерация slug при вводе названия
 document.getElementById('pTitle')?.addEventListener('input', function() {
-    const slugField = document.getElementById('pSlug');
-    if (slugField && !slugField.dataset.manual) {
-        // Простая транслитерация
-        const translit = {
-            'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
-            'е': 'e', 'ё': 'e', 'ж': 'zh', 'з': 'z', 'и': 'i',
-            'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
-            'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
-            'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'c', 'ч': 'ch',
-            'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '',
-            'э': 'e', 'ю': 'yu', 'я': 'ya', ' ': '-'
-        };
-        
-        let slug = this.value.toLowerCase()
-            .split('')
-            .map(char => translit[char] || char)
-            .join('')
-            .replace(/[^a-z0-9-]/g, '')
-            .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '');
-        
-        slugField.value = slug;
-    }
+    window.generateSlug();
 });
 
-// Если пользователь редактирует slug вручную — отключаем автогенерацию
+// 🔥 Если пользователь редактирует slug вручную — отключаем автогенерацию
 document.getElementById('pSlug')?.addEventListener('input', function() {
     this.dataset.manual = 'true';
 });

@@ -2,14 +2,8 @@
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 import { 
-    doc, 
-    getDoc, 
-    getDocs,
-    updateDoc, 
-    serverTimestamp,
-    collection,
-    query,
-    where
+    doc, getDoc, getDocs, updateDoc, serverTimestamp,
+    collection, query, where
 } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
 // ============================================
@@ -20,7 +14,6 @@ let currentProgram = null;
 let currentLessonIndex = 0;
 let allLessons = [];
 
-// Делаем доступными для HTML
 window.currentProgramSlug = null;
 window.programLessons = [];
 
@@ -163,7 +156,7 @@ async function renderLessons() {
 // ============================================
 function renderLessonCard(lesson, index, completedLessons) {
     const isCompleted = completedLessons.includes(index);
-    const isLocked = index > 0 && !completedLessons.includes(index - 1) && completedLessons.length > 0 && !completedLessons.includes(index);
+    const isLocked = index > 0 && !completedLessons.includes(index - 1);
     
     let statusClass = '';
     let statusBadge = '';
@@ -253,27 +246,19 @@ window.openVideo = function(lessonIndex, lessonData) {
     durationEl.textContent = lessonData.duration || '15 мин';
     
     const videoUrl = lessonData.videoUrl || '';
+    const embedUrl = getEmbedUrl(videoUrl);
     
-    if (videoUrl.includes('drive.google.com')) {
-        const fileId = extractGoogleDriveFileId(videoUrl);
-        if (fileId) {
-            playerEl.src = `https://drive.google.com/file/d/${fileId}/preview`;
-        } else {
-            playerEl.src = '';
-            Swal.fire('Ошибка', 'Не удалось получить ID видео', 'error');
-            return;
-        }
-    } else if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
-        const videoId = extractYouTubeId(videoUrl);
-        if (videoId) {
-            playerEl.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-        } else {
-            playerEl.src = '';
-        }
-    } else if (videoUrl) {
-        playerEl.src = videoUrl;
+    if (embedUrl) {
+        playerEl.src = embedUrl;
+        
+        playerEl.onerror = function() {
+            console.error('❌ Ошибка загрузки видео');
+            showVideoError(videoUrl);
+        };
     } else {
         playerEl.src = '';
+        showVideoError(videoUrl);
+        return;
     }
     
     checkLessonCompletion(lessonIndex, completeBtn);
@@ -286,9 +271,70 @@ window.openVideo = function(lessonIndex, lessonData) {
 }
 
 // ============================================
+// 🔹 ФУНКЦИЯ ПОЛУЧЕНИЯ URL ДЛЯ ВСТРАИВАНИЯ
+// ============================================
+function getEmbedUrl(videoUrl) {
+    if (!videoUrl) return null;
+    
+    if (videoUrl.includes('drive.google.com')) {
+        const fileId = extractGoogleDriveFileId(videoUrl);
+        if (fileId) {
+            return `https://drive.google.com/file/d/${fileId}/preview`;
+        }
+        return null;
+    }
+    
+    if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+        const videoId = extractYouTubeId(videoUrl);
+        if (videoId) {
+            return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
+        }
+        return null;
+    }
+    
+    if (videoUrl.includes('vimeo.com')) {
+        const vimeoId = videoUrl.match(/vimeo\.com\/(\d+)/)?.[1];
+        if (vimeoId) {
+            return `https://player.vimeo.com/video/${vimeoId}`;
+        }
+        return null;
+    }
+    
+    if (videoUrl.match(/\.(mp4|webm|ogg|mov)(\?|$)/i)) {
+        return videoUrl;
+    }
+    
+    if (videoUrl.includes('/preview') || videoUrl.includes('/embed')) {
+        return videoUrl;
+    }
+    
+    return videoUrl;
+}
+
+// ============================================
+// 🔹 ПОКАЗ ОШИБКИ ВИДЕО
+// ============================================
+function showVideoError(videoUrl) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Видео недоступно',
+        html: `
+            <p style="margin-bottom: 15px;">Не удалось загрузить видео.</p>
+            <p style="margin-top: 15px; padding: 10px; background: #f0f7ff; border-radius: 8px; font-size: 12px; color: #6198FF;">
+                💡 <strong>Решение:</strong> Тренер должен опубликовать видео публично в Google Drive
+            </p>
+        `,
+        confirmButtonText: 'Понятно',
+        confirmButtonColor: '#6198FF'
+    });
+}
+
+// ============================================
 // 🔹 ПРОВЕРКА ЗАВЕРШЕНИЯ УРОКА
 // ============================================
 async function checkLessonCompletion(lessonIndex, button) {
+    if (!button) return;
+    
     try {
         const userRef = doc(db, 'users', currentUser.uid);
         const userDoc = await getDoc(userRef);
@@ -394,12 +440,10 @@ async function checkNextLessonUnlocked(nextIndex, button) {
 }
 
 // ============================================
-// 🔹 ЗАВЕРШЕНИЕ УРОКА (РАБОЧАЯ ВЕРСИЯ)
+// 🔹 🔥 ЗАВЕРШЕНИЕ УРОКА (С activityLog!)
 // ============================================
 window.completeLesson = async function() {
     console.log('🎯 Завершение урока...');
-    console.log('📋 currentLessonIndex:', currentLessonIndex);
-    console.log('📋 currentProgramSlug:', window.currentProgramSlug);
     
     if (!currentUser) {
         Swal.fire('Ошибка', 'Вы не авторизованы', 'error');
@@ -513,16 +557,31 @@ window.completeLesson = async function() {
             }
         }
         
+        // 🔥 🔥 🔥 СОЗДАЁМ ЗАПИСЬ В activityLog
+        const activityEntry = {
+            date: new Date(),
+            lessonsCompleted: 1,
+            minutesWatched: lessonDuration,
+            programSlug: window.currentProgramSlug,
+            programTitle: currentProgram.title || 'Программа'
+        };
+        
+        let activityLog = userData.activityLog || [];
+        activityLog.push(activityEntry);
+        
+        // 🔥 🔥 🔥 СОХРАНЯЕМ ВСЁ В FIRESTORE
         await updateDoc(userRef, {
             enrolledPrograms: enrolledPrograms,
             'stats.totalLessons': (stats.totalLessons || 0) + 1,
             'stats.totalMinutes': (stats.totalMinutes || 0) + lessonDuration,
             'stats.streak': newStreak,
             'stats.lastWorkoutDate': new Date(),
+            activityLog: activityLog,  // ← 🔥 НОВОЕ!
             updatedAt: serverTimestamp()
         });
         
         console.log('✅ Прогресс сохранён');
+        console.log('📊 activityLog обновлён:', activityLog.length, 'записей');
         
         await renderLessons();
         
@@ -584,22 +643,13 @@ function parseDuration(durationStr) {
     return match ? parseInt(match[1]) : 20;
 }
 
-function calculateTotalProgress(enrolledPrograms) {
-    if (!enrolledPrograms || enrolledPrograms.length === 0) return 0;
-    
-    const activePrograms = enrolledPrograms.filter(p => p.status === 'active');
-    if (activePrograms.length === 0) return 0;
-    
-    const totalProgress = activePrograms.reduce((sum, p) => sum + (p.progress || 0), 0);
-    return Math.round(totalProgress / activePrograms.length);
-}
-
 function extractGoogleDriveFileId(url) {
     if (!url) return '';
     
     const patterns = [
         /\/file\/d\/([a-zA-Z0-9_-]+)\/view/,
         /\/file\/d\/([a-zA-Z0-9_-]+)\//,
+        /\/file\/d\/([a-zA-Z0-9_-]+)/,
         /id=([a-zA-Z0-9_-]+)/,
         /^([a-zA-Z0-9_-]{20,})$/
     ];
@@ -652,11 +702,9 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Привязка кнопки "Завершить урок" (дублирующая для надёжности)
 document.addEventListener('DOMContentLoaded', () => {
     const completeBtn = document.getElementById('completeLessonBtn');
     if (completeBtn) {
-        // Проверяем что onclick уже есть в HTML
         if (!completeBtn.getAttribute('onclick')) {
             completeBtn.addEventListener('click', function(e) {
                 e.preventDefault();

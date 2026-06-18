@@ -7,11 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/reviews.css">
+    <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
-     <header class="header">
+    <!-- Хедер -->
+    <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
@@ -33,40 +35,42 @@
                         <li><a href="contact.html" class="nav-link">Контакты</a></li>
                     </ul>
                     <div class="header-actions-mobile">
-                        <a href="login.html" class="btn btn-block">Войти</a>
+                        <a href="login.html" class="btn btn-primary btn-block">Войти</a>
                     </div>
                 </nav>
                 
                 <div class="header-actions desktop-only">
-                    <a href="login.html" class="btn">Войти</a>
+                    <a href="login.html" class="btn btn-primary">Войти</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Основное содержимое -->
-    <section class="reviews-section">
+    <!-- Hero секция -->
+    <section class="reviews-hero">
         <div class="container">
-            <div class="section-header">
-                <h1 class="section-title">Узнайте, как мы помогаем людям улучшить свое здоровье</h1>
-            </div>
-            
+            <h1 class="page-title">Отзывы наших пользователей</h1>
+            <p class="page-subtitle">Узнайте, что говорят о нас наши клиенты</p>
+        </div>
+    </section>
+
+    <!-- Основной контент -->
+    <main class="reviews-main">
+        <div class="container">
             <div class="reviews-grid" id="reviewsGrid">
-                <!-- Отзывы загрузятся из Firebase -->
-                <div style="text-align: center; padding: 60px; grid-column: 1/-1;">
+                <div class="loading" style="text-align: center; padding: 60px 20px;">
                     <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: #6198FF;"></i>
-                    <p style="margin-top: 20px; color: #7f8c8d;">Загрузка отзывов...</p>
+                    <p style="margin-top: 15px; color: #7f8c8d;">Загрузка отзывов...</p>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
     <!-- Футер -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <span class="logo-icon"></span>
                     <span class="logo-text">StretchWell</span>
                 </div>
                 <div class="footer-links">
@@ -83,17 +87,11 @@
         </div>
     </footer>
 
-    <!-- Firebase конфиг -->
+    <!-- Firebase -->
     <script type="module" src="js/firebase-config.js"></script>
     
-    <!-- Загрузка отзывов -->
-    <script type="module">
-        import { loadReviews } from './js/load-reviews.js';
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            loadReviews();
-        });
-    </script>
+    <!-- Основной JS -->
     <script src="js/main.js"></script>
+    <script type="module" src="js/load-reviews.js"></script>
 </body>
 </html>

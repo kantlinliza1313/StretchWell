@@ -41,11 +41,14 @@
         <i class="fas fa-calendar-alt"></i>
         <span>Расписание</span>
     </a>
-    <!-- 🔥 НОВЫЙ ПУНКТ: СООБЩЕНИЯ -->
     <a href="client-messages.html" class="nav-item">
         <i class="fas fa-envelope"></i>
         <span>Сообщения</span>
         <span class="badge badge-info" id="msgCount" style="display:none">0</span>
+    </a>
+    <a href="dashboard-reviews.html" class="nav-item">
+        <i class="fas fa-star"></i>
+        <span>Мои отзывы</span>
     </a>
     <a href="settings.html" class="nav-item active">
         <i class="fas fa-cog"></i>
@@ -105,11 +108,11 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="fullName">Имя и фамилия</label>
-                            <input type="text" id="fullName" class="form-input" value="Иван Иванов">
+                            <input type="text" id="fullName" class="form-input" value="">
                         </div>
                         <div class="form-group">
                             <label for="birthDate">Дата рождения</label>
-                            <input type="date" id="birthDate" class="form-input" value="1990-01-15">
+                            <input type="date" id="birthDate" class="form-input" value="">
                         </div>
                     </div>
 
@@ -117,7 +120,7 @@
                         <label for="email">Электронная почта</label>
                         <div class="input-with-icon">
                             <i class="fas fa-envelope"></i>
-                            <input type="email" id="email" class="form-input" value="demo@stretchwell.ru">
+                            <input type="email" id="email" class="form-input" value="">
                         </div>
                         <span class="form-hint">На эту почту будут приходить уведомления</span>
                     </div>
@@ -126,7 +129,7 @@
                         <label for="phone">Номер телефона</label>
                         <div class="input-with-icon">
                             <i class="fas fa-phone"></i>
-                            <input type="tel" id="phone" class="form-input" value="+7 (999) 123-45-67">
+                            <input type="tel" id="phone" class="form-input" value="">
                         </div>
                         <span class="form-hint">Используется для восстановления доступа</span>
                     </div>
@@ -318,7 +321,74 @@
 <script type="module" src="js/firebase-config.js"></script>
 <script type="module" src="js/firebase-auth.js"></script>
 <script type="module" src="js/settings.js"></script>
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarClose = document.getElementById('sidebarClose');
+    
+    if (menuToggle && sidebar) {
+        // Создаём overlay для затемнения фона
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+        
+        // Открытие меню
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Закрытие меню через кнопку X
+        if (sidebarClose) {
+            sidebarClose.addEventListener('click', function() {
+                closeSidebar();
+            });
+        }
+        
+        // Закрытие по клику на overlay
+        overlay.addEventListener('click', function() {
+            closeSidebar();
+        });
+        
+        // Закрытие при клике на пункт меню
+        document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+        
+        // Закрытие при изменении размера окна
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Закрытие по клавише Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+                closeSidebar();
+            }
+        });
+        
+        // Функция закрытия меню
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        console.log('✅ Боковое меню инициализировано');
+    }
+});
+</script>
 
 </body>
 </html>

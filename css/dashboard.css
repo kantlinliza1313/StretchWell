@@ -1057,3 +1057,544 @@ input:checked + .toggle-slider:before {
     flex: 1;
     min-width: 0;
 }
+
+/* ============================================
+   🔥 МОБИЛЬНОЕ БОКОВОЕ МЕНЮ
+   ============================================ */
+
+/* Кнопка бургер-меню (скрыта на десктопе) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #2c3e50;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    z-index: 1001;
+}
+
+.menu-toggle:hover {
+    background: #f5f7fa;
+    color: #6198FF;
+}
+
+/* Кнопка закрытия меню */
+.sidebar-close {
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #f5f7fa;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #5a6c7d;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.sidebar-close:hover {
+    background: #e1e8ed;
+    color: #e74c3c;
+}
+
+/* Затемнение фона при открытом меню */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ============================================
+   🔥 АДАПТИВНОСТЬ БОКОВОГО МЕНЮ
+   ============================================ */
+
+/* Планшеты и мобильные (до 1024px) */
+@media (max-width: 1024px) {
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .sidebar-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Боковая панель скрыта по умолчанию */
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+        box-shadow: none;
+    }
+    
+    /* Боковая панель открыта */
+    .sidebar.active {
+        transform: translateX(0);
+        box-shadow: 5px 0 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Основной контент занимает всю ширину */
+    .main-content {
+        margin-left: 0;
+    }
+    
+    /* Верхняя панель */
+    .top-bar {
+        padding: 12px 15px;
+    }
+    
+    .page-title {
+        font-size: 18px;
+    }
+    
+    .user-name {
+        display: none; /* Скрываем имя на мобильных */
+    }
+}
+
+/* Мобильные (до 768px) */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 280px;
+    }
+    
+    .sidebar-header {
+        padding: 20px;
+    }
+    
+    .logo-text {
+        font-size: 20px;
+    }
+    
+    .sidebar-nav {
+        padding: 15px 10px;
+    }
+    
+    .nav-item {
+        padding: 12px 15px;
+        font-size: 15px;
+        min-height: 44px;
+    }
+    
+    .nav-item i {
+        font-size: 16px;
+        width: 20px;
+    }
+    
+    .page-content {
+        padding: 15px;
+    }
+    
+    .welcome-card {
+        padding: 20px;
+    }
+    
+    .welcome-text h1 {
+        font-size: 22px;
+    }
+    
+    /* Статистика в 2 колонки */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .stat-card {
+        padding: 15px;
+    }
+    
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .stat-value {
+        font-size: 22px;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+    }
+    
+    /* Карточки секций */
+    .section-card {
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .section-title {
+        font-size: 16px;
+    }
+    
+    .btn-link {
+        font-size: 13px;
+    }
+    
+    /* Информация о профиле */
+    .profile-info-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .info-item {
+        padding: 12px 0;
+    }
+    
+    .info-item label {
+        font-size: 12px;
+    }
+    
+    .info-item p {
+        font-size: 14px;
+    }
+    
+    /* Активная программа */
+    .program-card-active {
+        flex-direction: column;
+    }
+    
+    .program-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .program-details {
+        padding: 20px;
+    }
+    
+    .program-name {
+        font-size: 18px;
+    }
+    
+    .program-desc {
+        font-size: 14px;
+    }
+    
+    .program-buttons {
+        flex-direction: column;
+    }
+    
+    .program-buttons .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Очень маленькие экраны (до 480px) */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .top-bar {
+        padding: 10px 12px;
+    }
+    
+    .page-title {
+        font-size: 16px;
+    }
+    
+    .page-content {
+        padding: 12px;
+    }
+    
+    .welcome-card {
+        padding: 15px;
+    }
+    
+    .welcome-text h1 {
+        font-size: 18px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 12px;
+    }
+    
+    .stat-value {
+        font-size: 20px;
+    }
+    
+    .section-card {
+        padding: 15px;
+    }
+    
+    .section-title {
+        font-size: 15px;
+    }
+    
+    .program-image {
+        height: 160px;
+    }
+    
+    .program-name {
+        font-size: 16px;
+    }
+    
+    .btn {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+}
+
+/* ============================================
+   🔥 УЛУЧШЕНИЯ ДЛЯ УДОБСТВА
+   ============================================ */
+
+/* Минимальный размер для touch-элементов */
+@media (hover: none) {
+    .nav-item,
+    .btn,
+    .menu-toggle,
+    .sidebar-close {
+        min-height: 44px;
+    }
+    
+    .nav-item {
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* Отключение hover-эффекта на мобильных */
+@media (max-width: 768px) {
+    .stat-card:hover,
+    .section-card:hover {
+        transform: none;
+    }
+}
+
+/* Плавная прокрутка */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Отключение горизонтального скролла */
+body {
+    overflow-x: hidden;
+}
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eef2f6;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #2c3e50;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #7f8c8d;
+            line-height: 1;
+        }
+        
+        .modal-close:hover {
+            color: #2c3e50;
+        }
+        
+        #editProfileForm {
+            padding: 20px;
+        }
+        
+        #editProfileForm .form-group {
+            margin-bottom: 15px;
+        }
+        
+        #editProfileForm label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* ============================================
+   🔥 СТИЛИ ДЛЯ ОТЗЫВОВ В DASHBOARD
+   ============================================ */
+
+.review-form-container {
+    padding: 20px;
+}
+
+.review-form-container .form-group {
+    margin-bottom: 20px;
+}
+
+.review-form-container label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.review-form-container .form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.review-form-container .form-input:focus {
+    outline: none;
+    border-color: #6198FF;
+}
+
+.review-form-container textarea.form-input {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-hint {
+    display: block;
+    font-size: 12px;
+    color: #95a5a6;
+    margin-top: 5px;
+}
+
+/* Звёздный рейтинг */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 32px;
+    color: #e1e8ed;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #f39c12;
+}
+
+/* Кнопка отправки */
+.review-form-container .btn-primary {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #6198FF 0%, #8DA4CE 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.review-form-container .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(97, 152, 255, 0.4);
+}
+
+/* Карточка отзыва */
+.review-card {
+    transition: all 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .star-rating label {
+        font-size: 28px;
+    }
+    
+    .review-form-container .btn-primary {
+        width: 100%;
+    }
+}

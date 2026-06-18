@@ -40,9 +40,7 @@ export async function loadPrograms() {
                         <button class="btn-program-details" data-slug="${program.slug}">
                             О тренировке
                         </button>
-                        <button class="btn-program-video" data-slug="${program.slug}">
-                            Видео
-                        </button>
+                        
                     </div>
                 </div>
             </div>
